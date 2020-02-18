@@ -6,7 +6,7 @@ a web micro-framework.
 
 ## Team
 
-- MEMBER1
+- Anthony Prestia (atp4280)
 - MEMBER2
 - MEMBER3
 - MEMBER4
