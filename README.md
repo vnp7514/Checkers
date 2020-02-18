@@ -6,9 +6,9 @@ a web micro-framework.
 
 ## Team
 
-- Kevin Murcia Garcia
-- MEMBER2
-- MEMBER3
+- Anthony Prestia (atp4280)
+- Van Pham (vnp7514)
+- Kevin Murcia Garcia (krm7205)
 - MEMBER4
 
 
