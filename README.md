@@ -9,7 +9,7 @@ a web micro-framework.
 - Anthony Prestia (atp4280)
 - Van Pham (vnp7514)
 - Kevin Murcia Garcia (krm7205)
-- MEMBER4
+- Brody Wrighter (baw9895)
 
 
 ## Prerequisites
