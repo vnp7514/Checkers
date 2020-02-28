@@ -1,10 +1,13 @@
 package com.webcheckers.ui;
 
+import com.webcheckers.application.PlayerLobby;
 import spark.*;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+
+import static spark.Spark.halt;
 
 /**
  * The {@code GET /signin} route handler.
@@ -32,10 +35,33 @@ public class GetSignInRoute implements Route {
         this.templateEngine = templateEngine;
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @throws Exception
+     */
     @Override
     public Object handle(Request request, Response response) throws Exception {
         final Session httpSession = request.session();
-        final Map<String,Object> vm = new HashMap<>();
-        return templateEngine.render(new ModelAndView(vm,VIEW_NAME));
+
+        // start building the View-Model
+        final Map<String, Object> vm = new HashMap<>();
+
+        final PlayerLobby playerLobby =
+                httpSession.attribute(GetHomeRoute.PLAYERLOBBY_KEY);
+        if (playerLobby == null){
+            response.redirect(GetHomeRoute.VIEW_NAME);
+            halt("Lobby is null");
+            return null;
+        } else {
+            if (playerLobby.isFull()){
+                response.redirect(GetHomeRoute.VIEW_NAME);
+                halt("Lobby is full");
+                return null;
+            } else {
+
+                return templateEngine.render(new ModelAndView(vm, VIEW_NAME));
+            }
+        }
     }
 }

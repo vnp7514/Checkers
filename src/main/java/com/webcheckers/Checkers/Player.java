@@ -11,7 +11,7 @@ public class Player {
      * Create a player with the unique name
      * @param name the name of the player
      */
-    Player(final String name) {
+    public Player(final String name) {
         this.name = name;
     }
 
