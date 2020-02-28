@@ -10,7 +10,7 @@ public class Space {
         this.piece = piece;
     }
 
-    // Stubbed out
+    // TODO Stubbed out
     public boolean isValid() {
         return true;
     }
