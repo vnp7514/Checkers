@@ -16,6 +16,8 @@ public class GetSignInRoute implements Route {
 
     // Values used in the view-model map for rendering the signin view
     static final String VIEW_NAME = "signin.ftl";
+    static final String TITLE = "Sign In!";
+
 
     private final TemplateEngine templateEngine;
 
@@ -36,6 +38,7 @@ public class GetSignInRoute implements Route {
     public Object handle(Request request, Response response) throws Exception {
         final Session httpSession = request.session();
         final Map<String,Object> vm = new HashMap<>();
+        vm.put("title", TITLE);
         return templateEngine.render(new ModelAndView(vm,VIEW_NAME));
     }
 }

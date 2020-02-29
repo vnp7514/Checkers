@@ -11,7 +11,7 @@ public class PostSignInRoute implements Route{
     private final TemplateEngine templateEngine;
 
     static final String VIEW_NAME = "signin.ftl";
-    static final String TITLE = "Please Sign In!";
+    static final String TITLE = "Sign In!";
 
     public PostSignInRoute(TemplateEngine templateEngine) {
         //Validation
