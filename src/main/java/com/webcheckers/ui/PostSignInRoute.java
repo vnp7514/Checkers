@@ -1,5 +1,8 @@
 package com.webcheckers.ui;
 
+import com.webcheckers.Checkers.Player;
+import com.webcheckers.application.PlayerLobby;
+import com.webcheckers.util.Message;
 import spark.*;
 
 import java.util.HashMap;
@@ -12,7 +15,16 @@ public class PostSignInRoute implements Route{
 
     static final String VIEW_NAME = "signin.ftl";
     static final String TITLE = "Sign In!";
+    static final String NAME_PARAM = "username";
 
+    /**
+     * The constructor for the code {@code POST /signin} route handler.
+     *
+     * @param templateEngine the template engine to use for rendering HTML page
+     *
+     * @throws NullPointerException
+     *     when the {@code templateEngine} is null
+     */
     public PostSignInRoute(TemplateEngine templateEngine) {
         //Validation
         Objects.requireNonNull(templateEngine, "templateEngine must not be null");
@@ -23,8 +35,18 @@ public class PostSignInRoute implements Route{
 
     @Override
     public Object handle(Request request, Response response) throws Exception {
+        // View-model
         final Map<String, Object> vm = new HashMap<>();
-        vm.put("title", TITLE);
-        return templateEngine.render(new ModelAndView(vm,VIEW_NAME));
+        // TODO need a condition statement here in case of Lobby is full or null
+        final Session session = request.session();
+        final String userName = request.queryParams(NAME_PARAM);
+        Player player = new Player(userName);
+        PlayerLobby playerLobby = session.attribute(GetHomeRoute.PLAYERLOBBY_KEY);
+        playerLobby.addPlayer(player);
+        vm.put(GetHomeRoute.TITLE_ATTR, "Welcome!");
+        vm.put(GetHomeRoute.USER_ATTR, player);
+        vm.put(GetHomeRoute.MESSAGE_ATTR, Message.info("Successfully logged in!"));
+        ModelAndView mv = new ModelAndView(vm, GetHomeRoute.VIEW_NAME);
+        return templateEngine.render(mv);
     }
 }

@@ -19,6 +19,7 @@ public class GetSignInRoute implements Route {
 
     // Values used in the view-model map for rendering the signin view
     static final String VIEW_NAME = "signin.ftl";
+    static final String TITLE_ATTR = "title";
 
     private final TemplateEngine templateEngine;
 
@@ -46,6 +47,9 @@ public class GetSignInRoute implements Route {
 
         // start building the View-Model
         final Map<String, Object> vm = new HashMap<>();
+
+        // Adding the title name
+        vm.put(TITLE_ATTR, "WebChecker");
 
         final PlayerLobby playerLobby =
                 httpSession.attribute(GetHomeRoute.PLAYERLOBBY_KEY);
