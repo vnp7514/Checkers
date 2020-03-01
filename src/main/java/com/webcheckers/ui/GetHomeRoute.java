@@ -102,6 +102,11 @@ public class GetHomeRoute implements Route {
                 LOG.fine("A signed in player!");
                 vm.put(USER_ATTR, playerServices.getPlayer());
 
+                if (playerLobby.lobbySize() >= 1) {
+                    vm.put(ACTIVE_USERS,
+                            String.format("There are %d other users online.", playerLobby.lobbySize()));
+                }
+
             } else {
                 LOG.fine("A player without a username");
                 if (playerLobby.lobbySize() >= 1) {
