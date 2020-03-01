@@ -7,6 +7,7 @@ import java.util.logging.Logger;
 
 import com.google.gson.Gson;
 
+import com.webcheckers.application.PlayerLobby;
 import spark.TemplateEngine;
 
 
@@ -41,6 +42,7 @@ import spark.TemplateEngine;
  * </p>
  *
  * @author <a href='mailto:bdbvse@rit.edu'>Bryan Basham</a>
+ * @author Van Pham vnp7514@rit.edu
  */
 public class WebServer {
   private static final Logger LOG = Logger.getLogger(WebServer.class.getName());
@@ -138,15 +140,16 @@ public class WebServer {
     //// that are appropriate for the HTTP client interface that you define.
     //// Create separate Route classes to handle each route; this keeps your
     //// code clean; using small classes.
-
+    PlayerLobby playerLobby = new PlayerLobby();
     // Shows the Checkers game Home page.
-    get(HOME_URL, new GetHomeRoute(templateEngine));
+    get(HOME_URL, new GetHomeRoute(playerLobby, templateEngine));
 
     // Shows the Signin page
-    get(SIGNIN_URL, new GetSignInRoute(templateEngine));
+    get(SIGNIN_URL, new GetSignInRoute(playerLobby, templateEngine));
 
     //Keeps SignIn page up after trying to sign in
-    post(SIGNIN_URL, new PostSignInRoute(templateEngine));
+    post(SIGNIN_URL, new PostSignInRoute(playerLobby, templateEngine));
+
     //
     LOG.config("WebServer is initialized.");
   }
