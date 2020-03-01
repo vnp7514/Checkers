@@ -70,8 +70,7 @@ public class PostSignInRoute implements Route{
         for (int i = 0; i < userName.length(); i++) {
             if ((+userName.charAt(i) >= 65 && +userName.charAt(i) <= 90) ||
                     ((+userName.charAt(i) >= 97 && +userName.charAt(i) <= 122)) ||
-                    (+userName.charAt(i) == 32) || ((+userName.charAt(i) >= 48) &&
-                    (+userName.charAt(i) <= 57))) {
+                    ((+userName.charAt(i) >= 48) && (+userName.charAt(i) <= 57))) {
                 alphaneumeric++;
             }
             else {
