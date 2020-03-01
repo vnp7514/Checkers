@@ -1,5 +1,7 @@
 package com.webcheckers.application;
 
+import com.webcheckers.Checkers.Player;
+
 /**
  * The object to coordinate the state of the Web Application.
  *
@@ -12,6 +14,8 @@ public class PlayerServices {
 
     private int totalGames = 0;
     private int wonGames = 0;
+    // The current username of this player
+    private Player player;
 
     // The playerLobby that contains all the current players in the game
     private final PlayerLobby playerLobby;
@@ -22,8 +26,15 @@ public class PlayerServices {
      */
     PlayerServices(PlayerLobby playerLobby){
         this.playerLobby = playerLobby;
+        player = null;
     }
 
+    /**
+     * Get the current player. Null if there is no player
+     */
+    public Player getPlayer(){
+        return player;
+    }
     /**
      * Cleanup
      */

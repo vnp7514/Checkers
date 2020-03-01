@@ -5,7 +5,9 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.logging.Logger;
 
+import com.webcheckers.Checkers.Player;
 import com.webcheckers.application.PlayerLobby;
+import com.webcheckers.application.PlayerServices;
 import spark.*;
 
 import com.webcheckers.util.Message;
@@ -22,10 +24,15 @@ public class GetHomeRoute implements Route {
 
     private static final Message WELCOME_MSG = Message.info("Welcome to the world of online Checkers.");
 
+    // The length of the session timeout in seconds
+    static final int SESSION_TIMEOUT_PERIOD = 120;
+
     private final TemplateEngine templateEngine;
+    private final PlayerLobby playerLobby;
 
     // Key in the session attribute map for the player who started the session
-    static final String PLAYERLOBBY_KEY = "playerLobby";
+    static final String PLAYER_KEY = "player";
+    static final String TIMEOUT_SESSION_KEY = "timeoutWatchdog";
 
     // Values used in the view-model map for rendering the home view
     static final String TITLE_ATTR = "title";
@@ -39,8 +46,9 @@ public class GetHomeRoute implements Route {
      * @param templateEngine
      *   the HTML template rendering engine
      */
-    public GetHomeRoute(final TemplateEngine templateEngine) {
+    public GetHomeRoute(final PlayerLobby playerLobby, final TemplateEngine templateEngine) {
         this.templateEngine = Objects.requireNonNull(templateEngine, "templateEngine is required");
+        this.playerLobby = Objects.requireNonNull(playerLobby, "playerLobby is required");
         //
         LOG.config("GetHomeRoute is initialized.");
     }
@@ -59,7 +67,7 @@ public class GetHomeRoute implements Route {
     @Override
     public Object handle(Request request, Response response) {
         LOG.finer("GetHomeRoute is invoked.");
-        //
+        // View-Model
         Map<String, Object> vm = new HashMap<>();
         vm.put(TITLE_ATTR, "Welcome!");
         // display a user message in the Home page
@@ -68,13 +76,33 @@ public class GetHomeRoute implements Route {
         // Retrieve the HTTP session
         final Session httpSession = request.session();
 
-        if(httpSession.attribute(PLAYERLOBBY_KEY)== null){
-            final PlayerLobby playerLobby = new PlayerLobby();
-            httpSession.attribute(PLAYERLOBBY_KEY, playerLobby);
+        // if this is a brand new browser session or a session that timed out
+        if (httpSession.attribute(PLAYER_KEY) == null){
+            LOG.fine("A brand new session is created!");
+            // Get the object that will provide client-specific services for this
+            final PlayerServices playerService = playerLobby.newPlayerServices();
+            httpSession.attribute(PLAYER_KEY, playerService);
 
-            // render the View
-            return templateEngine.render(new ModelAndView(vm , "home.ftl"));
-        } // TODO need a condition where the playerlobby is not null
-        return null;
+            // setup session timeout. The valueUnbound() method in the SessionTimeoutWatchdog will
+            // be called when the session is invalidated. The next invocation of this route will
+            // have a new Session object with no attributes.
+            httpSession.attribute(TIMEOUT_SESSION_KEY, new SessionTimeoutWatchdog(playerService));
+            httpSession.maxInactiveInterval(SESSION_TIMEOUT_PERIOD);
+
+
+        } else {
+            // This user has already been here
+            PlayerServices playerServices = httpSession.attribute(PLAYER_KEY);
+
+            if (playerServices.getPlayer() != null){
+                // if the user has signed in with a username
+                LOG.fine("A signed in player!");
+                vm.put(USER_ATTR, playerServices.getPlayer());
+            } else {
+                LOG.fine("A player without a username");
+            }
+        }
+        //render the Home Page
+        return templateEngine.render(new ModelAndView(vm, VIEW_NAME));
     }
 }
