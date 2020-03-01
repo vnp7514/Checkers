@@ -35,8 +35,28 @@ public class PlayerServices {
     public Player getPlayer(){
         return player;
     }
+
     /**
-     * Cleanup
+     * Insert the new player to this PlayerServices if this is not holding any
+     * This is used when player has successfully signed in
+     * @param player the player
+     */
+    public void insertPlayer(Player player){
+        if (this.player == null){
+            this.player = player;
+        }
+    }
+
+    /**
+     * Delete the current player in this PlayerServices
+     * This is used when the player has signed out
+     */
+    public void deletePlayer(){
+        this.player = null;
+    }
+
+    /**
+     * Cleanup when the session is over
      */
     public void endSession(){
 
