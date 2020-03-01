@@ -1,8 +1,6 @@
 package com.webcheckers.ui;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.logging.Logger;
 
 import com.webcheckers.Checkers.Player;
@@ -39,6 +37,7 @@ public class GetHomeRoute implements Route {
     static final String MESSAGE_ATTR = "message";
     static final String USER_ATTR = "currentUser";
     static final String VIEW_NAME = "home.ftl";
+    static final String ACTIVE_USERS = "otherUsers";
 
     /**
      * Create the Spark Route (UI controller) to handle all {@code GET /} HTTP requests.
@@ -76,6 +75,10 @@ public class GetHomeRoute implements Route {
         // Retrieve the HTTP session
         final Session httpSession = request.session();
 
+        if (playerLobby.lobbySize() <= 1) {
+            vm.put(ACTIVE_USERS, "There are no other players available to play at this time.");
+        }
+
         // if this is a brand new browser session or a session that timed out
         if (httpSession.attribute(PLAYER_KEY) == null){
             LOG.fine("A brand new session is created!");
@@ -98,8 +101,13 @@ public class GetHomeRoute implements Route {
                 // if the user has signed in with a username
                 LOG.fine("A signed in player!");
                 vm.put(USER_ATTR, playerServices.getPlayer());
+
             } else {
                 LOG.fine("A player without a username");
+                if (playerLobby.lobbySize() >= 1) {
+                    vm.put(ACTIVE_USERS,
+                            String.format("There are %d other users online.", playerLobby.lobbySize()));
+                }
             }
         }
         //render the Home Page

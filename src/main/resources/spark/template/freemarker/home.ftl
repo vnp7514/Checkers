@@ -20,6 +20,12 @@
     <!-- Provide a message to the user, if supplied. -->
     <#include "message.ftl" />
 
+    <h2>Players Online</h2>
+    <ul>
+    <li>${otherUsers}</li>
+    </ul>
+
+
     <!-- TODO: future content on the Home:
             to start games,
             spectating active games,

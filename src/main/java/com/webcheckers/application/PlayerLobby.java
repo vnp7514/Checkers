@@ -4,7 +4,9 @@ import com.webcheckers.Checkers.Player;
 import com.webcheckers.model.Board;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.logging.Logger;
 
 /**
@@ -65,5 +67,13 @@ public class PlayerLobby {
      */
     public void removePlayer(Player player){
         players.remove(player.getName());
+    }
+
+    public int lobbySize() {
+        return this.players.size();
+    }
+
+    public Set<String> availablePlayers() {
+        return players.keySet();
     }
 }
