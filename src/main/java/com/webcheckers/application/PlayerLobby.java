@@ -56,4 +56,12 @@ public class PlayerLobby {
     public boolean containPlayer(Player player){
         return players.containsValue(player);
     }
+
+    /**
+     * Remove the player from the lobby
+     * @param player the player
+     */
+    public void removePlayer(Player player){
+        players.remove(player.getName());
+    }
 }
