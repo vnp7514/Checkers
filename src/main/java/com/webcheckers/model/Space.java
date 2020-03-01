@@ -10,17 +10,41 @@ public class Space {
         this.piece = piece;
     }
 
-    // TODO Stubbed out
+    /**
+     * Is valid checks to make sure that the board from a player's
+     * perspective is both a black tile and does not already hold
+     * a checker piece.
+     * @return
+     */
     public boolean isValid() {
+
+        if (this.containsPiece()) {
+            return false;
+        }
         return true;
     }
 
+    /**
+     * Get the cellIdx number
+     * @return int
+     */
     public int getCellIdx() {
         return cellIdx;
     }
 
+    /**
+     * Get the piece
+     * @return
+     */
     public Piece getPiece() {
-        return piece;
+        return this.piece;
+    }
+
+    public boolean containsPiece() {
+        if (this.piece == null) {
+            return false;
+        }
+        return true;
     }
 
 }

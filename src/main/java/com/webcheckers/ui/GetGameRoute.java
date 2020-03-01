@@ -1,5 +1,6 @@
 package com.webcheckers.ui;
 
+import com.webcheckers.Checkers.BoardView;
 import com.webcheckers.application.PlayerLobby;
 import com.webcheckers.application.PlayerServices;
 import com.webcheckers.model.Board;
@@ -19,7 +20,7 @@ public class GetGameRoute implements Route {
     private final String TITLE = "title";
     private final String VIEW_NAME = "game.ftl";
     private final String CURRENT_USER = "currentUser";
-    private final String GAME_BOARD = "game-board";
+    private final String GAME_BOARD = "board";
     private final String VIEW = "viewMode";
     private final String MODE = "modeOptions";
     private final String RED_PLAYER = "redPlayer";
@@ -31,6 +32,8 @@ public class GetGameRoute implements Route {
     private final PlayerLobby playerLobby;
     private final TemplateEngine templateEngine;
 
+    private final BoardView boardView;
+
     /**
      * Constructor
      * @param playerLobby
@@ -40,6 +43,7 @@ public class GetGameRoute implements Route {
         //validation
         Objects.requireNonNull(templateEngine, "templateEngine must not be null");
         //
+        this.boardView = new BoardView();
         this.templateEngine = templateEngine;
         this.playerLobby = Objects.requireNonNull(playerLobby, "playerLobby must not be null");
     }
@@ -53,9 +57,11 @@ public class GetGameRoute implements Route {
         // Retrieve the HTTP session
         final Session httpSession = request.session();
 
-        final PlayerServices playerServices = httpSession.attribute(CURRENT_USER);
+        final PlayerServices playerServices =
+                httpSession.attribute(GetHomeRoute.PLAYER_KEY);
 
         if (playerServices != null) {
+
 
             vm.put(ACTIVE_COLOR, Color.WHITE);
             vm.put(TITLE, "Checkers game!");
