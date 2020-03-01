@@ -1,6 +1,7 @@
 package com.webcheckers.application;
 
 import com.webcheckers.Checkers.Player;
+import com.webcheckers.model.Board;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -47,6 +48,7 @@ public class PlayerLobby {
     public void addPlayer( Player player ){
         players.put(player.getName(), player);
     }
+
 
     /**
      * Check whether the lobby already has the player with same name
