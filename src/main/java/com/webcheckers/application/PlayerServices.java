@@ -24,5 +24,10 @@ public class PlayerServices {
         this.playerLobby = playerLobby;
     }
 
+    /**
+     * Cleanup
+     */
+    public void endSession(){
 
+    }
 }
