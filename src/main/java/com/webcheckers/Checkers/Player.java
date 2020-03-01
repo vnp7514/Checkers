@@ -22,4 +22,22 @@ public class Player {
     public String getName(){
         return name;
     }
+
+    /**
+     * If obj is a Player instance and has the same name as this, return true
+     * @param obj the object in question
+     * @return true if they have the same name, false otherwise
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this){
+            return true;
+        }
+        if (!(obj instanceof Player)) {
+            return false;
+        }
+        // Casting obj into Player
+        Player o = (Player) obj;
+        return o.getName().compareTo(this.getName()) == 0;
+    }
 }
