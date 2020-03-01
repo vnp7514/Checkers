@@ -1,11 +1,15 @@
 package com.webcheckers.ui;
 
 import com.webcheckers.application.PlayerLobby;
+import com.webcheckers.application.PlayerServices;
+import com.webcheckers.util.Message;
 import spark.*;
+import sun.rmi.runtime.Log;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.logging.Logger;
 
 import static spark.Spark.halt;
 
@@ -21,19 +25,22 @@ public class GetSignInRoute implements Route {
     static final String VIEW_NAME = "signin.ftl";
     static final String TITLE_ATTR = "title";
 
+    private static final Logger LOG = Logger.getLogger(GetSignInRoute.class.getName());
+
+    private final PlayerLobby playerLobby;
     private final TemplateEngine templateEngine;
 
     /**
      * The constructor for the {@code GET /signin} route handler
      *
-     * @param templateEngine
-     *      The {@Link TemplateEngine} used for rendering page HTML.
+     * @param templateEngine The {@Link TemplateEngine} used for rendering page HTML.
      */
-    GetSignInRoute(final TemplateEngine templateEngine){
+    GetSignInRoute(final PlayerLobby playerLobby, final TemplateEngine templateEngine) {
         //validation
         Objects.requireNonNull(templateEngine, "templateEngine must not be null");
         //
         this.templateEngine = templateEngine;
+        this.playerLobby = Objects.requireNonNull(playerLobby, "playerLobby must not be null");
     }
 
     /**
@@ -44,28 +51,32 @@ public class GetSignInRoute implements Route {
     @Override
     public Object handle(Request request, Response response) throws Exception {
         final Session httpSession = request.session();
-
+        LOG.fine("GetSignInRoute is invoked");
         // start building the View-Model
         final Map<String, Object> vm = new HashMap<>();
 
         // Adding the title name
-        vm.put(TITLE_ATTR, "WebChecker");
+        vm.put(TITLE_ATTR, "Sign In Page");
 
-        final PlayerLobby playerLobby =
-                httpSession.attribute(GetHomeRoute.PLAYERLOBBY_KEY);
-        if (playerLobby == null){
+        final PlayerServices playerServices =
+                httpSession.attribute(GetHomeRoute.PLAYER_KEY);
+        if (playerServices == null) {
+            LOG.fine("PlayerServices is null");
             response.redirect(GetHomeRoute.VIEW_NAME);
-            halt("Lobby is null");
+            halt("PlayerServices is null");
             return null;
         } else {
-            if (playerLobby.isFull()){
-                response.redirect(GetHomeRoute.VIEW_NAME);
-                halt("Lobby is full");
-                return null;
+            LOG.fine("PlayerServices is not null");
+            if (playerServices.getPlayer() == null) {
+                LOG.fine("This session has not signed in with a username");
+                vm.put(GetHomeRoute.MESSAGE_ATTR, Message.info("Please sign in"));
             } else {
-
-                return templateEngine.render(new ModelAndView(vm, VIEW_NAME));
+                LOG.fine("This session has signed in!");
+                response.redirect(WebServer.HOME_URL);
+                halt();
+                return null;
             }
         }
+        return templateEngine.render(new ModelAndView(vm, VIEW_NAME));
     }
 }
