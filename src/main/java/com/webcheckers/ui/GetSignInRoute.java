@@ -62,7 +62,7 @@ public class GetSignInRoute implements Route {
                 httpSession.attribute(GetHomeRoute.PLAYER_KEY);
         if (playerServices == null) {
             LOG.fine("PlayerServices is null");
-            response.redirect(GetHomeRoute.VIEW_NAME);
+            response.redirect(WebServer.HOME_URL);
             halt("PlayerServices is null");
             return null;
         } else {
