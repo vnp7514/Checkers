@@ -8,14 +8,19 @@
 </head>
 
 <body>
-    <form action="./signin" method="POST">
-        <h1>Please Sign In!</h1>
-        <label for="username">Username:</label><br>
-        <input type="text" id="username" name="username">
-        <br>
-        <br>
-        <button type="submit">Sign in</button>
-    </form>
+<div class ="page">
+    <div class="body">
+        <!-- Provide a message to the user, if supplied. -->
+        <#include "message.ftl" />
+        <form action="./signin" method="POST">
+            <label for="username">Username:</label><br>
+            <input type="text" id="username" name="username">
+            <br>
+            <br>
+            <button type="submit">Sign in</button>
+        </form>
+    </div>
+</div>
 </body>
 
 </html>
