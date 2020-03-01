@@ -2,53 +2,58 @@ package com.webcheckers.application;
 
 import com.webcheckers.Checkers.Player;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.logging.Logger;
+
 /**
- * The object to coordinate the state of
+ * The object to coordinate the state of the Web Application and keep all the players who have
+ * signed into the game.
+ *
+ * @author Van Pham vnp7514@rit.edu
  */
 public class PlayerLobby {
 
-    // Player 1
-    private Player player1 = null;
-    // Player 2
-    private Player player2 = null;
+    // A list of unique players
+    private Map<String, Player> players;
+    private static final Logger LOG = Logger.getLogger(PlayerLobby.class.getName());
+
+    /**
+     * A Constructor
+     */
+    public PlayerLobby() {
+        this.players = new HashMap<>();
+    }
+
+    /**
+     * Get a new {@Linkplain PlayerServices} object to provide client-specific services to
+     * the client who just connected to this application.
+     *
+     * @return
+     *   A new {@Link PlayerServices}
+     */
+    public PlayerServices newPlayerServices(){
+        LOG.fine("A new PlayerServices");
+        return new PlayerServices(this);
+    }
 
     /**
      * Add a player to the lobby
      * @param player the player to be added
+     *
+     * Pre-condition: containPlayer( player ) was called before
+     *               being added
      */
     public void addPlayer( Player player ){
-        if (player1 == null){
-            player1 = player;
-        } else {
-            player2 = player;
-        }
+        players.put(player.getName(), player);
     }
 
     /**
-     * Return true if the lobby is full, false otherwise
-     * @return ^
+     * Check whether the lobby already has the player with same name
+     * @param player the player
+     * @return true if the lobby already has the player, false otherwise
      */
-    public boolean isFull(){
-        if (player1 != null && player2 != null) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    /**
-     * Get player 1
-     * @return player 1
-     */
-    public Player getPlayer1() {
-        return player1;
-    }
-
-    /**
-     * Get player 2
-     * @return player 2
-     */
-    public Player getPlayer2() {
-        return player2;
+    public boolean containPlayer(Player player){
+        return players.containsValue(player);
     }
 }
