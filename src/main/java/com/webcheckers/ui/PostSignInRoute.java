@@ -41,6 +41,7 @@ public class PostSignInRoute implements Route{
      * The constructor for the code {@code POST /signin} route handler.
      *
      * @param templateEngine the template engine to use for rendering HTML page
+     * @param playerLobby the player Lobby
      *
      * @throws NullPointerException
      *     when the {@code templateEngine} is null
@@ -64,6 +65,9 @@ public class PostSignInRoute implements Route{
         return null;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Object handle(Request request, Response response) throws Exception {
         LOG.fine("PostSignInRoute is called!");
