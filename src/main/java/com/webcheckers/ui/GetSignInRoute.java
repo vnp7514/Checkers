@@ -4,7 +4,6 @@ import com.webcheckers.application.PlayerLobby;
 import com.webcheckers.application.PlayerServices;
 import com.webcheckers.util.Message;
 import spark.*;
-import sun.rmi.runtime.Log;
 
 import java.util.HashMap;
 import java.util.Map;

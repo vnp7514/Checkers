@@ -61,8 +61,32 @@ public class PostSignInRoute implements Route{
      *         will be returned
      */
     private Message checkUsername(String userName){
-        //TODO
-        return null;
+        Message message = null;
+        int alphaneumeric = 0;
+        int nonLetter = 0;
+        if (playerLobby.containPlayer(new Player(userName))) {
+            message = USER_ALREADY_DEFINED;
+        }
+        for (int i = 0; i < userName.length(); i++) {
+            if ((+userName.charAt(i) >= 65 && +userName.charAt(i) <= 90) ||
+                    ((+userName.charAt(i) >= 97 && +userName.charAt(i) <= 122)) ||
+                    (+userName.charAt(i) == 32) || ((+userName.charAt(i) >= 48) &&
+                    (+userName.charAt(i) <= 57))) {
+                alphaneumeric++;
+            }
+            else {
+                nonLetter++;
+            }
+        }
+
+        if (alphaneumeric < 1) {
+            message = AT_LEAST_ALPHANUM;
+        }
+        else if (nonLetter > 1) {
+            message = NO_ALPHANUM;
+        }
+
+        return message;
     }
 
     /**
