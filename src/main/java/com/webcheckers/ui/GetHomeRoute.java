@@ -36,6 +36,7 @@ public class GetHomeRoute implements Route {
     static final String TITLE_ATTR = "title";
     static final String MESSAGE_ATTR = "message";
     static final String USER_ATTR = "currentUser";
+    static final String PLAYER_LIST_ATTR = "players";
     static final String VIEW_NAME = "home.ftl";
     static final String ACTIVE_USERS = "otherUsers";
 
@@ -71,12 +72,12 @@ public class GetHomeRoute implements Route {
         vm.put(TITLE_ATTR, "Welcome!");
         // display a user message in the Home page
         vm.put(MESSAGE_ATTR, WELCOME_MSG);
+
         // Retrieve the HTTP session
         final Session httpSession = request.session();
 
-        if (playerLobby.lobbySize() <= 1) {
-            vm.put(ACTIVE_USERS, "There are no other players available to play at this time.");
-        }
+        vm.put(ACTIVE_USERS,
+                String.format("There are %d other users online.", playerLobby.lobbySize()));
 
         // if this is a brand new browser session or a session that timed out
         if (httpSession.attribute(PLAYER_KEY) == null){
@@ -91,10 +92,6 @@ public class GetHomeRoute implements Route {
             httpSession.attribute(TIMEOUT_SESSION_KEY, new SessionTimeoutWatchdog(playerService));
             httpSession.maxInactiveInterval(SESSION_TIMEOUT_PERIOD);
 
-            if (playerLobby.lobbySize() <= 1) {
-                vm.put(ACTIVE_USERS, "There are no other players available to play at this time.");
-            }
-
 
         } else {
             // This user has already been here
@@ -105,17 +102,10 @@ public class GetHomeRoute implements Route {
                 LOG.fine("A signed in player!");
                 vm.put(USER_ATTR, playerServices.getPlayer());
 
-                if (playerLobby.lobbySize() >= 1) {
-                    vm.put(ACTIVE_USERS,
-                            String.format("There are %d other users online.", playerLobby.lobbySize() -1));
-                }
+                vm.put(PLAYER_LIST_ATTR, playerLobby.availablePlayers());
 
             } else {
                 LOG.fine("A player without a username");
-                if (playerLobby.lobbySize() >= 1) {
-                    vm.put(ACTIVE_USERS,
-                            String.format("There are %d other users online.", playerLobby.lobbySize()));
-                }
             }
         }
         //render the Home Page

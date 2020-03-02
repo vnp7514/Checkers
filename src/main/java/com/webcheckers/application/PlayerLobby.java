@@ -69,10 +69,19 @@ public class PlayerLobby {
         players.remove(player.getName());
     }
 
+    /**
+     * Get the size of the lobby
+     * @return the size of the lobby
+     */
     public int lobbySize() {
         return this.players.size();
     }
 
+    /**
+     * Return the a set of all the keys of the players map (aka the names of all
+     *   players currently signed in)
+     * @return a set
+     */
     public Set<String> availablePlayers() {
         return players.keySet();
     }
