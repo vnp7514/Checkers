@@ -73,6 +73,7 @@ public class PostGameRoute implements Route {
         final Player opponent = new Player(otherPlayer);
 
 
+
         if (playerServices != null) {
             if (playerServices.getPlayer() != null){
                 LOG.fine("Retrieving the current Player from the PlayerServices");
