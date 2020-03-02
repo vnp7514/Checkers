@@ -1,7 +1,7 @@
 package com.webcheckers.ui;
 
 import com.webcheckers.Checkers.BoardView;
-import com.webcheckers.application.PlayerLobby;
+import com.webcheckers.application.GameLobby;
 import com.webcheckers.application.PlayerServices;
 import com.webcheckers.model.Color;
 import com.webcheckers.model.ViewMode;
@@ -27,7 +27,7 @@ public class PostGameRoute implements Route {
 
     private static final Logger LOG = Logger.getLogger(GetSignInRoute.class.getName());
 
-    private final PlayerLobby playerLobby;
+    private final GameLobby gameLobby;
     private final TemplateEngine templateEngine;
 
     private final BoardView boardView;
@@ -37,13 +37,13 @@ public class PostGameRoute implements Route {
      * @param playerLobby
      * @param templateEngine
      */
-    public PostGameRoute (final PlayerLobby playerLobby, final TemplateEngine templateEngine) {
+    public PostGameRoute (final GameLobby playerLobby, final TemplateEngine templateEngine) {
         //validation
         Objects.requireNonNull(templateEngine, "templateEngine must not be null");
         //
         this.boardView = new BoardView();
         this.templateEngine = templateEngine;
-        this.playerLobby = Objects.requireNonNull(playerLobby, "playerLobby must not be null");
+        this.gameLobby = Objects.requireNonNull(playerLobby, "playerLobby must not be null");
     }
 
     @Override
