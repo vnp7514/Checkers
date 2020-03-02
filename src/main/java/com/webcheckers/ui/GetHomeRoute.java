@@ -71,7 +71,6 @@ public class GetHomeRoute implements Route {
         vm.put(TITLE_ATTR, "Welcome!");
         // display a user message in the Home page
         vm.put(MESSAGE_ATTR, WELCOME_MSG);
-
         // Retrieve the HTTP session
         final Session httpSession = request.session();
 
@@ -92,6 +91,10 @@ public class GetHomeRoute implements Route {
             httpSession.attribute(TIMEOUT_SESSION_KEY, new SessionTimeoutWatchdog(playerService));
             httpSession.maxInactiveInterval(SESSION_TIMEOUT_PERIOD);
 
+            if (playerLobby.lobbySize() <= 1) {
+                vm.put(ACTIVE_USERS, "There are no other players available to play at this time.");
+            }
+
 
         } else {
             // This user has already been here
@@ -104,7 +107,7 @@ public class GetHomeRoute implements Route {
 
                 if (playerLobby.lobbySize() >= 1) {
                     vm.put(ACTIVE_USERS,
-                            String.format("There are %d other users online.", playerLobby.lobbySize()));
+                            String.format("There are %d other users online.", playerLobby.lobbySize() -1));
                 }
 
             } else {

@@ -19,10 +19,10 @@ public class GetGameRoute implements Route {
 
     private final String TITLE = "title";
     private final String VIEW_NAME = "game.ftl";
-    private final String CURRENT_USER = "currentUser";
+    private final String CURRENT_USER = "currentUser.name";
     private final String GAME_BOARD = "board";
     private final String VIEW = "viewMode";
-    private final String MODE = "modeOptions";
+    private final String MODE = "modeOptionsAsJSON";
     private final String RED_PLAYER = "redPlayer";
     private final String WHITE_PLAYER = "whitePlayer";
     private final String ACTIVE_COLOR = "activeColor";
@@ -65,12 +65,13 @@ public class GetGameRoute implements Route {
 
             vm.put(ACTIVE_COLOR, Color.WHITE);
             vm.put(TITLE, "Checkers game!");
-            vm.put(VIEW_NAME, ViewMode.PLAY);
+            vm.put(VIEW, ViewMode.PLAY);
+            vm.put(GAME_BOARD, this.boardView);
             //need to put player instances in all of these below
 
-            vm.put(CURRENT_USER, playerServices.getPlayer());
-            vm.put(RED_PLAYER, playerServices.getPlayer());
-            vm.put(WHITE_PLAYER, playerServices.getPlayer());
+            vm.put(CURRENT_USER, playerServices.getPlayer().getName());
+            vm.put(RED_PLAYER, playerServices.getPlayer().getName());
+            vm.put(WHITE_PLAYER, playerServices.getPlayer().getName());
             return templateEngine.render(new ModelAndView(vm, VIEW_NAME));
         }
         else {
