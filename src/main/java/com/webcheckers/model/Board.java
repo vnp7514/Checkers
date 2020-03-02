@@ -24,15 +24,15 @@ public class Board {
         for (int row = 0; row < NUM_ROWS; row++) {
             for (int col = 0; col < NUM_COLS; col++) {
                 if (col % 2 == 1 && row == 1) {
-                    board[row][col] = new Space(col, new Piece(Type.SINGLE, Color.WHITE));
+                    board[row][col] = new Space(col, new Piece(Type.SINGLE, Color.WHITE), row);
                 } else if (col % 2 == 0 && row < 3) {
-                    board[row][col] = new Space(col, new Piece(Type.SINGLE, Color.WHITE));
+                    board[row][col] = new Space(col, new Piece(Type.SINGLE, Color.WHITE), row);
                 } else if (col % 2 == 0 && row == 6) {
-                    board[row][col] = new Space(col, new Piece(Type.SINGLE, Color.RED));
+                    board[row][col] = new Space(col, new Piece(Type.SINGLE, Color.RED), row);
                 } else if (col % 2 == 1 && row > 4) {
-                    board[row][col] = new Space(col, new Piece(Type.SINGLE, Color.RED));
+                    board[row][col] = new Space(col, new Piece(Type.SINGLE, Color.RED), row);
                 } else {
-                    board[row][col] = new Space(col, null);
+                    board[row][col] = new Space(col, null, row);
                 }
             }
         }

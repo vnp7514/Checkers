@@ -32,42 +32,42 @@ public class Row implements Iterable<Space> {
             if (this.index == 0)
             {
                 if ((i % 2) == 1){
-                    this.spaces.add(new Space(i, new Piece(Type.SINGLE, Color.WHITE)));
+                    this.spaces.add(new Space(i, new Piece(Type.SINGLE, Color.WHITE), this.index));
                 } else {
-                    this.spaces.add(new Space(i, null));
+                    this.spaces.add(new Space(i, null, this.index));
                 }
             } else if (this.index == 1) {
                 if ((i % 2) == 0){
-                    this.spaces.add(new Space(i, new Piece(Type.SINGLE, Color.WHITE)));
+                    this.spaces.add(new Space(i, new Piece(Type.SINGLE, Color.WHITE), this.index));
                 } else {
-                    this.spaces.add(new Space(i, null));
+                    this.spaces.add(new Space(i, null, this.index));
                 }
             } else if (this.index == 2) {
                 if ((i % 2) == 1){
-                    this.spaces.add(new Space(i, new Piece(Type.SINGLE, Color.WHITE)));
+                    this.spaces.add(new Space(i, new Piece(Type.SINGLE, Color.WHITE), this.index));
                 } else {
-                    this.spaces.add(new Space(i, null));
+                    this.spaces.add(new Space(i, null, this.index));
                 }
             }else if (this.index == 5) {
                 if ((i % 2) == 0){
-                    this.spaces.add(new Space(i, new Piece(Type.SINGLE, Color.RED)));
+                    this.spaces.add(new Space(i, new Piece(Type.SINGLE, Color.RED), this.index));
                 } else {
-                    this.spaces.add(new Space(i, null));
+                    this.spaces.add(new Space(i, null, this.index));
                 }
             }else if (this.index == 6) {
                 if ((i % 2) == 1){
-                    this.spaces.add(new Space(i, new Piece(Type.SINGLE, Color.RED)));
+                    this.spaces.add(new Space(i, new Piece(Type.SINGLE, Color.RED), this.index));
                 } else {
-                    this.spaces.add(new Space(i, null));
+                    this.spaces.add(new Space(i, null, this.index));
                 }
             }else if (this.index == 7) {
                 if ((i % 2) == 0){
-                    this.spaces.add(new Space(i, new Piece(Type.SINGLE, Color.RED)));
+                    this.spaces.add(new Space(i, new Piece(Type.SINGLE, Color.RED), this.index));
                 } else {
-                    this.spaces.add(new Space(i, null));
+                    this.spaces.add(new Space(i, null, this.index));
                 }
             } else {
-                this.spaces.add(new Space(i, null));
+                this.spaces.add(new Space(i, null, this.index));
             }
         }
     }

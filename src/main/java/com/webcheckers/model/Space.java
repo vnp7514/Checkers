@@ -4,10 +4,12 @@ public class Space {
 
     private int cellIdx;
     private Piece piece;
+    private int rowIdx;
 
-    public Space(int cellIdx, Piece piece) {
+    public Space(int cellIdx, Piece piece, int row) {
         this.cellIdx = cellIdx;
         this.piece = piece;
+        this.rowIdx = row;
     }
 
     /**
@@ -20,8 +22,16 @@ public class Space {
 
         if (this.containsPiece()) {
             return false;
+        } else if ((this.rowIdx % 2) == 0) {
+            if ((this.cellIdx % 2) == 1) {
+                return true;
+            }
+        } else if ((this.rowIdx % 2) == 1) {
+            if ((this.cellIdx % 2) == 0) {
+                return true;
+            }
         }
-        return true;
+        return false;
     }
 
     /**
@@ -50,6 +60,5 @@ public class Space {
         }
         return true;
     }
-
 
 }
