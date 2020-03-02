@@ -85,7 +85,6 @@ public class PlayerLobby {
         for (int i = 0; i < this.players.size(); i++) {
             names.add(i, this.players.get(i).getName());
         }
-
         return names;
     }
 }
