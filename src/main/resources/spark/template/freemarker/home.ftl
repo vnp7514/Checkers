@@ -24,13 +24,13 @@
     <p>${otherUsers}</p>
     <div class="playerList">
       <#if currentUser??>
-        <form action="/game" method="POST">
+        <form action="/" method="POST">
           <table border=1>
             <th>Current Players</th>
             <#list players as player>
               <tr>
                 <td>
-                  <input type="radio" id=${player} name=${player} value=${player}>
+                  <input type="radio" id=${player} name="otherPlayer" value=${player}>
                   <label for=${player}>${player}</label><br>
                 </td>
               </tr>
