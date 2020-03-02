@@ -1,5 +1,6 @@
 package com.webcheckers.application;
 
+import com.webcheckers.Checkers.BoardView;
 import com.webcheckers.Checkers.Player;
 import com.webcheckers.model.Board;
 
@@ -21,7 +22,7 @@ public class PlayerServices {
     // The playerLobby that contains all the current players in the game
     private final PlayerLobby playerLobby;
 
-    private Board game;
+    private BoardView game;
 
     /**
      * Construct a new PlayerServices but wait for player to sign in
