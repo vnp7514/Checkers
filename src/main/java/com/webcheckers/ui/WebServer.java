@@ -166,8 +166,6 @@ public class WebServer {
     // Start game
     post(GAME_URL, new PostGameRoute(playerLobby, templateEngine));
 
-
-
     //
     LOG.config("WebServer is initialized.");
   }

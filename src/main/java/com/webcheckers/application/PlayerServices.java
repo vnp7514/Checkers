@@ -3,6 +3,7 @@ package com.webcheckers.application;
 import com.webcheckers.Checkers.BoardView;
 import com.webcheckers.Checkers.Player;
 import com.webcheckers.model.Board;
+import com.webcheckers.util.Message;
 
 /**
  * The object to coordinate the state of the Web Application.
@@ -20,6 +21,8 @@ public class PlayerServices {
     private Player player;
     // The playerLobby that contains all the current players in the game
     private final PlayerLobby playerLobby;
+    // String representing the availability of the player
+    private String message;
 
     private BoardView game;
 
@@ -30,6 +33,7 @@ public class PlayerServices {
     PlayerServices(PlayerLobby playerLobby){
         this.playerLobby = playerLobby;
         player = null;
+        this.message = null;
     }
 
 
@@ -65,5 +69,29 @@ public class PlayerServices {
      */
     public void endSession(){
 
+    }
+
+    /**
+     * This function stores a given message into
+     * the message variable
+     * @param message String
+     */
+    public void storeMessage(String message) {
+        this.message = message;
+    }
+
+    /**
+     * This function returns the String message value
+     * @return String
+     */
+    public String getMessage() {
+        return this.message;
+    }
+
+    /**
+     * This function sets the message string to null
+     */
+    public void removeMessage() {
+        this.message = null;
     }
 }

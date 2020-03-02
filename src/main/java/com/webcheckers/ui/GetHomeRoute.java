@@ -39,6 +39,7 @@ public class GetHomeRoute implements Route {
     static final String PLAYER_LIST_ATTR = "players";
     static final String VIEW_NAME = "home.ftl";
     static final String ACTIVE_USERS = "otherUsers";
+    static final String PLAYER_STATUS = "playerStatus";
 
     /**
      * Create the Spark Route (UI controller) to handle all {@code GET /} HTTP requests.
@@ -66,7 +67,7 @@ public class GetHomeRoute implements Route {
      */
     @Override
     public Object handle(Request request, Response response) {
-        LOG.finer("GetHomeRoute is invoked.");
+        LOG.fine("GetHomeRoute is invoked.");
         // View-Model
         Map<String, Object> vm = new HashMap<>();
         vm.put(TITLE_ATTR, "Welcome!");
@@ -75,7 +76,6 @@ public class GetHomeRoute implements Route {
 
         // Retrieve the HTTP session
         final Session httpSession = request.session();
-
 
         vm.put(ACTIVE_USERS, String.format("There are %d users online.", playerLobby.lobbySize()));
 
@@ -104,6 +104,17 @@ public class GetHomeRoute implements Route {
                 LOG.fine("A signed in player!");
                 vm.put(USER_ATTR, playerServices.getPlayer());
                 vm.put(ACTIVE_USERS, "");
+
+                //If there player is already in a game place the correlating message
+                //into the view model
+                if (playerServices.getMessage() != null) {
+                    vm.put(PLAYER_STATUS, playerServices.getMessage());
+                    playerServices.removeMessage();
+                }
+                //If the player is don't print a message.
+                else {
+                    vm.put(PLAYER_STATUS, "");
+                }
 
                 List<String> players = playerLobby.availablePlayers();
                 players.remove(playerServices.getPlayer().getName());

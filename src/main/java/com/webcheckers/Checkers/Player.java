@@ -1,5 +1,7 @@
 package com.webcheckers.Checkers;
 
+import com.webcheckers.util.Message;
+
 public class Player {
 
     /**

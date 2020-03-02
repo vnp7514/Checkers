@@ -7,6 +7,7 @@ import com.webcheckers.application.PlayerLobby;
 import com.webcheckers.application.PlayerServices;
 import com.webcheckers.model.Color;
 import com.webcheckers.model.ViewMode;
+import com.webcheckers.util.Message;
 import spark.*;
 
 import java.util.HashMap;
@@ -73,21 +74,15 @@ public class PostGameRoute implements Route {
         final Player opponent = new Player(otherPlayer);
 
 
-
         if (playerServices != null) {
             if (playerServices.getPlayer() != null){
                 LOG.fine("Retrieving the current Player from the PlayerServices");
                 Player currentPlayer = playerServices.getPlayer();
-                if(this.playerLobby.playerInGame(currentPlayer)) {
-                    LOG.fine("This player " + currentPlayer.getName() +
-                            " is already in the game");
-                    response.redirect(WebServer.HOME_URL);
-                    halt();
-                    return null;
-                }
+
                 if(this.playerLobby.playerInGame(opponent)){
-                    LOG.fine("This opponent " + opponent.getName() +
-                            " is already in the game");
+                    //If a player is already playing a game then print out an message and return to home
+                    LOG.fine(String.format("This player %s is already in a game.", opponent.getName()));
+                    playerServices.storeMessage(String.format("%s is already in a game.", opponent.getName()));
                     response.redirect(WebServer.HOME_URL);
                     halt();
                     return null;
