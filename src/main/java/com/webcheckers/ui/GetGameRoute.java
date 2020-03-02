@@ -19,7 +19,7 @@ public class GetGameRoute implements Route {
 
     private final String TITLE = "title";
     private final String VIEW_NAME = "game.ftl";
-    private final String CURRENT_USER = "currentUser.name";
+    private final String CURRENT_USER = "currentUser";
     private final String GAME_BOARD = "board";
     private final String VIEW = "viewMode";
     private final String MODE = "modeOptionsAsJSON";
@@ -57,17 +57,30 @@ public class GetGameRoute implements Route {
         // Retrieve the HTTP session
         final Session httpSession = request.session();
 
-        final PlayerServices playerServices =
-                httpSession.attribute(GetHomeRoute.PLAYER_KEY);
+        final PlayerServices playerServices = httpSession.attribute(GetHomeRoute.PLAYER_KEY);
+
+        final BoardView board;
 
         if (playerServices != null) {
 
+            if(playerLobby.playerOfGame(playerServices.getPlayer()).getWhitePlayer().equals(playerServices.getPlayer())){
+                board = playerLobby.getFlippedBoard(playerLobby.playerOfGame(playerServices.getPlayer()));
+                LOG.fine("Flipping Board!");
+            } else {
+                board = playerLobby.playerOfGame(playerServices.getPlayer()).getBoard();
+                LOG.fine("Not Flipping Board!");
+            }
 
             vm.put(ACTIVE_COLOR, Color.WHITE);
             vm.put(TITLE, "Checkers game!");
             vm.put(VIEW, ViewMode.PLAY);
-            vm.put(GAME_BOARD, this.boardView);
             //need to put player instances in all of these below
+            LOG.fine(playerServices.getPlayer().toString());
+            vm.put(CURRENT_USER, playerServices.getPlayer());
+            vm.put(RED_PLAYER, playerLobby.playerOfGame(playerServices.getPlayer()).getRedPlayer());
+            vm.put(WHITE_PLAYER, playerLobby.playerOfGame(playerServices.getPlayer()).getWhitePlayer());
+            vm.put(GAME_BOARD, board);
+            vm.put(MODE, null );
 
 
             return templateEngine.render(new ModelAndView(vm, VIEW_NAME));

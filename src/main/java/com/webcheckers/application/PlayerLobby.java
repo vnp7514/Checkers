@@ -1,5 +1,6 @@
 package com.webcheckers.application;
 
+import com.webcheckers.Checkers.BoardView;
 import com.webcheckers.Checkers.Player;
 import com.webcheckers.model.Board;
 
@@ -119,5 +120,24 @@ public class PlayerLobby {
             }
         }
         return false;
+    }
+
+    public GameLobby playerOfGame(Player player)
+    {
+        for (GameLobby i : games) {
+            if (i.containPlayer(player)) {
+                return i;
+            }
+        }
+        return null;
+    }
+
+    public BoardView getBoard(GameLobby game)
+    {
+        return game.getBoard();
+    }
+
+    public BoardView getFlippedBoard(GameLobby game) {
+        return game.getBoardFlipped();
     }
 }

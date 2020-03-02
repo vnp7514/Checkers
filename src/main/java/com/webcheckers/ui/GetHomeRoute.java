@@ -110,6 +110,12 @@ public class GetHomeRoute implements Route {
 
                 vm.put(PLAYER_LIST_ATTR, players);
 
+                if (playerLobby.playerInGame(playerServices.getPlayer())){
+                    response.redirect(WebServer.GAME_URL);
+                    halt();
+                    return null;
+                }
+
             } else {
                 LOG.fine("A player without a username");
 

@@ -1,7 +1,9 @@
 package com.webcheckers.Checkers;
 
+import com.webcheckers.model.Color;
 import com.webcheckers.model.Piece;
 import com.webcheckers.model.Space;
+import com.webcheckers.model.Type;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -27,8 +29,52 @@ public class Row implements Iterable<Space> {
         //Create ArrayList of spaces without pieces
         this.spaces = new ArrayList<>();
         for (int i = 0; i <= 7; i++) {
-            this.spaces.add(new Space(i, null));
+            if (this.index == 0)
+            {
+                if ((i % 2) == 1){
+                    this.spaces.add(new Space(i, new Piece(Type.SINGLE, Color.WHITE)));
+                } else {
+                    this.spaces.add(new Space(i, null));
+                }
+            } else if (this.index == 1) {
+                if ((i % 2) == 0){
+                    this.spaces.add(new Space(i, new Piece(Type.SINGLE, Color.WHITE)));
+                } else {
+                    this.spaces.add(new Space(i, null));
+                }
+            } else if (this.index == 2) {
+                if ((i % 2) == 1){
+                    this.spaces.add(new Space(i, new Piece(Type.SINGLE, Color.WHITE)));
+                } else {
+                    this.spaces.add(new Space(i, null));
+                }
+            }else if (this.index == 5) {
+                if ((i % 2) == 0){
+                    this.spaces.add(new Space(i, new Piece(Type.SINGLE, Color.RED)));
+                } else {
+                    this.spaces.add(new Space(i, null));
+                }
+            }else if (this.index == 6) {
+                if ((i % 2) == 1){
+                    this.spaces.add(new Space(i, new Piece(Type.SINGLE, Color.RED)));
+                } else {
+                    this.spaces.add(new Space(i, null));
+                }
+            }else if (this.index == 7) {
+                if ((i % 2) == 0){
+                    this.spaces.add(new Space(i, new Piece(Type.SINGLE, Color.RED)));
+                } else {
+                    this.spaces.add(new Space(i, null));
+                }
+            } else {
+                this.spaces.add(new Space(i, null));
+            }
         }
+    }
+
+    public Row(int index, ArrayList<Space> spaces){
+        this.spaces = spaces;
+        this.index = index;
     }
 
     /**
@@ -50,5 +96,13 @@ public class Row implements Iterable<Space> {
 
     public void setSpace(int space, Piece piece) {
         this.spaces.get(space).setPiece(piece);
+    }
+
+    public Row flip() {
+        ArrayList<Space> temp = new ArrayList<>();
+        for(int i = 7; i >= 0; i--){
+            temp.add(this.spaces.get(i));
+        }
+        return new Row(this.index, temp);
     }
 }

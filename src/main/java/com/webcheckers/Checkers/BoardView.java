@@ -27,6 +27,11 @@ public class BoardView implements Iterable<Row> {
         }
     }
 
+    public BoardView(ArrayList board) {
+        this.board = new Board();
+        this.rows = board;
+    }
+
     /**
      * Returns the Iterator of the Arraylist of Rows
      * @return An Iterator of the Rows
@@ -58,4 +63,12 @@ public class BoardView implements Iterable<Row> {
 
     }
 
+    public BoardView flip()
+    {
+        ArrayList<Row> temp = new ArrayList<>();
+        for (int i = 7; i >= 0; i--){
+            temp.add(this.rows.get(i).flip());
+        }
+        return new BoardView(temp);
+    }
 }

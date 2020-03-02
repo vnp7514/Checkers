@@ -1,5 +1,6 @@
 package com.webcheckers.application;
 
+import com.webcheckers.Checkers.BoardView;
 import com.webcheckers.Checkers.Player;
 
 
@@ -12,6 +13,7 @@ public class GameLobby {
     // A list of unique players
     private Player redPlayer;
     private Player whitePlayer;
+    private BoardView board;
     private static final Logger LOG = Logger.getLogger(PlayerLobby.class.getName());
 
     /**
@@ -20,6 +22,7 @@ public class GameLobby {
     public GameLobby(Player player) {
         this.redPlayer = player;
         this.whitePlayer = null;
+        this.board = new BoardView();
     }
 
     /**
@@ -50,5 +53,22 @@ public class GameLobby {
         } else {
             return false;
         }
+    }
+
+    public Player getRedPlayer()
+    {
+        return redPlayer;
+    }
+
+    public Player getWhitePlayer() {
+        return whitePlayer;
+    }
+
+    public BoardView getBoard(){
+        return this.board;
+    }
+
+    public BoardView getBoardFlipped(){
+        return this.board.flip();
     }
 }
