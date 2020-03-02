@@ -30,8 +30,8 @@
             <#list players as player>
               <tr>
                 <td>
-                  <input type="radio" id=${player} name="otherPlayer" value=${player}>
-                  <label for=${player}>${player}</label><br>
+                  <input type="radio" id="otherPlayer" name="otherPlayer" value=${player}>
+                  <label for="otherPlayer">${player}</label><br>
                 </td>
               </tr>
             </#list>

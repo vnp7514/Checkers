@@ -90,32 +90,34 @@ public class PlayerLobby {
         return names;
     }
 
+    /**
+     * Add a new gameLobby to the list
+     * @param gameLobby the game lobby
+     */
     public void addGame(GameLobby gameLobby) {
         this.games.add(gameLobby);
     }
 
+    /**
+     * Remove the gameLobby from the list
+     * @param gameLobby the game lobby
+     */
     public void removeGame(GameLobby gameLobby) {
         this.games.remove(gameLobby);
     }
 
-    public boolean playerInGame(Player player) {
-        if (this.games == null){
-            return false;
-        }
-        else {
-            for (GameLobby i : games) {
-                if (i.containPlayer(player)) {
-                    return true;
-                }
-            }
-            return false;
-        }
-    }
 
-    public Player getPlayer(String player)
-    {
-        if (players.contains(new Player(player))){
-            return players.
+    /**
+     * Check whether the player is in any gameLobby
+     * @param player the player in question
+     * @return true if the player is in a gameLobby
+     */
+    public boolean playerInGame(Player player) {
+        for (GameLobby i : games) {
+            if (i.containPlayer(player)) {
+                return true;
+            }
         }
+        return false;
     }
 }

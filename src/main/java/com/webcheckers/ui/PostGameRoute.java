@@ -27,7 +27,7 @@ public class PostGameRoute implements Route {
     private final String WHITE_PLAYER = "whitePlayer";
     private final String ACTIVE_COLOR = "activeColor";
 
-    private final String OTHER_PLAYER_PARAM = "otherplayer";
+    private final String OTHER_PLAYER_PARAM = "otherPlayer";
 
     private static final Logger LOG = Logger.getLogger(GetSignInRoute.class.getName());
 
@@ -54,6 +54,7 @@ public class PostGameRoute implements Route {
     public Object handle(Request request, Response response) throws Exception {
         final Map<String, Object> vm = new HashMap<>();
 
+        LOG.fine("Initialized");
         // Retrieve the HTTP session
         final Session httpSession = request.session();
 
@@ -61,22 +62,36 @@ public class PostGameRoute implements Route {
                 httpSession.attribute(GetHomeRoute.PLAYER_KEY);
 
         final String otherPlayer = request.queryParams(OTHER_PLAYER_PARAM);
+        if (otherPlayer == null){
+            LOG.fine("No player was challenged");
+            response.redirect(WebServer.HOME_URL);
+            halt();
+            return null;
+        }
+
+        // The new player instance for the opponent
         final Player opponent = new Player(otherPlayer);
 
 
         if (playerServices != null) {
             if (playerServices.getPlayer() != null){
-                if(this.playerLobby.playerInGame(playerServices.getPlayer())) {
+                LOG.fine("Retrieving the current Player from the PlayerServices");
+                Player currentPlayer = playerServices.getPlayer();
+                if(this.playerLobby.playerInGame(currentPlayer)) {
+                    LOG.fine("This player " + currentPlayer.getName() +
+                            " is already in the game");
                     response.redirect(WebServer.HOME_URL);
                     halt();
                     return null;
                 }
                 if(this.playerLobby.playerInGame(opponent)){
+                    LOG.fine("This opponent " + opponent.getName() +
+                            " is already in the game");
                     response.redirect(WebServer.HOME_URL);
                     halt();
                     return null;
                 }
-                final GameLobby gameLobby = new GameLobby(playerServices.getPlayer());
+                final GameLobby gameLobby = new GameLobby(currentPlayer);
                 gameLobby.addPlayer(opponent);
                 this.playerLobby.addGame(gameLobby);
 
@@ -85,9 +100,9 @@ public class PostGameRoute implements Route {
                 vm.put(VIEW, ViewMode.PLAY);
                 //need to put player instances in all of these below
 
-                vm.put(CURRENT_USER, playerServices.getPlayer());
-                vm.put(RED_PLAYER, playerServices.getPlayer());
-                vm.put(WHITE_PLAYER, playerLobby.);
+                vm.put(CURRENT_USER, currentPlayer);
+                vm.put(RED_PLAYER, currentPlayer);
+                vm.put(WHITE_PLAYER, opponent);
                 vm.put(GAME_BOARD, this.boardView);
                 vm.put(MODE, null );
                 return templateEngine.render(new ModelAndView(vm, VIEW_NAME));
