@@ -24,7 +24,7 @@
     <p>${otherUsers}</p>
     <div class="playerList">
       <#if currentUser??>
-        <form action="/" method="POST">
+        <form action="/game" method="POST">
           <table border=1>
             <th>Current Players</th>
             <#list players as player>

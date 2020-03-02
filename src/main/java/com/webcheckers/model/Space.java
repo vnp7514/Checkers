@@ -40,11 +40,16 @@ public class Space {
         return this.piece;
     }
 
+    public Piece setPiece(Piece piece) {
+        return this.piece = piece;
+    }
+
     public boolean containsPiece() {
         if (this.piece == null) {
             return false;
         }
         return true;
     }
+
 
 }

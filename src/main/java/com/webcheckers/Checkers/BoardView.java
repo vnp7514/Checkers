@@ -1,6 +1,7 @@
 package com.webcheckers.Checkers;
 
 import com.webcheckers.model.Board;
+import com.webcheckers.model.Piece;
 
 import java.util.*;
 
@@ -46,6 +47,10 @@ public class BoardView implements Iterable<Row> {
      */
     public Board getBoard(){
         return this.board;
+    }
+
+    public void setPiece(int row, int col, Piece piece) {
+        this.rows.get(row).setSpace(col, piece);
     }
 
     //TODO Stubbed out

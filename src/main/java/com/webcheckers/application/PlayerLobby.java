@@ -16,12 +16,14 @@ public class PlayerLobby {
 
     // A list of unique players
     private List<Player> players;
+    private List<GameLobby> games;
     private static final Logger LOG = Logger.getLogger(PlayerLobby.class.getName());
 
     /**
      * A Constructor
      */
     public PlayerLobby() {
+        this.games = new ArrayList<>();
         this.players = new ArrayList<>();
     }
 
@@ -86,5 +88,34 @@ public class PlayerLobby {
             names.add(i, this.players.get(i).getName());
         }
         return names;
+    }
+
+    public void addGame(GameLobby gameLobby) {
+        this.games.add(gameLobby);
+    }
+
+    public void removeGame(GameLobby gameLobby) {
+        this.games.remove(gameLobby);
+    }
+
+    public boolean playerInGame(Player player) {
+        if (this.games == null){
+            return false;
+        }
+        else {
+            for (GameLobby i : games) {
+                if (i.containPlayer(player)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+    }
+
+    public Player getPlayer(String player)
+    {
+        if (players.contains(new Player(player))){
+            return players.
+        }
     }
 }

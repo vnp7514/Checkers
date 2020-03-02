@@ -1,5 +1,6 @@
 package com.webcheckers.Checkers;
 
+import com.webcheckers.model.Piece;
 import com.webcheckers.model.Space;
 
 import java.util.ArrayList;
@@ -45,5 +46,9 @@ public class Row implements Iterable<Space> {
      */
     public int getIndex(){
         return this.index;
+    }
+
+    public void setSpace(int space, Piece piece) {
+        this.spaces.get(space).setPiece(piece);
     }
 }

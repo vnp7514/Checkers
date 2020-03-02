@@ -1,7 +1,9 @@
 package com.webcheckers.ui;
 
 import com.webcheckers.Checkers.BoardView;
+import com.webcheckers.Checkers.Player;
 import com.webcheckers.application.GameLobby;
+import com.webcheckers.application.PlayerLobby;
 import com.webcheckers.application.PlayerServices;
 import com.webcheckers.model.Color;
 import com.webcheckers.model.ViewMode;
@@ -25,9 +27,11 @@ public class PostGameRoute implements Route {
     private final String WHITE_PLAYER = "whitePlayer";
     private final String ACTIVE_COLOR = "activeColor";
 
+    private final String OTHER_PLAYER_PARAM = "otherplayer";
+
     private static final Logger LOG = Logger.getLogger(GetSignInRoute.class.getName());
 
-    private final GameLobby gameLobby;
+    private final PlayerLobby playerLobby;
     private final TemplateEngine templateEngine;
 
     private final BoardView boardView;
@@ -37,13 +41,13 @@ public class PostGameRoute implements Route {
      * @param playerLobby
      * @param templateEngine
      */
-    public PostGameRoute (final GameLobby playerLobby, final TemplateEngine templateEngine) {
+    public PostGameRoute (final PlayerLobby playerLobby, final TemplateEngine templateEngine) {
         //validation
         Objects.requireNonNull(templateEngine, "templateEngine must not be null");
         //
         this.boardView = new BoardView();
         this.templateEngine = templateEngine;
-        this.gameLobby = Objects.requireNonNull(playerLobby, "playerLobby must not be null");
+        this.playerLobby = Objects.requireNonNull(playerLobby, "playerLobby must not be null");
     }
 
     @Override
@@ -56,25 +60,41 @@ public class PostGameRoute implements Route {
         final PlayerServices playerServices =
                 httpSession.attribute(GetHomeRoute.PLAYER_KEY);
 
+        final String otherPlayer = request.queryParams(OTHER_PLAYER_PARAM);
+        final Player opponent = new Player(otherPlayer);
+
+
         if (playerServices != null) {
+            if (playerServices.getPlayer() != null){
+                if(this.playerLobby.playerInGame(playerServices.getPlayer())) {
+                    response.redirect(WebServer.HOME_URL);
+                    halt();
+                    return null;
+                }
+                if(this.playerLobby.playerInGame(opponent)){
+                    response.redirect(WebServer.HOME_URL);
+                    halt();
+                    return null;
+                }
+                final GameLobby gameLobby = new GameLobby(playerServices.getPlayer());
+                gameLobby.addPlayer(opponent);
+                this.playerLobby.addGame(gameLobby);
 
+                vm.put(ACTIVE_COLOR, Color.WHITE);
+                vm.put(TITLE, "Checkers game!");
+                vm.put(VIEW, ViewMode.PLAY);
+                //need to put player instances in all of these below
 
-            vm.put(ACTIVE_COLOR, Color.WHITE);
-            vm.put(TITLE, "Checkers game!");
-            vm.put(VIEW, ViewMode.PLAY);
-            //need to put player instances in all of these below
-
-            vm.put(CURRENT_USER, playerServices.getPlayer());
-            vm.put(RED_PLAYER, playerServices.getPlayer());
-            vm.put(WHITE_PLAYER, playerServices.getPlayer());
-            vm.put(GAME_BOARD, this.boardView);
-            vm.put(MODE, null );
-            return templateEngine.render(new ModelAndView(vm, VIEW_NAME));
+                vm.put(CURRENT_USER, playerServices.getPlayer());
+                vm.put(RED_PLAYER, playerServices.getPlayer());
+                vm.put(WHITE_PLAYER, playerLobby.);
+                vm.put(GAME_BOARD, this.boardView);
+                vm.put(MODE, null );
+                return templateEngine.render(new ModelAndView(vm, VIEW_NAME));
+            }
         }
-        else {
-            response.redirect(WebServer.HOME_URL);
-            halt();
-            return null;
-        }
+        response.redirect(WebServer.HOME_URL);
+        halt();
+        return null;
     }
 }

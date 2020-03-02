@@ -18,7 +18,6 @@ public class PlayerServices {
     private int wonGames = 0;
     // The current username of this player
     private Player player;
-    private Player opponent;
     // The playerLobby that contains all the current players in the game
     private final PlayerLobby playerLobby;
 
@@ -32,6 +31,8 @@ public class PlayerServices {
         this.playerLobby = playerLobby;
         player = null;
     }
+
+
 
     /**
      * Get the current player. Null if there is no player
@@ -64,9 +65,5 @@ public class PlayerServices {
      */
     public void endSession(){
 
-    }
-
-    public void insertOpponent(Player opponent){
-        this.opponent = opponent;
     }
 }
