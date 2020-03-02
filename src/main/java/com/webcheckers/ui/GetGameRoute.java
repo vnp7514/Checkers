@@ -75,7 +75,6 @@ public class GetGameRoute implements Route {
             vm.put(TITLE, "Checkers game!");
             vm.put(VIEW, ViewMode.PLAY);
             //need to put player instances in all of these below
-            LOG.fine(playerServices.getPlayer().toString());
             vm.put(CURRENT_USER, playerServices.getPlayer());
             vm.put(RED_PLAYER, playerLobby.playerOfGame(playerServices.getPlayer()).getRedPlayer());
             vm.put(WHITE_PLAYER, playerLobby.playerOfGame(playerServices.getPlayer()).getWhitePlayer());
