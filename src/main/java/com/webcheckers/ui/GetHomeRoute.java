@@ -76,8 +76,10 @@ public class GetHomeRoute implements Route {
         // Retrieve the HTTP session
         final Session httpSession = request.session();
 
-        vm.put(ACTIVE_USERS,
-                String.format("There are %d other users online.", playerLobby.lobbySize()));
+
+        vm.put(ACTIVE_USERS, String.format("There are %d users online.", playerLobby.lobbySize()));
+
+
 
         // if this is a brand new browser session or a session that timed out
         if (httpSession.attribute(PLAYER_KEY) == null){
@@ -101,11 +103,16 @@ public class GetHomeRoute implements Route {
                 // if the user has signed in with a username
                 LOG.fine("A signed in player!");
                 vm.put(USER_ATTR, playerServices.getPlayer());
+                vm.put(ACTIVE_USERS, "");
 
-                vm.put(PLAYER_LIST_ATTR, playerLobby.availablePlayers());
+                List<String> players = playerLobby.availablePlayers();
+                players.remove(playerServices.getPlayer().getName());
+
+                vm.put(PLAYER_LIST_ATTR, players);
 
             } else {
                 LOG.fine("A player without a username");
+
             }
         }
         //render the Home Page

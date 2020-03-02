@@ -3,10 +3,7 @@ package com.webcheckers.application;
 import com.webcheckers.Checkers.Player;
 import com.webcheckers.model.Board;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.logging.Logger;
 
 /**
@@ -18,14 +15,14 @@ import java.util.logging.Logger;
 public class PlayerLobby {
 
     // A list of unique players
-    private Map<String, Player> players;
+    private List<Player> players;
     private static final Logger LOG = Logger.getLogger(PlayerLobby.class.getName());
 
     /**
      * A Constructor
      */
     public PlayerLobby() {
-        this.players = new HashMap<>();
+        this.players = new ArrayList<>();
     }
 
     /**
@@ -48,7 +45,7 @@ public class PlayerLobby {
      *               being added
      */
     public void addPlayer( Player player ){
-        players.put(player.getName(), player);
+        this.players.add(player);
     }
 
 
@@ -58,7 +55,7 @@ public class PlayerLobby {
      * @return true if the lobby already has the player, false otherwise
      */
     public boolean containPlayer(Player player){
-        return players.containsValue(player);
+        return this.players.contains(player);
     }
 
     /**
@@ -66,7 +63,7 @@ public class PlayerLobby {
      * @param player the player
      */
     public void removePlayer(Player player){
-        players.remove(player.getName());
+        this.players.remove(player);
     }
 
     /**
@@ -82,7 +79,13 @@ public class PlayerLobby {
      *   players currently signed in)
      * @return a set
      */
-    public Set<String> availablePlayers() {
-        return players.keySet();
+    public List<String> availablePlayers() {
+        List<String> names = new ArrayList<>();
+
+        for (int i = 0; i < this.players.size(); i++) {
+            names.add(i, this.players.get(i).getName());
+        }
+
+        return names;
     }
 }

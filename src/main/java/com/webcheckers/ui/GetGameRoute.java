@@ -69,9 +69,7 @@ public class GetGameRoute implements Route {
             vm.put(GAME_BOARD, this.boardView);
             //need to put player instances in all of these below
 
-            vm.put(CURRENT_USER, playerServices.getPlayer().getName());
-            vm.put(RED_PLAYER, playerServices.getPlayer().getName());
-            vm.put(WHITE_PLAYER, playerServices.getPlayer().getName());
+
             return templateEngine.render(new ModelAndView(vm, VIEW_NAME));
         }
         else {
