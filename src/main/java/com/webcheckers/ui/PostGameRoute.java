@@ -64,6 +64,7 @@ public class PostGameRoute implements Route {
         final Player opponent = new Player(otherPlayer);
 
 
+
         if (playerServices != null) {
             if (playerServices.getPlayer() != null){
                 if(this.playerLobby.playerInGame(playerServices.getPlayer())) {
