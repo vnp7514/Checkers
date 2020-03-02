@@ -163,6 +163,9 @@ public class WebServer {
     // Perform Signout procedures
     post(SIGNOUT_URL, new PostSignOutRoute(playerLobby, templateEngine));
 
+    // Start game
+    post(GAME_URL, new PostGameRoute(playerLobby, templateEngine));
+
 
 
     //
