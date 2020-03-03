@@ -62,11 +62,14 @@ public class PlayerLobby {
     }
 
     /**
-     * Remove the player from the lobby
+     * Remove the player from the lobby and the gameLobby :)
      * @param player the player
      */
     public void removePlayer(Player player){
         this.players.remove(player);
+        if (playerOfGame(player) != null){
+            games.remove(playerOfGame(player));
+        }
     }
 
     /**
@@ -78,15 +81,18 @@ public class PlayerLobby {
     }
 
     /**
-     * Return the a set of all the keys of the players map (aka the names of all
-     *   players currently signed in)
-     * @return a set
+     * Return the a list of all the players' name that the current client can
+     *   challenge
+     * @return a list
      */
     public List<String> availablePlayers() {
         List<String> names = new ArrayList<>();
 
         for (int i = 0; i < this.players.size(); i++) {
-            names.add(i, this.players.get(i).getName());
+            Player player = this.players.get(i);
+            if (!playerInGame(player)) {
+                names.add(player.getName());
+            }
         }
         return names;
     }

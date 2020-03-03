@@ -1,5 +1,6 @@
 package com.webcheckers.ui;
 
+import com.webcheckers.Checkers.Player;
 import com.webcheckers.application.PlayerLobby;
 import com.webcheckers.application.PlayerServices;
 import com.webcheckers.util.Message;
@@ -40,11 +41,6 @@ public class PostSignOutRoute implements Route {
     public Object handle(Request request, Response response) throws Exception {
         final Session httpSession = request.session();
         LOG.fine("GetSignOutRoute is invoked");
-        // start building the View-Model
-        final Map<String, Object> vm = new HashMap<>();
-
-        // Adding the title name
-        vm.put(GetHomeRoute.TITLE_ATTR, "Welcome!");
 
         final PlayerServices playerServices =
                 httpSession.attribute(GetHomeRoute.PLAYER_KEY);
@@ -59,7 +55,8 @@ public class PostSignOutRoute implements Route {
             } else {
                 LOG.fine("This session has signed in!");
                 // remove the player from the lobby
-                playerLobby.removePlayer(playerServices.getPlayer());
+                Player currentPlayer = playerServices.getPlayer();
+                playerLobby.removePlayer(currentPlayer);
                 // This session now has no username / signed out
                 playerServices.deletePlayer();
                 response.redirect(WebServer.HOME_URL);
