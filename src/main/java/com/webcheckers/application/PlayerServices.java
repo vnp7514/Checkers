@@ -22,7 +22,7 @@ public class PlayerServices {
     // The playerLobby that contains all the current players in the game
     private final PlayerLobby playerLobby;
     // String representing the availability of the player
-    private String message;
+    private Message message;
 
     private BoardView game;
 
@@ -74,9 +74,9 @@ public class PlayerServices {
     /**
      * This function stores a given message into
      * the message variable
-     * @param message String
+     * @param message  Message
      */
-    public void storeMessage(String message) {
+    public void storeMessage(Message message) {
         this.message = message;
     }
 
@@ -84,7 +84,7 @@ public class PlayerServices {
      * This function returns the String message value
      * @return String
      */
-    public String getMessage() {
+    public Message getMessage() {
         return this.message;
     }
 

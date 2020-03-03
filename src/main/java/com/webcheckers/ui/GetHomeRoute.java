@@ -105,22 +105,19 @@ public class GetHomeRoute implements Route {
                 vm.put(USER_ATTR, playerServices.getPlayer());
                 vm.put(ACTIVE_USERS, "");
 
-                //If there player is already in a game place the correlating message
-                //into the view model
+                //If there is a message for the player from the server
                 if (playerServices.getMessage() != null) {
-                    vm.put(PLAYER_STATUS, playerServices.getMessage());
+                    vm.put(MESSAGE_ATTR, playerServices.getMessage());
                     playerServices.removeMessage();
                 }
-                //If the player is don't print a message.
-                else {
-                    vm.put(PLAYER_STATUS, "");
-                }
 
+                // Get a list of available players
                 List<String> players = playerLobby.availablePlayers();
                 players.remove(playerServices.getPlayer().getName());
 
                 vm.put(PLAYER_LIST_ATTR, players);
 
+                // If the player is already in a game, redirect to /game
                 if (playerLobby.playerInGame(playerServices.getPlayer())){
                     response.redirect(WebServer.GAME_URL);
                     halt();

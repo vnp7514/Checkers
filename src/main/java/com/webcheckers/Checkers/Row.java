@@ -88,16 +88,25 @@ public class Row implements Iterable<Space> {
 
     /**
      * Getter for the index of the Row
-     * @return
+     * @return the index of the row
      */
     public int getIndex(){
         return this.index;
     }
 
+    /**
+     * Put a piece on the space
+     * @param space the space
+     * @param piece the piece
+     */
     public void setSpace(int space, Piece piece) {
         this.spaces.get(space).setPiece(piece);
     }
 
+    /**
+     * Flip the row for the other player
+     * @return the flipped row
+     */
     public Row flip() {
         ArrayList<Space> temp = new ArrayList<>();
         for(int i = 7; i >= 0; i--){

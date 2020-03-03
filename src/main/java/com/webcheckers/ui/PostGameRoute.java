@@ -63,12 +63,7 @@ public class PostGameRoute implements Route {
                 httpSession.attribute(GetHomeRoute.PLAYER_KEY);
 
         final String otherPlayer = request.queryParams(OTHER_PLAYER_PARAM);
-        if (otherPlayer == null){
-            LOG.fine("No player was challenged");
-            response.redirect(WebServer.HOME_URL);
-            halt();
-            return null;
-        }
+
 
         // The new player instance for the opponent
         final Player opponent = new Player(otherPlayer);
@@ -79,10 +74,21 @@ public class PostGameRoute implements Route {
                 LOG.fine("Retrieving the current Player from the PlayerServices");
                 Player currentPlayer = playerServices.getPlayer();
 
+                if (otherPlayer == null){
+                    LOG.fine("No player was challenged");
+                    playerServices.storeMessage(Message.error("No player was challenged"));
+                    response.redirect(WebServer.HOME_URL);
+                    halt();
+                    return null;
+                }
+
                 if(this.playerLobby.playerInGame(opponent)){
                     //If a player is already playing a game then print out an message and return to home
-                    LOG.fine(String.format("This player %s is already in a game.", opponent.getName()));
-                    playerServices.storeMessage(String.format("%s is already in a game.", opponent.getName()));
+                    LOG.fine(String.format("This player %s is already in a game.",
+                            opponent.getName()));
+                    playerServices.storeMessage(Message.error(
+                            String.format("%s is already in a game.",
+                            opponent.getName())));
                     response.redirect(WebServer.HOME_URL);
                     halt();
                     return null;
@@ -91,19 +97,15 @@ public class PostGameRoute implements Route {
                 gameLobby.addPlayer(opponent);
                 this.playerLobby.addGame(gameLobby);
 
-                vm.put(ACTIVE_COLOR, Color.WHITE);
-                vm.put(TITLE, "Checkers game!");
-                vm.put(VIEW, ViewMode.PLAY);
-                //need to put player instances in all of these below
-
-                vm.put(CURRENT_USER, currentPlayer);
-                vm.put(RED_PLAYER, currentPlayer);
-                vm.put(WHITE_PLAYER, opponent);
-                vm.put(GAME_BOARD, this.boardView);
-                vm.put(MODE, null );
-                return templateEngine.render(new ModelAndView(vm, VIEW_NAME));
+                LOG.fine("Successfully create a gameLobby!");
+                // GetGameRoute will handle the rendering and the game
+                response.redirect(WebServer.GAME_URL);
+                halt();
+                return null;
             }
         }
+        // if playerServices is null or the client has not signed in
+        LOG.fine("the playerServices is null or the client has not signed in");
         response.redirect(WebServer.HOME_URL);
         halt();
         return null;

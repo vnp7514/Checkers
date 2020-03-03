@@ -122,6 +122,12 @@ public class PlayerLobby {
         return false;
     }
 
+    /**
+     * Return which GameLobby the player is in
+     * @param player the player
+     * @return the lobby that the player is in. null if
+     * the player isnt in any lobby
+     */
     public GameLobby playerOfGame(Player player)
     {
         for (GameLobby i : games) {
@@ -132,11 +138,23 @@ public class PlayerLobby {
         return null;
     }
 
+    /**
+     * Get the board instance of the specific gameLobby
+     * @param game the gameLobby
+     * @return the board
+     */
     public BoardView getBoard(GameLobby game)
     {
         return game.getBoard();
     }
 
+    /**
+     * Get the board instance of the specfic gameLobby
+     * But the board is flipped
+     * Used for rendering the challenged player board
+     * @param game the game lobby
+     * @return the flipped board
+     */
     public BoardView getFlippedBoard(GameLobby game) {
         return game.getBoardFlipped();
     }

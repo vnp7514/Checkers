@@ -55,19 +55,35 @@ public class GameLobby {
         }
     }
 
+    /**
+     * Get the red player
+     * @return the red player
+     */
     public Player getRedPlayer()
     {
         return redPlayer;
     }
 
+    /**
+     * Get the white player
+     * @return the white player
+     */
     public Player getWhitePlayer() {
         return whitePlayer;
     }
 
+    /**
+     * Get the board for the challenger
+     * @return the board
+     */
     public BoardView getBoard(){
         return this.board;
     }
 
+    /**
+     * Get the flipped board for player who got challenged
+     * @return the flipped board
+     */
     public BoardView getBoardFlipped(){
         return this.board.flip();
     }
