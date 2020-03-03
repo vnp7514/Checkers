@@ -1,6 +1,8 @@
 package com.webcheckers.ui;
 
 import com.webcheckers.Checkers.BoardView;
+import com.webcheckers.Checkers.Player;
+import com.webcheckers.application.GameLobby;
 import com.webcheckers.application.PlayerLobby;
 import com.webcheckers.application.PlayerServices;
 import com.webcheckers.model.Board;
@@ -62,32 +64,41 @@ public class GetGameRoute implements Route {
         final BoardView board;
 
         if (playerServices != null) {
+            Player currentPlayer = playerServices.getPlayer();
+            if (currentPlayer != null) {
+                GameLobby gameLobby = playerLobby.playerOfGame(currentPlayer);
+                if (gameLobby != null) {
+                    if (gameLobby.getWhitePlayer().equals(currentPlayer)) { // the current player is white
+                        board = playerLobby.getFlippedBoard(gameLobby);
+                        LOG.fine("Flipping Board!");
+                    } else { // the current player is red
+                        board = gameLobby.getBoard();
+                        LOG.fine("Not Flipping Board!");
+                    }
 
-            if(playerLobby.playerOfGame(playerServices.getPlayer()).getWhitePlayer().equals(playerServices.getPlayer())){
-                board = playerLobby.getFlippedBoard(playerLobby.playerOfGame(playerServices.getPlayer()));
-                LOG.fine("Flipping Board!");
+                    vm.put(ACTIVE_COLOR, Color.WHITE);
+                    vm.put(TITLE, "Checkers game!");
+                    vm.put(VIEW, ViewMode.PLAY);
+                    //need to put player instances in all of these below
+                    vm.put(CURRENT_USER, currentPlayer);
+                    vm.put(RED_PLAYER, gameLobby.getRedPlayer());
+                    vm.put(WHITE_PLAYER, gameLobby.getWhitePlayer());
+                    vm.put(GAME_BOARD, board);
+                    vm.put(MODE, null);
+
+
+                    return templateEngine.render(new ModelAndView(vm, VIEW_NAME));
+                } else {
+                    LOG.fine("gameLobby is null so the player is not in a game");
+                }
             } else {
-                board = playerLobby.playerOfGame(playerServices.getPlayer()).getBoard();
-                LOG.fine("Not Flipping Board!");
+                LOG.fine("the client has not signed in");
             }
-
-            vm.put(ACTIVE_COLOR, Color.WHITE);
-            vm.put(TITLE, "Checkers game!");
-            vm.put(VIEW, ViewMode.PLAY);
-            //need to put player instances in all of these below
-            vm.put(CURRENT_USER, playerServices.getPlayer());
-            vm.put(RED_PLAYER, playerLobby.playerOfGame(playerServices.getPlayer()).getRedPlayer());
-            vm.put(WHITE_PLAYER, playerLobby.playerOfGame(playerServices.getPlayer()).getWhitePlayer());
-            vm.put(GAME_BOARD, board);
-            vm.put(MODE, null );
-
-
-            return templateEngine.render(new ModelAndView(vm, VIEW_NAME));
+        } else {
+            LOG.fine("the playerServices is null");
         }
-        else {
-            response.redirect(WebServer.HOME_URL);
-            halt();
-            return null;
-        }
+        response.redirect(WebServer.HOME_URL);
+        halt();
+        return null;
     }
 }
