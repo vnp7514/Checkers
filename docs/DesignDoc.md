@@ -17,8 +17,12 @@ geometry: margin=1in
   * Kevin Murcia Garcia
 
 ## Executive Summary
+The purpose of this project is to create a working webapp
+that allows players to challenge each other to a game of checkers.
+A player must sign in to play a game and as a minimum requirement,
+atleast two players must be signed in before a game can be started.
 
-This is a summary of the project.
+//TODO FINISH
 
 ### Purpose
 > _Provide a very brief statement about the project and the most
