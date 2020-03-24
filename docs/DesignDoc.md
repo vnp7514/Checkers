@@ -11,10 +11,10 @@ geometry: margin=1in
 ## Team Information
 * Team name: TEAMNAME
 * Team members
-  * MEMBER1
-  * MEMBER2
-  * MEMBER3
-  * MEMBER4
+  * Anthony Prestia
+  * Van Pham
+  * Brody Wrighter
+  * Kevin Murcia Garcia
 
 ## Executive Summary
 
