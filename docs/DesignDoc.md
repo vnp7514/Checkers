@@ -9,7 +9,7 @@ geometry: margin=1in
 > and appear in the generated PDF in italics._
 
 ## Team Information
-* Team name: TEAMNAME
+* Team name: Wizards
 * Team members
   * Anthony Prestia
   * Van Pham
