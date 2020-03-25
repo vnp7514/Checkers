@@ -1,4 +1,4 @@
----
+﻿---
 geometry: margin=1in
 ---
 # PROJECT Design Documentation
@@ -9,23 +9,25 @@ geometry: margin=1in
 > and appear in the generated PDF in italics._
 
 ## Team Information
-* Team name: TEAMNAME
+* Team name: Wizards
 * Team members
-  * MEMBER1
-  * MEMBER2
-  * MEMBER3
-  * MEMBER4
+  * Anthony Prestia (atp4280)
+  * Van Pham (vnp7514)
+  * Kevin Murcia Garcia (krm7205)
+  * Brody Wrighter (baw9895)
 
 ## Executive Summary
 
-This is a summary of the project.
+The WebCheckers application must let two users who are signed in to play a game of checkers. This application has two features that set it apart from a basic checkers game:
+ 
+* Spectate games that are currently in session
+* Watch a replay of a game  
 
 ### Purpose
-> _Provide a very brief statement about the project and the most
-> important user group and user goals._
+
+A web-based application for users to play/spectate games of checkers.
 
 ### Glossary and Acronyms
-> _Provide a table of terms and acronyms._
 
 | Term | Definition |
 |------|------------|
@@ -54,11 +56,9 @@ This section describes the features of the application.
 
 This section describes the application domain.
 
-![The WebCheckers Domain Model](domain-model-placeholder.png)
+![The WebCheckers Domain Model](Domain-Model.png)
 
-> _Provide a high-level overview of the domain for this application. You
-> can discuss the more important domain entities and their relationship
-> to each other._
+The WebCheckers application can have any number of games occurring simultaneously. Each game must have 2 players and any number of spectators. Each game will be saved as a replay for users to watch at a later time. 
 
 
 ## Architecture and Design
@@ -87,11 +87,9 @@ Details of the components within these tiers are supplied below.
 This section describes the web interface flow; this is how the user views and interacts
 with the WebCheckers application.
 
-![The WebCheckers Web Interface Statechart](web-interface-placeholder.png)
+![The WebCheckers Web Interface Statechart](Web-Application-Interface.png)
 
-> _Provide a summary of the application's user interface.  Describe, from
-> the user's perspective, the flow of the pages in the web application._
-
+Once the user is connected to the server, the Home page is rendered. The user then must click on the sign in button to sign in before they are able to play a game. Clicking the sign in page will render the Sign-In page. The user must provide a valid and unique username.  Once the user chooses a valid username, the Home page is rendered. Now the option to play a game is available to the user. The user now challenges another player to a match. Once the challenge is accepted, the Game page is rendered. 
 
 ### UI Tier
 > _Provide a summary of the Server-side UI tier of your architecture.
@@ -155,3 +153,4 @@ with the WebCheckers application.
 > coverage targets, why you selected those values, and how well your
 > code coverage met your targets. If there are any anomalies, discuss
 > those._
+
