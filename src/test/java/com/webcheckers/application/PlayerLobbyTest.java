@@ -52,7 +52,6 @@ public class PlayerLobbyTest {
     public void test_add_player(){
         final PlayerLobby CuT = new PlayerLobby();
         assertFalse(CuT.containPlayer(p1));
-        fail("containPlayer() is flawed");
         CuT.addPlayer(p1);
         assertTrue(CuT.containPlayer(p1), "addPlayer() is flawed");
         CuT.removePlayer(p1);
