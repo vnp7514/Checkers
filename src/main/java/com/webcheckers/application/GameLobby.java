@@ -57,6 +57,17 @@ public class GameLobby {
         this.players.add(player);
     }
 
+    /**
+     * Add a player to the lobby
+     * @param player the player to be added
+     *
+     * Pre-condition: containPlayer( player ) was called before
+     *               being added
+     */
+    public void removePlayer( Player player){
+        this.players.remove(player);
+    }
+
 
     /**
      * Check whether the lobby already has the player with same name
