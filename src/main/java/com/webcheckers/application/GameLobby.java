@@ -4,25 +4,46 @@ import com.webcheckers.Checkers.BoardView;
 import com.webcheckers.Checkers.Player;
 
 
-import java.util.HashMap;
-import java.util.Map;
+import javax.swing.*;
+import java.util.*;
 import java.util.logging.Logger;
 
 public class GameLobby {
 
     // A list of unique players
-    private Player redPlayer;
-    private Player whitePlayer;
+    //private Player redPlayer;
+    //private Player whitePlayer;
+    // a list of players currently in the game
+    private List<Player> players;
+
+    // The index where the specified player is in the list
+    private int red = 0;
+    private int white = 1;
+
+    // the game board
     private BoardView board;
+    // For logging
     private static final Logger LOG = Logger.getLogger(PlayerLobby.class.getName());
 
     /**
      * A Constructor
      */
-    public GameLobby(Player player) {
-        this.redPlayer = player;
-        this.whitePlayer = null;
+    public GameLobby() {
+        this.players = new ArrayList<>();
         this.board = new BoardView();
+    }
+
+    public GameLobby(Player player){
+        this();
+        this.players.add(player);
+    }
+
+    /**
+     * Return the list of players in the game
+     * @return the list of players
+     */
+    private List<Player> getPlayers() {
+        return players;
     }
 
     /**
@@ -33,9 +54,7 @@ public class GameLobby {
      *               being added
      */
     public void addPlayer( Player player){
-        if (this.whitePlayer == null) {
-            this.whitePlayer = player;
-        }
+        this.players.add(player);
     }
 
 
@@ -45,14 +64,7 @@ public class GameLobby {
      * @return true if the lobby already has the player, false otherwise
      */
     public boolean containPlayer(Player player){
-        if (this.whitePlayer.equals(player)){
-            return true;
-        }
-        else if( this.redPlayer.equals(player)){
-            return true;
-        } else {
-            return false;
-        }
+        return this.players.contains(player);
     }
 
     /**
@@ -61,7 +73,7 @@ public class GameLobby {
      */
     public Player getRedPlayer()
     {
-        return redPlayer;
+        return players.get(red);
     }
 
     /**
@@ -69,7 +81,7 @@ public class GameLobby {
      * @return the white player
      */
     public Player getWhitePlayer() {
-        return whitePlayer;
+        return players.get(white);
     }
 
     /**
@@ -86,5 +98,23 @@ public class GameLobby {
      */
     public BoardView getBoardFlipped(){
         return this.board.flip();
+    }
+
+    /**
+     * Two gameLobbies are equal if they have the same players
+     * @param obj the other gameLobby
+     * @return
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this){
+            return true;
+        }
+        if (!(obj instanceof GameLobby)) {
+            return false;
+        }
+        GameLobby o = (GameLobby)obj;
+        return Arrays.equals(players.toArray(new Player[0]),
+                o.getPlayers().toArray(new Player[0]));
     }
 }
