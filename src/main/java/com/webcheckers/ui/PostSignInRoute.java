@@ -60,7 +60,7 @@ public class PostSignInRoute implements Route{
      * @return null if it is a valid name. Otherwise, a specific Message
      *         will be returned
      */
-    private Message checkUsername(String userName){
+    public Message checkUsername(String userName){
         Message message = null;
         int alphaneumeric = 0;
         int nonLetter = 0;
