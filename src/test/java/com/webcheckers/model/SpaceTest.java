@@ -80,5 +80,21 @@ public class SpaceTest {
         assertNotEquals(new Piece(Type.SINGLE, Color.WHITE), sp8.getPiece());
     }
 
+    /**
+     * Tests to make sure that the getCellIdx function returns the correct
+     * cellIdx for a given Space.
+     */
+    @Test
+    public void getCellIdxTest() {
+        assertEquals(0, sp1.getCellIdx());
+        assertEquals(0, sp2.getCellIdx());
+        assertEquals(1, sp3.getCellIdx());
+        assertEquals(1, sp4.getCellIdx());
+        assertEquals(0, sp5.getCellIdx());
+        assertEquals(0, sp6.getCellIdx());
+        assertNotEquals(0, sp7.getCellIdx());
+        assertNotEquals(0, sp8.getCellIdx());
+    }
+
 }
 
