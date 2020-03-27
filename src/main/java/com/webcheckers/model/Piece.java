@@ -18,4 +18,16 @@ public class Piece {
         return color;
     }
 
+
+    @Override
+    public boolean equals(Object object) {
+        if (object instanceof Piece) {
+            Piece temp = (Piece) object;
+            if (temp.type == this.type && temp.color == this.color) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 }

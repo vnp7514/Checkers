@@ -51,7 +51,10 @@ public class Space {
     }
 
     public Piece setPiece(Piece piece) {
-        return this.piece = piece;
+        if (this.isValid()) {
+            return this.piece = piece;
+        }
+        return this.piece;
     }
 
     public boolean containsPiece() {
