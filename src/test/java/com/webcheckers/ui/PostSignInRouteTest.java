@@ -12,7 +12,7 @@ import spark.TemplateEngine;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 
-@Tag("Ui Tier")
+@Tag("UI-tier")
 public class PostSignInRouteTest {
 
     private static final Message USER_ALREADY_DEFINED =
