@@ -1,10 +1,9 @@
 package com.webcheckers.ui;
 
-import com.webcheckers.Checkers.Player;
-import com.webcheckers.application.PlayerLobby;
+import com.webcheckers.model.Player;
+import com.webcheckers.appl.PlayerLobby;
 import com.webcheckers.util.Message;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import spark.TemplateEngine;

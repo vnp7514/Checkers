@@ -3,9 +3,8 @@ package com.webcheckers.ui;
 import java.util.*;
 import java.util.logging.Logger;
 
-import com.webcheckers.Checkers.Player;
-import com.webcheckers.application.PlayerLobby;
-import com.webcheckers.application.PlayerServices;
+import com.webcheckers.appl.PlayerLobby;
+import com.webcheckers.appl.PlayerServices;
 import spark.*;
 
 import com.webcheckers.util.Message;

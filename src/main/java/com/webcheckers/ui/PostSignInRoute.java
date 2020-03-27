@@ -1,8 +1,8 @@
 package com.webcheckers.ui;
 
-import com.webcheckers.Checkers.Player;
-import com.webcheckers.application.PlayerLobby;
-import com.webcheckers.application.PlayerServices;
+import com.webcheckers.model.Player;
+import com.webcheckers.appl.PlayerLobby;
+import com.webcheckers.appl.PlayerServices;
 import com.webcheckers.util.Message;
 import spark.*;
 

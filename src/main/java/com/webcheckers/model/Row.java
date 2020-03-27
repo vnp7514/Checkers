@@ -1,9 +1,4 @@
-package com.webcheckers.Checkers;
-
-import com.webcheckers.model.Color;
-import com.webcheckers.model.Piece;
-import com.webcheckers.model.Space;
-import com.webcheckers.model.Type;
+package com.webcheckers.model;
 
 import java.util.ArrayList;
 import java.util.Iterator;

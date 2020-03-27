@@ -1,12 +1,10 @@
 package com.webcheckers.ui;
 
-import com.webcheckers.Checkers.BoardView;
-import com.webcheckers.Checkers.Player;
-import com.webcheckers.application.GameLobby;
-import com.webcheckers.application.PlayerLobby;
-import com.webcheckers.application.PlayerServices;
-import com.webcheckers.model.Color;
-import com.webcheckers.model.ViewMode;
+import com.webcheckers.model.BoardView;
+import com.webcheckers.model.Player;
+import com.webcheckers.appl.GameLobby;
+import com.webcheckers.appl.PlayerLobby;
+import com.webcheckers.appl.PlayerServices;
 import com.webcheckers.util.Message;
 import spark.*;
 

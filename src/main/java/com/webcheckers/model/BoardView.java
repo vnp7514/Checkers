@@ -1,7 +1,4 @@
-package com.webcheckers.Checkers;
-
-import com.webcheckers.model.Board;
-import com.webcheckers.model.Piece;
+package com.webcheckers.model;
 
 import java.util.*;
 
