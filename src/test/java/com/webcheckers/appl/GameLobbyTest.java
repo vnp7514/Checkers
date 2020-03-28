@@ -1,6 +1,6 @@
-package com.webcheckers.application;
+package com.webcheckers.appl;
 
-import com.webcheckers.Checkers.Player;
+import com.webcheckers.model.Player;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
