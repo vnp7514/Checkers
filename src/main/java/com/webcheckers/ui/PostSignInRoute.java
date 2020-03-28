@@ -1,8 +1,8 @@
 package com.webcheckers.ui;
 
-import com.webcheckers.Checkers.Player;
-import com.webcheckers.application.PlayerLobby;
-import com.webcheckers.application.PlayerServices;
+import com.webcheckers.model.Player;
+import com.webcheckers.appl.PlayerLobby;
+import com.webcheckers.appl.PlayerServices;
 import com.webcheckers.util.Message;
 import spark.*;
 
@@ -60,7 +60,7 @@ public class PostSignInRoute implements Route{
      * @return null if it is a valid name. Otherwise, a specific Message
      *         will be returned
      */
-    private Message checkUsername(String userName){
+    public Message checkUsername(String userName){
         Message message = null;
         int alphaneumeric = 0;
         int nonLetter = 0;

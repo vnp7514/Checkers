@@ -1,6 +1,6 @@
 package com.webcheckers.ui;
 
-import com.webcheckers.application.PlayerServices;
+import com.webcheckers.appl.PlayerServices;
 
 import javax.servlet.http.HttpSessionBindingEvent;
 import javax.servlet.http.HttpSessionBindingListener;

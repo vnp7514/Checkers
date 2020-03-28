@@ -1,6 +1,4 @@
-package com.webcheckers.Checkers;
-
-import com.webcheckers.util.Message;
+package com.webcheckers.model;
 
 public class Player {
 

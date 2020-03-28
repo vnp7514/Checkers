@@ -13,7 +13,7 @@ import spark.template.freemarker.FreeMarkerEngine;
 
 
 /**
- * The entry point for the WebCheckers web application.
+ * The entry point for the WebCheckers web appl.
  *
  * @author <a href='mailto:bdbvse@rit.edu'>Bryan Basham</a>
  */
@@ -21,7 +21,7 @@ public final class Application {
   private static final Logger LOG = Logger.getLogger(Application.class.getName());
 
   /**
-   * Queries whether the application is being run in demo-mode.
+   * Queries whether the appl is being run in demo-mode.
    *
    * <p>
    *   This method uses the memoization idiom so the calculation of
@@ -64,10 +64,10 @@ public final class Application {
   //
 
   /**
-   * Entry point for the WebCheckers web application.
+   * Entry point for the WebCheckers web appl.
    *
    * <p>
-   * It wires the application components together.  This is an example
+   * It wires the appl components together.  This is an example
    * of <a href='https://en.wikipedia.org/wiki/Dependency_injection'>Dependency Injection</a>
    * </p>
    *
@@ -85,12 +85,12 @@ public final class Application {
       System.err.println("Could not initialize log manager because: " + e.getMessage());
     }
 
-    // The application uses FreeMarker templates to generate the HTML
+    // The appl uses FreeMarker templates to generate the HTML
     // responses sent back to the client. This will be the engine processing
     // the templates and associated data.
     final TemplateEngine templateEngine = new FreeMarkerEngine();
 
-    // The application uses Gson to generate JSON representations of Java objects.
+    // The appl uses Gson to generate JSON representations of Java objects.
     // This should be used by your Ajax Routes to generate JSON for the HTTP
     // response to Ajax requests.
     final Gson gson = new Gson();
@@ -98,10 +98,10 @@ public final class Application {
     // inject the game center and freemarker engine into web server
     final WebServer webServer = new WebServer(templateEngine, gson);
 
-    // inject web server into application
+    // inject web server into appl
     final Application app = new Application(webServer);
 
-    // start the application up
+    // start the appl up
     app.initialize();
   }
 

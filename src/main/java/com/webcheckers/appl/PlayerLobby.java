@@ -1,8 +1,7 @@
-package com.webcheckers.application;
+package com.webcheckers.appl;
 
-import com.webcheckers.Checkers.BoardView;
-import com.webcheckers.Checkers.Player;
-import com.webcheckers.model.Board;
+import com.webcheckers.model.BoardView;
+import com.webcheckers.model.Player;
 
 import java.util.*;
 import java.util.logging.Logger;
@@ -30,7 +29,7 @@ public class PlayerLobby {
 
     /**
      * Get a new {@Linkplain PlayerServices} object to provide client-specific services to
-     * the client who just connected to this application.
+     * the client who just connected to this appl.
      *
      * @return
      *   A new {@Link PlayerServices}

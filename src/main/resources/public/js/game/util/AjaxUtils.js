@@ -193,7 +193,7 @@ define(function (require) {
       url: actionURL,
 
       // action data (as JSON)
-      contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+      contentType: 'appl/x-www-form-urlencoded; charset=UTF-8',
       data: parameters,
 
       // HTTP callback handlers

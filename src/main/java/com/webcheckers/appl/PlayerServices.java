@@ -1,8 +1,7 @@
-package com.webcheckers.application;
+package com.webcheckers.appl;
 
-import com.webcheckers.Checkers.BoardView;
-import com.webcheckers.Checkers.Player;
-import com.webcheckers.model.Board;
+import com.webcheckers.model.BoardView;
+import com.webcheckers.model.Player;
 import com.webcheckers.util.Message;
 
 /**

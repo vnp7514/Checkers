@@ -7,18 +7,18 @@ import java.util.logging.Logger;
 
 import com.google.gson.Gson;
 
-import com.webcheckers.application.PlayerLobby;
+import com.webcheckers.appl.PlayerLobby;
 import spark.TemplateEngine;
 
 
 /**
  * The server that initializes the set of HTTP request handlers.
- * This defines the <em>web application interface</em> for this
- * WebCheckers application.
+ * This defines the <em>web appl interface</em> for this
+ * WebCheckers appl.
  *
  * <p>
  * There are multiple ways in which you can have the client issue a
- * request and the application generate responses to requests. If your team is
+ * request and the appl generate responses to requests. If your team is
  * not careful when designing your approach, you can quickly create a mess
  * where no one can remember how a particular request is issued or the response
  * gets generated. Aim for consistency in your approach for similar
@@ -37,7 +37,7 @@ import spark.TemplateEngine;
  * <ul>
  *     <li>View templates with conditional elements</li>
  *     <li>Use different view templates based on results of executing the client request</li>
- *     <li>Redirecting to a different application URL</li>
+ *     <li>Redirecting to a different appl URL</li>
  * </ul>
  * </p>
  *
@@ -102,7 +102,7 @@ public class WebServer {
   //
 
   /**
-   * Initialize all of the HTTP routes that make up this web application.
+   * Initialize all of the HTTP routes that make up this web appl.
    *
    * <p>
    * Initialization of the web server includes defining the location for static
@@ -128,11 +128,11 @@ public class WebServer {
     //// Each route (processing function) will check if the request is valid
     //// from the client that made the request. If it is valid, the route
     //// will extract the relevant data from the request and pass it to the
-    //// application object delegated with executing the request. When the
+    //// appl object delegated with executing the request. When the
     //// delegate completes execution of the request, the route will create
     //// the parameter map that the response template needs. The data will
     //// either be in the value the delegate returns to the route after
-    //// executing the request, or the route will query other application
+    //// executing the request, or the route will query other appl
     //// objects for the data needed.
 
     //// FreeMarker defines the HTML response using templates. Additional

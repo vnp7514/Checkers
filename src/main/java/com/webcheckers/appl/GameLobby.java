@@ -1,10 +1,9 @@
-package com.webcheckers.application;
+package com.webcheckers.appl;
 
-import com.webcheckers.Checkers.BoardView;
-import com.webcheckers.Checkers.Player;
+import com.webcheckers.model.BoardView;
+import com.webcheckers.model.Player;
 
 
-import javax.swing.*;
 import java.util.*;
 import java.util.logging.Logger;
 

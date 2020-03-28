@@ -1,13 +1,10 @@
 package com.webcheckers.ui;
 
-import com.webcheckers.Checkers.Player;
-import com.webcheckers.application.PlayerLobby;
-import com.webcheckers.application.PlayerServices;
-import com.webcheckers.util.Message;
+import com.webcheckers.model.Player;
+import com.webcheckers.appl.PlayerLobby;
+import com.webcheckers.appl.PlayerServices;
 import spark.*;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
 import java.util.logging.Logger;
 
