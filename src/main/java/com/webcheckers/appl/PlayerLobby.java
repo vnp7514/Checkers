@@ -1,6 +1,7 @@
 package com.webcheckers.appl;
 
 import com.webcheckers.model.BoardView;
+import com.webcheckers.model.Color;
 import com.webcheckers.model.Player;
 
 import java.util.*;
@@ -21,6 +22,7 @@ public class PlayerLobby {
     // Number of games have been created/ Also used as a unique id for each game
     private int numGames = 0;
     private static final Logger LOG = Logger.getLogger(PlayerLobby.class.getName());
+
 
     /**
      * A Constructor

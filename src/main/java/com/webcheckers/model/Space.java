@@ -51,6 +51,10 @@ public class Space {
     }
 
     public Piece setPiece(Piece piece) {
+        if (piece == null){
+            this.piece = null;
+            return null;
+        }
         if (this.isValid()) {
             return this.piece = piece;
         }
