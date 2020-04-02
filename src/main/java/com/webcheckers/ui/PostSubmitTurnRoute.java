@@ -51,9 +51,9 @@ public class PostSubmitTurnRoute implements Route {
                 board.movePiece(board.seeTopMove(), board);
                 LOG.fine("Submitted Move!");
                 message = Message.info("Submitted Move!");
-                playerLobby.playerOfGame(playerServices.getPlayer()).swapActiveColor();
                 board.removeAllMoves();
             }
+            playerLobby.playerOfGame(playerServices.getPlayer()).swapActiveColor();
             String messageJSON = gson.toJson(message);
             return messageJSON;
         }

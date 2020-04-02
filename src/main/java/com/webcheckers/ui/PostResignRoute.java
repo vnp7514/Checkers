@@ -6,6 +6,7 @@ import com.webcheckers.appl.PlayerLobby;
 import com.webcheckers.appl.PlayerServices;
 import com.webcheckers.model.Player;
 import com.webcheckers.util.Message;
+import com.webcheckers.util.ModeOptions;
 import spark.*;
 
 import java.util.Objects;
@@ -37,18 +38,20 @@ public class PostResignRoute implements Route {
         Player currentPlayer = playerServices.getPlayer();
         GameLobby gameLobby = playerLobby.playerOfGame(currentPlayer);
         Message message;
+        ModeOptions end;
         if ( gameLobby == null) {
             LOG.fine("GameLobby is null");
             message = Message.error("GameLobby is null");
+            end = null;
         }
         else {
             LOG.fine("GameLobby is not null");
             LOG.fine("This player has resigned");
             playerLobby.removeGame(gameLobby);
-            message = Message.info(currentPlayer.getName() + RESIGN_STR);
+             end = new ModeOptions(true,currentPlayer.getName() + RESIGN_STR);
         }
 
-        LOG.fine(gson.toJson(message));
-        return gson.toJson(message);
+        LOG.fine(gson.toJson(end));
+        return gson.toJson(end);
     }
 }

@@ -5,6 +5,7 @@ import com.webcheckers.appl.GameLobby;
 import com.webcheckers.appl.PlayerLobby;
 import com.webcheckers.appl.PlayerServices;
 import com.webcheckers.model.BoardView;
+import com.webcheckers.model.Color;
 import com.webcheckers.model.Player;
 import com.webcheckers.util.Message;
 import com.webcheckers.util.Move;
@@ -34,6 +35,19 @@ public class PostCheckTurnRoute implements Route {
                 httpSession.attribute(GetHomeRoute.PLAYER_KEY);
         Player player = playerServices.getPlayer();
         GameLobby gameLobby = playerLobby.playerOfGame(player);
+
+        Player opponent;
+        Color yourColor;
+        if (gameLobby.getWhitePlayer() == player) {
+            yourColor = Color.WHITE;
+            opponent = gameLobby.getRedPlayer();
+        }
+        else {
+            yourColor = Color.RED;
+            opponent = gameLobby.getRedPlayer();
+        }
+        GameLobby other = playerLobby.playerOfGame(opponent);
+
         Message message;
         if (player == null) {
             LOG.fine("Player is null");
@@ -45,7 +59,7 @@ public class PostCheckTurnRoute implements Route {
             return gson.toJson(Message.info("true"));
         }
 
-        if (player == gameLobby.getCurrent_player()) {
+        if (yourColor == gameLobby.getActiveColor() || yourColor == other.getActiveColor()) {
             LOG.fine("It's your turn!");
             message = Message.info("true");
         }
