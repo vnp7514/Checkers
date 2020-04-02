@@ -120,6 +120,7 @@ public class BoardView implements Iterable<Row> {
             startRow = move.getStart().getRow();
             endRow = move.getEnd().getRow();
         } else {
+
             endRow = move.getStart().getRow();
             startRow = move.getEnd().getRow();
         }
@@ -167,6 +168,7 @@ public class BoardView implements Iterable<Row> {
         int endRow;
 
         if(playerColor == Color.WHITE) {
+
             startRow = move.getStart().getRow();
             endRow = move.getEnd().getRow();
         } else {
@@ -174,7 +176,7 @@ public class BoardView implements Iterable<Row> {
             startRow = move.getEnd().getRow();
         }
 
-        if (endRow-startRow == 2) {
+        if (startRow-endRow == 2) {
             skipPieceRow = (startRow + endRow) / 2; //Set skipped piece row
             skipPieceCell = (startRow + endRow) / 2; //Set skipped piece cell
             if (board.getRow(skipPieceRow).getSpace(skipPieceCell).getPiece() != null) { //Check if piece exists
