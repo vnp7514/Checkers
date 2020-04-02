@@ -19,7 +19,7 @@ public class PostCheckTurnRoute implements Route {
     private final PlayerLobby playerLobby;
     private final TemplateEngine templateEngine;
 
-    private static final Logger LOG = Logger.getLogger(GetSignInRoute.class.getName());
+    private static final Logger LOG = Logger.getLogger(PostCheckTurnRoute.class.getName());
 
     public PostCheckTurnRoute(final PlayerLobby playerLobby, final TemplateEngine templateEngine, final Gson gson) {
         this.playerLobby = Objects.requireNonNull(playerLobby, "playerLobby must not be null");
@@ -27,7 +27,7 @@ public class PostCheckTurnRoute implements Route {
         this.templateEngine = Objects.requireNonNull(templateEngine, "templateEngine must not be null");
     }
 
-
+    @Override
     public Object handle(Request request, Response response) {
         final Session httpSession = request.session();
         final PlayerServices playerServices =
@@ -37,15 +37,21 @@ public class PostCheckTurnRoute implements Route {
         Message message;
         if (player == null) {
             LOG.fine("Player is null");
-            message = Message.error("Player is null");
+            return null;
         }
+        if (gameLobby == null){
+            LOG.fine("gameLobby is null");
+            playerServices.storeMessage(Message.info("Your opponent has resigned"));
+            return gson.toJson(Message.info("true"));
+        }
+
         if (player == gameLobby.getCurrent_player()) {
             LOG.fine("It's your turn!");
             message = Message.info("true");
         }
         else {
             LOG.fine("It is not your turn");
-            message = Message.info("It's not your turn");
+            message = Message.info("false");
         }
         return gson.toJson(message);
     }
