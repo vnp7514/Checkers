@@ -13,6 +13,6 @@ public class Position {
     }
 
     public int getCell() {
-        return this.row;
+        return this.cell;
     }
 }
