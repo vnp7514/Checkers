@@ -1,5 +1,6 @@
 package com.webcheckers.ui;
 
+import com.google.gson.Gson;
 import com.webcheckers.model.BoardView;
 import com.webcheckers.model.Player;
 import com.webcheckers.appl.GameLobby;
@@ -32,6 +33,7 @@ public class GetGameRoute implements Route {
 
     private final PlayerLobby playerLobby;
     private final TemplateEngine templateEngine;
+    private final Gson gson;
 
     //private final BoardView boardView;
 
@@ -40,12 +42,14 @@ public class GetGameRoute implements Route {
      * @param playerLobby
      * @param templateEngine
      */
-    public GetGameRoute (final PlayerLobby playerLobby, final TemplateEngine templateEngine) {
+    public GetGameRoute (final PlayerLobby playerLobby, final TemplateEngine templateEngine, final Gson gson) {
         //validation
         Objects.requireNonNull(templateEngine, "templateEngine must not be null");
         //
         //this.boardView = new BoardView();
         this.templateEngine = templateEngine;
+        this.gson = Objects.requireNonNull(gson, "gson must not be null");
+
         this.playerLobby = Objects.requireNonNull(playerLobby, "playerLobby must not be null");
     }
 
@@ -54,6 +58,8 @@ public class GetGameRoute implements Route {
     public Object handle(Request request, Response response) throws Exception {
 
         final Map<String, Object> vm = new HashMap<>();
+
+        final Map<String, Object> modeOptions = new HashMap<>(2);
 
         // Retrieve the HTTP session
         final Session httpSession = request.session();
@@ -75,7 +81,8 @@ public class GetGameRoute implements Route {
                         LOG.fine("Not Flipping Board!");
                     }
                     playerServices.addBoard(board);
-
+                    vm.put(GetHomeRoute.MESSAGE_ATTR,playerServices.getMessage());
+                    playerServices.removeMessage();
                     vm.put(ACTIVE_COLOR, Color.WHITE);
                     vm.put(TITLE, "Checkers game!");
                     vm.put(VIEW, ViewMode.PLAY);
@@ -86,10 +93,12 @@ public class GetGameRoute implements Route {
                     vm.put(GAME_BOARD, board);
                     vm.put(MODE, null);
 
-
                     return templateEngine.render(new ModelAndView(vm, VIEW_NAME));
                 } else {
                     LOG.fine("gameLobby is null so the player is not in a game");
+                    modeOptions.put("isGameOver", true);
+                    modeOptions.put("gameOverMessage", request.body());
+                    vm.put(MODE, gson.toJson(modeOptions));
                 }
             } else {
                 LOG.fine("the client has not signed in");
