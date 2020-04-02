@@ -57,7 +57,7 @@ public class GameLobby {
     }
 
     /**
-     * Add a player to the lobby
+     * Remove a player from the lobby
      * @param player the player to be added
      *
      * Pre-condition: containPlayer( player ) was called before

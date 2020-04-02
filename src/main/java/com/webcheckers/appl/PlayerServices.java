@@ -19,7 +19,7 @@ public class PlayerServices {
     // The current username of this player
     private Player player;
     // The playerLobby that contains all the current players in the game
-    private final PlayerLobby playerLobby;
+    //private final PlayerLobby playerLobby;
     // String representing the availability of the player
     private Message message;
 
@@ -28,14 +28,20 @@ public class PlayerServices {
     /**
      * Construct a new PlayerServices but wait for player to sign in
      * @param playerLobby the playerLobby
-     */
+
     PlayerServices(PlayerLobby playerLobby){
         this.playerLobby = playerLobby;
         player = null;
         this.message = null;
     }
-
-
+*/
+    /**
+     * Construct a new PlayerServices but wait for player to sign in
+     */
+    PlayerServices(){
+        player = null;
+        this.message = null;
+    }
 
     /**
      * Get the current player. Null if there is no player
@@ -52,6 +58,8 @@ public class PlayerServices {
     public void insertPlayer(Player player){
         if (this.player == null){
             this.player = player;
+        } else {
+            throw new RuntimeException("player has already been assigned");
         }
     }
 

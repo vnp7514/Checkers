@@ -16,7 +16,10 @@ public class PlayerLobby {
 
     // A list of unique players
     private List<Player> players;
+    // A list of all games
     private List<GameLobby> games;
+    // Number of games have been created/ Also used as a unique id for each game
+    private int numGames = 0;
     private static final Logger LOG = Logger.getLogger(PlayerLobby.class.getName());
 
     /**
@@ -36,7 +39,7 @@ public class PlayerLobby {
      */
     public PlayerServices newPlayerServices(){
         LOG.fine("A new PlayerServices");
-        return new PlayerServices(this);
+        return new PlayerServices();
     }
 
     /**
