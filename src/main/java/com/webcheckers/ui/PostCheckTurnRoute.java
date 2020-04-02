@@ -38,7 +38,8 @@ public class PostCheckTurnRoute implements Route {
 
         Player opponent;
         Color yourColor;
-        if (gameLobby.getWhitePlayer() == player) {
+        // If the white player is the current player
+        if (gameLobby.getWhitePlayer().equals(player)) {
             yourColor = Color.WHITE;
             opponent = gameLobby.getRedPlayer();
         }
@@ -46,20 +47,19 @@ public class PostCheckTurnRoute implements Route {
             yourColor = Color.RED;
             opponent = gameLobby.getRedPlayer();
         }
-        GameLobby other = playerLobby.playerOfGame(opponent);
-
         Message message;
         if (player == null) {
             LOG.fine("Player is null");
             return null;
         }
         if (gameLobby == null){
+            // gameLobby is null if a player resigned
             LOG.fine("gameLobby is null");
-            playerServices.storeMessage(Message.info("Your opponent has resigned"));
+            playerServices.storeMessage(gson.fromJson(response.body(), Message.class));
             return gson.toJson(Message.info("true"));
         }
 
-        if (yourColor == gameLobby.getActiveColor() || yourColor == other.getActiveColor()) {
+        if (yourColor == gameLobby.getActiveColor()) {
             LOG.fine("It's your turn!");
             message = Message.info("true");
         }

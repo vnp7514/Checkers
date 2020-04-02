@@ -382,10 +382,10 @@ public class BoardView implements Iterable<Row> {
         }
     }
 
-    public boolean winCondition(BoardView board){
+    public boolean winCondition(){
         int red = 0;
         int whi= 0;
-        for (Row r : board.rows) {
+        for (Row r : this.rows) {
             for (Space s : r) {
                 if (s.getPiece() != null) {
                     if (s.getPiece().getColor() == Color.WHITE) {

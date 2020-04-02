@@ -26,7 +26,7 @@ public class GetGameRoute implements Route {
     private final String WHITE_PLAYER = "whitePlayer";
     private final String ACTIVE_COLOR = "activeColor";
 
-    private static final Logger LOG = Logger.getLogger(GetSignInRoute.class.getName());
+    private static final Logger LOG = Logger.getLogger(GetGameRoute.class.getName());
 
     private final PlayerLobby playerLobby;
     private final TemplateEngine templateEngine;
@@ -71,7 +71,7 @@ public class GetGameRoute implements Route {
             Player currentPlayer = playerServices.getPlayer();
             if (currentPlayer != null) {
                 GameLobby gameLobby = playerLobby.playerOfGame(currentPlayer);
-                if (gameLobby != null || !playerLobby.getBoard(gameLobby).winCondition(playerLobby.getBoard(gameLobby))) {
+                if (gameLobby != null && !playerLobby.getBoard(gameLobby).winCondition()) {
                     if (gameLobby.getWhitePlayer().equals(currentPlayer)) { // the current player is white
                         PSBoard = gameLobby.getBoard();
                         board = playerLobby.getFlippedBoard(gameLobby);
