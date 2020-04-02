@@ -89,6 +89,10 @@ public class Row implements Iterable<Space> {
         return this.index;
     }
 
+    public Space getSpace(int index) {
+        return this.spaces.get(index);
+    }
+
     /**
      * Put a piece on the space
      * @param space the space

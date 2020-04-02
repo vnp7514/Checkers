@@ -1,6 +1,7 @@
 package com.webcheckers.model;
 
 import java.util.*;
+import com.webcheckers.util.Move;
 
 /**
  * The Board representation, creates and Arraylist of Rows,
@@ -51,6 +52,10 @@ public class BoardView implements Iterable<Row> {
         return this.board;
     }
 
+    public Row getRow(int indx) {
+        return this.rows.get(indx);
+    }
+
     public void setPiece(int row, int col, Piece piece) {
         this.rows.get(row).setSpace(col, piece);
     }
@@ -69,6 +74,46 @@ public class BoardView implements Iterable<Row> {
      */
     public boolean isValid(int rowidx, int cellidx){
         return board.isValid(rowidx, cellidx);
+    }
+
+    public boolean isValidMove(Move move, BoardView board){
+
+        int skipPieceRow, skipPieceCell = 0;
+        if (isValid(move.getStart().getRow(),move.getStart().getCell())) {
+            if (isValid(move.getStart().getRow(),move.getStart().getCell())) {
+                if(move.getEnd().getRow() > move.getStart().getRow()){ //Check that player is moving up
+                    if (move.getEnd().getRow()-move.getStart().getRow() == 1) { //Check if move up 1 space
+                        return true;
+                    } else if (isValidJump(move, board)) { //Check if skipping a piece
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    public boolean isValidJump(Move move, BoardView board) {
+        int skipPieceRow, skipPieceCell = 0;
+
+        Color playerColor = board.getRow(move.getStart().getRow()).getSpace(move.getStart().getCell()).getPiece().getColor();//Get player colors
+        Color otherPlayer;
+        if (playerColor == Color.WHITE) {
+            otherPlayer = Color.RED;
+        } else {
+            otherPlayer = Color.WHITE;
+        }
+
+        if (move.getEnd().getRow()-move.getStart().getRow() == 2) {
+            skipPieceRow = (move.getStart().getRow() + move.getEnd().getRow()) / 2; //Set skipped piece row
+            skipPieceCell = (move.getStart().getCell() + move.getEnd().getCell()) / 2; //Set skipped piece cell
+            if (board.getRow(skipPieceRow).getSpace(skipPieceCell).getPiece() != null) { //Check if piece exists
+                if (board.getRow(skipPieceRow).getSpace(skipPieceCell).getPiece().getColor() == otherPlayer) { //Check if piece is opposite color
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     public BoardView flip()

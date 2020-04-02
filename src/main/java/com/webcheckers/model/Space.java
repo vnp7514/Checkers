@@ -44,7 +44,7 @@ public class Space {
 
     /**
      * Get the piece
-     * @return
+     * @return the Piece
      */
     public Piece getPiece() {
         return this.piece;
