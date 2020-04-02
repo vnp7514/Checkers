@@ -62,19 +62,23 @@ public class GetGameRoute implements Route {
 
         final BoardView board;
 
+        final BoardView PSboard;
+
         if (playerServices != null) {
             Player currentPlayer = playerServices.getPlayer();
             if (currentPlayer != null) {
                 GameLobby gameLobby = playerLobby.playerOfGame(currentPlayer);
                 if (gameLobby != null) {
                     if (gameLobby.getWhitePlayer().equals(currentPlayer)) { // the current player is white
+                        PSboard = gameLobby.getBoard();
                         board = playerLobby.getFlippedBoard(gameLobby);
                         LOG.fine("Flipping Board!");
                     } else { // the current player is red
+                        PSboard = gameLobby.getBoard();
                         board = gameLobby.getBoard();
                         LOG.fine("Not Flipping Board!");
                     }
-                    playerServices.addBoard(board);
+                    playerServices.addBoard(PSboard);
 
                     vm.put(ACTIVE_COLOR, Color.WHITE);
                     vm.put(TITLE, "Checkers game!");

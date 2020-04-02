@@ -31,8 +31,8 @@ public class BoardView implements Iterable<Row> {
         }
     }
 
-    public BoardView(ArrayList board) {
-        this.moves = new ArrayList<>();
+    public BoardView(ArrayList board, ArrayList<Move> moves) {
+        this.moves = moves;
         this.board = new Board();
         this.rows = board;
     }
@@ -72,8 +72,16 @@ public class BoardView implements Iterable<Row> {
     }
 
     //TODO Stubbed out
-    public void movePiece(){
+    public void movePiece(Move move, BoardView board){
+        int movesSize = board.moves.size();
 
+        int endRow = board.seeTopMove().getEnd().getRow();
+        int endCell = board.seeTopMove().getEnd().getCell();
+        int startRow = board.moves.get(movesSize - 1).getStart().getRow();
+        int startCell = board.moves.get(movesSize - 1).getStart().getCell();
+
+        board.rows.get(endRow).getSpace(endCell).setPiece(new Piece(board.getRow(startRow).getSpace(startCell).getPiece().getType(),board.getRow(startRow).getSpace(startCell).getPiece().getColor()));
+        board.rows.get(startRow).getSpace(startCell).setPiece(null);
     }
 
     /**
@@ -88,6 +96,7 @@ public class BoardView implements Iterable<Row> {
     }
 
     public boolean isValidMove(Move move, BoardView board){
+
         if (board.seeTopMove() == null) {
             if (isValid(move.getStart().getRow(),move.getStart().getCell())) {
                 if (isValid(move.getStart().getRow(),move.getStart().getCell())) {
@@ -123,6 +132,7 @@ public class BoardView implements Iterable<Row> {
         Color otherPlayer;
         if (playerColor == Color.WHITE) {
             otherPlayer = Color.RED;
+            board = board.flip();
         } else {
             otherPlayer = Color.WHITE;
         }
@@ -139,13 +149,46 @@ public class BoardView implements Iterable<Row> {
         return false;
     }
 
+    public boolean newMoveExists(Move move, BoardView board) {
+        Color playerColor = board.getRow(move.getStart().getRow()).getSpace(move.getStart().getCell()).getPiece().getColor();//Get player colors
+        Color otherPlayer;
+        if (playerColor == Color.WHITE) {
+            otherPlayer = Color.RED;
+        } else {
+            otherPlayer = Color.WHITE;
+        }
+
+        int endRow = board.seeTopMove().getEnd().getRow();
+        int endCell = board.seeTopMove().getEnd().getCell();
+
+        if(endRow != 0) { //Check out of bounds
+            if (board.getRow(endRow + 1).getSpace(endCell + 1).getPiece() != null) {
+                if (board.getRow(endRow + 1).getSpace(endCell + 1).getPiece().getColor() == otherPlayer) {
+                    if (board.getRow(endRow + 2).getSpace(endCell + 2).getPiece() == null) {
+                        return true;
+                    }
+                }
+            }
+        }
+        if(endRow != 7) { //Check out of bounds
+            if (board.getRow(endRow + 1).getSpace(endCell - 1).getPiece() != null) {
+                if (board.getRow(endRow + 1).getSpace(endCell - 1).getPiece().getColor() == otherPlayer) {
+                    if (board.getRow(endRow + 2).getSpace(endCell - 2).getPiece() == null) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
     public BoardView flip()
     {
         ArrayList<Row> temp = new ArrayList<>();
         for (int i = 7; i >= 0; i--){
             temp.add(this.rows.get(i).flip());
         }
-        return new BoardView(temp);
+        return new BoardView(temp, this.moves);
     }
 
     /**
