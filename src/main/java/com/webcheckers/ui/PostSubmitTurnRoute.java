@@ -48,7 +48,8 @@ public class PostSubmitTurnRoute implements Route {
         
         Color playerColor = getColor(board, move);
 
-        //Only for single pieces not king pieces
+        //If this was a valid move we check to see if there are any more required
+        //moves before submission
         if (board.isValidMove(move,board)){
             //If a single move was made
             if (move.getEnd().getRow() - move.getStart().getRow() == 1 &&
@@ -60,9 +61,11 @@ public class PostSubmitTurnRoute implements Route {
                 move.getEnd().getRow() - move.getStart().getRow() == -1 &&
                     move.getEnd().getCell() - move.getStart().getCell() == -1) {
 
+                //Go through every space on the board looking for pieces owned by this player
                 for (int i = 0; i < 8; i++) {
                     for (int j = 0; j < 8; j++) {
                         if (board.viewPiece(i,j).getColor() == playerColor) {
+                            //If a required move is found get an error message.
                             if ( i+2< 8 && j-2 >= 0) {
                                 Move t_r = new Move(new Position(i,j), new Position(i+2,j-2));
                                 if (board.isValidJump(t_r, board)) {
@@ -103,8 +106,10 @@ public class PostSubmitTurnRoute implements Route {
                             move.getEnd().getCell() - move.getStart().getCell() == 2 ||
                     move.getEnd().getRow() - move.getStart().getRow() == -2 &&
                             move.getEnd().getCell() - move.getStart().getCell() == -2) {
+                //Get this player's color
                 if (board.viewPiece(move.getEnd().getRow(),move.getEnd().getCell()).getColor()
                         == playerColor) {
+                    //If a required was found get an error message
                     if ( move.getEnd().getRow()+2< 8 && move.getEnd().getCell()-2 >= 0) {
                         Move t_r = new Move(move.getEnd(),
                                 new Position(move.getEnd().getRow()+2,move.getEnd().getCell()-2));
@@ -135,10 +140,13 @@ public class PostSubmitTurnRoute implements Route {
                     }
                 }
             }
+            //If no required moves are found get Info message
             else {
                 message = Message.info("Move is valid");
             }
-        } else {
+        }
+        //If the last move was invalid get an error message
+        else {
             LOG.fine("move is invalid");
             message = Message.error("Move is invalid");
         }
