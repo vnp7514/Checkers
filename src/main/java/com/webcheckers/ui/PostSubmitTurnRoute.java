@@ -7,6 +7,8 @@ import com.webcheckers.model.BoardView;
 import com.webcheckers.util.Message;
 import spark.*;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 import java.util.logging.Logger;
 

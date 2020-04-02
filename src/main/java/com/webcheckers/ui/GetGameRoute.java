@@ -71,7 +71,7 @@ public class GetGameRoute implements Route {
             Player currentPlayer = playerServices.getPlayer();
             if (currentPlayer != null) {
                 GameLobby gameLobby = playerLobby.playerOfGame(currentPlayer);
-                if (gameLobby != null) {
+                if (gameLobby != null || !playerLobby.getBoard(gameLobby).winCondition()) {
                     if (gameLobby.getWhitePlayer().equals(currentPlayer)) { // the current player is white
                         PSBoard = gameLobby.getBoard();
                         board = playerLobby.getFlippedBoard(gameLobby);
