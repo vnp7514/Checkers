@@ -37,12 +37,18 @@ public class PostResignGameRoute implements Route {
         if ( gameLobby != null){
             LOG.fine("GameLobby is not null");
             playerLobby.removeGame(gameLobby);
-            response.redirect(WebServer.HOME_URL);
+            String messageJSON = gson.toJson(
+                    Message.info(playerServices.getPlayer().getName() +
+                            " has resigned"));
+            response.body(messageJSON);
             halt();
-            return Message.info(playerServices.getPlayer().getName() + "has resigned!");
         } else {
             LOG.fine("gameLobby is null");
-            return Message.error("Unable to resign the game");
+            String messageJSON = gson.toJson(
+                    Message.error(playerServices.getPlayer().getName() +
+                            " cannot resign"));
+            response.body(messageJSON);
         }
+        return null;
     }
 }
