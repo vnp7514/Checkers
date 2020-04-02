@@ -1,13 +1,10 @@
 package com.webcheckers.ui;
 
 import com.google.gson.Gson;
-import com.webcheckers.model.BoardView;
-import com.webcheckers.model.Player;
+import com.webcheckers.model.*;
 import com.webcheckers.appl.GameLobby;
 import com.webcheckers.appl.PlayerLobby;
 import com.webcheckers.appl.PlayerServices;
-import com.webcheckers.model.Color;
-import com.webcheckers.model.ViewMode;
 import spark.*;
 
 import java.util.HashMap;
@@ -68,22 +65,26 @@ public class GetGameRoute implements Route {
 
         final BoardView board;
 
+        final BoardView PSBoard;
+
         if (playerServices != null) {
             Player currentPlayer = playerServices.getPlayer();
             if (currentPlayer != null) {
                 GameLobby gameLobby = playerLobby.playerOfGame(currentPlayer);
                 if (gameLobby != null) {
                     if (gameLobby.getWhitePlayer().equals(currentPlayer)) { // the current player is white
+                        PSBoard = gameLobby.getBoard();
                         board = playerLobby.getFlippedBoard(gameLobby);
                         LOG.fine("Flipping Board!");
                     } else { // the current player is red
+                        PSBoard = gameLobby.getBoard();
                         board = gameLobby.getBoard();
                         LOG.fine("Not Flipping Board!");
                     }
-                    playerServices.addBoard(board);
+                    playerServices.addBoard(PSBoard);
                     vm.put(GetHomeRoute.MESSAGE_ATTR,playerServices.getMessage());
                     playerServices.removeMessage();
-                    vm.put(ACTIVE_COLOR, Color.WHITE);
+                    vm.put(ACTIVE_COLOR, gameLobby.getActiveColor());
                     vm.put(TITLE, "Checkers game!");
                     vm.put(VIEW, ViewMode.PLAY);
                     //need to put player instances in all of these below
