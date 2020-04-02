@@ -104,7 +104,7 @@ public class BoardView implements Iterable<Row> {
                     board.rows.get(startRow).getSpace(startCell).setPiece(null);
                 } else if (endRow - startRow == 2) {
                     int skipPieceRow = (startRow + endRow) / 2; //Set skipped piece row
-                    int skipPieceCell = (move.getStart().getCell() + move.getEnd().getCell()) / 2; //Set skipped piece cell
+                    int skipPieceCell = (startRow + endRow) / 2; //Set skipped piece cell
                     board.rows.get(startRow).getSpace(startCell).setPiece(null);
                     board.rows.get(skipPieceRow).getSpace(skipPieceCell).setPiece(null);
                     if (m.equals(board.seeTopMove())) {
@@ -126,7 +126,7 @@ public class BoardView implements Iterable<Row> {
                     board.rows.get(startRow).getSpace(startCell).setPiece(null);
                 } else if (startRow - endRow == 2) {
                     int skipPieceRow = (startRow + endRow) / 2; //Set skipped piece row
-                    int skipPieceCell = (move.getStart().getCell() + move.getEnd().getCell()) / 2; //Set skipped piece cell
+                    int skipPieceCell = (startCell + endCell) / 2; //Set skipped piece cell
                     board.rows.get(startRow).getSpace(startCell).setPiece(null);
                     board.rows.get(skipPieceRow).getSpace(skipPieceCell).setPiece(null);
                     if (m.equals(board.seeTopMove())) {
