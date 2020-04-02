@@ -63,8 +63,14 @@ public class WebServer {
    * The URL pattern for signing out
    */
   public static final String SIGNOUT_URL = "/signout";
-
+  /**
+   * The URL pattern for the game page
+   */
   public static final String GAME_URL = "/game";
+  /**
+   * The URL pattern for submitting a turn
+   */
+  public static final String SUBMIT_URL = "/submitTurn";
 
   //
   // Attributes
@@ -165,6 +171,9 @@ public class WebServer {
 
     // Start game
     post(GAME_URL, new PostGameRoute(playerLobby, templateEngine));
+
+    //Submit a turn
+    post(SUBMIT_URL, new PostSubmitTurnRoute(playerLobby, templateEngine, gson));
 
     //
     LOG.config("WebServer is initialized.");

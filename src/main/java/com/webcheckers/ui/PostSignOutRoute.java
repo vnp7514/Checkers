@@ -37,7 +37,7 @@ public class PostSignOutRoute implements Route {
     @Override
     public Object handle(Request request, Response response) throws Exception {
         final Session httpSession = request.session();
-        LOG.fine("GetSignOutRoute is invoked");
+        LOG.fine("PostSignOutRoute is invoked");
 
         final PlayerServices playerServices =
                 httpSession.attribute(GetHomeRoute.PLAYER_KEY);
