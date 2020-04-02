@@ -56,7 +56,6 @@ define(function (require) {
         // end the State machine by refreshing the Game View (via a browser page request)
         this._controller.refresh();
       } else {
-        this._controller.displayMessage(message);
         this._controller.setState(PlayModeConstants.WAITING_TO_CHECK_MY_TURN);
       }
     }
