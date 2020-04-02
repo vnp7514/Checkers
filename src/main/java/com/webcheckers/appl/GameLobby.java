@@ -1,6 +1,7 @@
 package com.webcheckers.appl;
 
 import com.webcheckers.model.BoardView;
+import com.webcheckers.model.Color;
 import com.webcheckers.model.Player;
 
 
@@ -20,6 +21,8 @@ public class GameLobby {
     private int white = 1;
     // The current player, white gets the first turn
     private int current_player = white;
+
+    private Color activeColor = Color.WHITE;
 
     // the game board
     private BoardView board;
@@ -62,6 +65,20 @@ public class GameLobby {
     private List<Player> getPlayers() {
         return players;
     }
+
+    public void swapActiveColor() {
+        if (activeColor == Color.WHITE) {
+            activeColor = Color.RED;
+        }
+        else {
+            activeColor = Color.WHITE;
+        }
+    }
+
+    public Color getActiveColor() {
+        return activeColor;
+    }
+
 
     /**
      * Add a player to the lobby

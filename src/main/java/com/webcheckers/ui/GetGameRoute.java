@@ -80,7 +80,7 @@ public class GetGameRoute implements Route {
                     }
                     playerServices.addBoard(PSboard);
 
-                    vm.put(ACTIVE_COLOR, Color.WHITE);
+                    vm.put(ACTIVE_COLOR, gameLobby.getActiveColor());
                     vm.put(TITLE, "Checkers game!");
                     vm.put(VIEW, ViewMode.PLAY);
                     //need to put player instances in all of these below

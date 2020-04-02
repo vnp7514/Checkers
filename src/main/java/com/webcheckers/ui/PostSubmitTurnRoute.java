@@ -52,6 +52,7 @@ public class PostSubmitTurnRoute implements Route {
                 LOG.fine("Submitted Move!");
                 message = Message.info("Submitted Move!");
             }
+            playerLobby.playerOfGame(playerServices.getPlayer()).swapActiveColor();
             String messageJSON = gson.toJson(message);
             return messageJSON;
         }
