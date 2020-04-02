@@ -1,9 +1,11 @@
 package com.webcheckers.ui;
 
 import com.google.gson.Gson;
+import com.webcheckers.appl.GameLobby;
 import com.webcheckers.appl.PlayerLobby;
 import com.webcheckers.appl.PlayerServices;
 import com.webcheckers.model.BoardView;
+import com.webcheckers.model.Player;
 import com.webcheckers.util.Message;
 import com.webcheckers.util.Move;
 import com.webcheckers.util.Position;
@@ -27,8 +29,25 @@ public class PostCheckTurnRoute implements Route {
 
 
     public Object handle(Request request, Response response) {
-        // Get the string from the body
-        return null;
+        final Session httpSession = request.session();
+        final PlayerServices playerServices =
+                httpSession.attribute(GetHomeRoute.PLAYER_KEY);
+        Player player = playerServices.getPlayer();
+        GameLobby gameLobby = playerLobby.playerOfGame(player);
+        Message message;
+        if (player == null) {
+            LOG.fine("Player is null");
+            message = Message.error("Player is null");
+        }
+        if (player == gameLobby.getCurrent_player()) {
+            LOG.fine("It's your turn!");
+            message = Message.info("true");
+        }
+        else {
+            LOG.fine("It is not your turn");
+            message = Message.info("It's not your turn");
+        }
+        return gson.toJson(message);
     }
 
 }

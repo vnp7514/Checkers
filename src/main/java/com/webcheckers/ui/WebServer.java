@@ -186,11 +186,13 @@ public class WebServer {
     // Start game
     post(GAME_URL, new PostGameRoute(playerLobby, templateEngine));
 
-    //Submit a turn
+    // Submit a turn
     post(SUBMIT_URL, new PostSubmitTurnRoute(playerLobby, templateEngine, gson));
 
+    // Validate move
     post(VALIDATE_URL, new PostValidateMoveRoute(playerLobby, templateEngine, gson));
 
+    // Check turn
     post(CHECKTURN_URL, new PostCheckTurnRoute(playerLobby, templateEngine, gson));
 
     // Resign

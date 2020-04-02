@@ -18,6 +18,8 @@ public class GameLobby {
     // The index where the specified player is in the list
     private int red = 0;
     private int white = 1;
+    // The current player, white gets the first turn
+    private int current_player = white;
 
     // the game board
     private BoardView board;
@@ -35,6 +37,22 @@ public class GameLobby {
     public GameLobby(Player player){
         this();
         this.players.add(player);
+    }
+
+    /**
+     * Get the current player
+     * @return the current player
+     */
+    public Player getCurrent_player() {
+        return players.get(current_player);
+    }
+
+    /**
+     * Set the current player
+     * @param player 0 for red, 1 for white
+     */
+    public void setCurrent_player(int player) {
+        this.current_player = player;
     }
 
     /**
