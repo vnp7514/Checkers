@@ -101,4 +101,12 @@ public class PlayerServices {
     public void removeMessage() {
         this.message = null;
     }
+
+    public void addBoard(BoardView boardView){
+        this.game = boardView;
+    }
+
+    public BoardView getGame() {
+        return game;
+    }
 }

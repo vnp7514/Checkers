@@ -33,7 +33,7 @@ public class GetGameRoute implements Route {
     private final PlayerLobby playerLobby;
     private final TemplateEngine templateEngine;
 
-    private final BoardView boardView;
+    //private final BoardView boardView;
 
     /**
      * Constructor
@@ -44,7 +44,7 @@ public class GetGameRoute implements Route {
         //validation
         Objects.requireNonNull(templateEngine, "templateEngine must not be null");
         //
-        this.boardView = new BoardView();
+        //this.boardView = new BoardView();
         this.templateEngine = templateEngine;
         this.playerLobby = Objects.requireNonNull(playerLobby, "playerLobby must not be null");
     }
@@ -74,6 +74,7 @@ public class GetGameRoute implements Route {
                         board = gameLobby.getBoard();
                         LOG.fine("Not Flipping Board!");
                     }
+                    playerServices.addBoard(board);
 
                     vm.put(ACTIVE_COLOR, Color.WHITE);
                     vm.put(TITLE, "Checkers game!");

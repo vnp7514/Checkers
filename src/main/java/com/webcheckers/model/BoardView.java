@@ -60,6 +60,17 @@ public class BoardView implements Iterable<Row> {
 
     }
 
+    /**
+     * Check whether the space at rowidx and cellidx (colidx) is
+     *    a valid space (aka. a black title and does not hold a piece)
+     * @param rowidx the row index
+     * @param cellidx the cell index
+     * @return true if it is valid. false otherwise
+     */
+    public boolean isValid(int rowidx, int cellidx){
+        return board.isValid(rowidx, cellidx);
+    }
+
     public BoardView flip()
     {
         ArrayList<Row> temp = new ArrayList<>();

@@ -71,6 +71,22 @@ public class WebServer {
    * The URL pattern for submitting a turn
    */
   public static final String SUBMIT_URL = "/submitTurn";
+  /**
+   * The URL pattern to validate a move
+   */
+  public static final String VALIDATE_URL = "/validateMove";
+  /**
+   * The URL pattern to remove the last move that was validated
+   */
+  public static final String BACKUP_URL = "/backupMove";
+  /**
+   * The URL pattern to resign the game
+   */
+  public static final String RESIGN_URL = "/resignGame";
+
+  public static final String CHECKTURN_URL = "/checkTurn";
+
+
 
   //
   // Attributes
@@ -175,6 +191,9 @@ public class WebServer {
     //Submit a turn
     post(SUBMIT_URL, new PostSubmitTurnRoute(playerLobby, templateEngine, gson));
 
+    post(VALIDATE_URL, new PostValidateMoveRoute(playerLobby, templateEngine, gson));
+
+    post(CHECKTURN_URL, new PostCheckTurnRoute(playerLobby, templateEngine, gson));
     //
     LOG.config("WebServer is initialized.");
   }

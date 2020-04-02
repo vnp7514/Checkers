@@ -16,6 +16,18 @@ public class Board {
         initialize_board();
     }
 
+
+    /**
+     * Check whether the space at rowidx and cellidx (colidx) is
+     *     a valid space (aka. a black title and does not hold a piece)
+     * @param rowidx the row index
+     * @param cellidx the cell index
+     * @return true if it is valid. false otherwise
+     */
+    public boolean isValid(int rowidx, int cellidx){
+        return (board[rowidx][cellidx].isValid());
+    }
+
     /**
      * Creates the starting board
      * White checkers are placed in the top three rows, red checkers on the bottom three rows
