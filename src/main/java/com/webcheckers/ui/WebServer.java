@@ -194,6 +194,8 @@ public class WebServer {
     post(VALIDATE_URL, new PostValidateMoveRoute(playerLobby, templateEngine, gson));
 
     post(CHECKTURN_URL, new PostCheckTurnRoute(playerLobby, templateEngine, gson));
+    // Resign a game
+    post(RESIGN_URL, new PostResignGameRoute(playerLobby, templateEngine, gson));
     //
     LOG.config("WebServer is initialized.");
   }
