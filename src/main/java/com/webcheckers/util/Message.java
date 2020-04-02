@@ -42,15 +42,19 @@ public final class Message {
     return new Message(message, Type.INFO);
   }
 
+  public static Message resign(final String message) {
+    return new Message(message, Type.RESIGN);
+  }
   //
   // Inner Types
   //
+
 
   /**
    * The type of {@link Message}; either information or an error.
    */
   public enum Type {
-    INFO, ERROR
+    INFO, ERROR, RESIGN
   }
 
   //

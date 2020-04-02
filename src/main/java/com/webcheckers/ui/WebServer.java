@@ -86,8 +86,6 @@ public class WebServer {
 
   public static final String CHECKTURN_URL = "/checkTurn";
 
-
-
   //
   // Attributes
   //
@@ -194,7 +192,10 @@ public class WebServer {
     post(VALIDATE_URL, new PostValidateMoveRoute(playerLobby, templateEngine, gson));
 
     post(CHECKTURN_URL, new PostCheckTurnRoute(playerLobby, templateEngine, gson));
-    //
+
+    // Resign
+    post(RESIGN_URL, new PostResignRoute(playerLobby, templateEngine, gson));
+
     LOG.config("WebServer is initialized.");
   }
 

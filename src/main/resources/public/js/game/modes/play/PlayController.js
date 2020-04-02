@@ -183,6 +183,10 @@ define(function(require){
         // tell the browser to route the player to the Home page
         window.location = '/';
       }
+      else if (message.type === 'RESIGN') {
+        this.displayMessage(message);
+        window.location = '/';
+      }
       // handle error message
       else {
         this.displayMessage(message);
