@@ -96,7 +96,11 @@ public class BoardView implements Iterable<Row> {
 
             if (startRow < endRow) {//White
                 if (endRow-startRow == 1) {
-                    board.rows.get(endRow).getSpace(endCell).setPiece(new Piece(pieceType,playerColor));
+                    if (endRow == 7) {
+                        board.rows.get(endRow).getSpace(endCell).setPiece(new Piece(Type.KING,playerColor));
+                    } else {
+                        board.rows.get(endRow).getSpace(endCell).setPiece(new Piece(pieceType,playerColor));
+                    }
                     board.rows.get(startRow).getSpace(startCell).setPiece(null);
                 } else if (endRow - startRow == 2) {
                     int skipPieceRow = (startRow + endRow) / 2; //Set skipped piece row
@@ -104,13 +108,21 @@ public class BoardView implements Iterable<Row> {
                     board.rows.get(startRow).getSpace(startCell).setPiece(null);
                     board.rows.get(skipPieceRow).getSpace(skipPieceCell).setPiece(null);
                     if (m.equals(board.seeTopMove())) {
-                        board.rows.get(endRow).getSpace(endCell).setPiece(new Piece(pieceType, playerColor));
+                        if (endRow == 7) {
+                            board.rows.get(endRow).getSpace(endCell).setPiece(new Piece(Type.KING,playerColor));
+                        } else {
+                            board.rows.get(endRow).getSpace(endCell).setPiece(new Piece(pieceType,playerColor));
+                        }
                     }
 
                 }
             } else if (endRow < startRow) { //Red
                 if (startRow-endRow == 1) {
-                    board.rows.get(endRow).getSpace(endCell).setPiece(new Piece(pieceType,playerColor));
+                    if (endRow == 0) {
+                        board.rows.get(endRow).getSpace(endCell).setPiece(new Piece(Type.KING,playerColor));
+                    } else {
+                        board.rows.get(endRow).getSpace(endCell).setPiece(new Piece(pieceType,playerColor));
+                    }
                     board.rows.get(startRow).getSpace(startCell).setPiece(null);
                 } else if (startRow - endRow == 2) {
                     int skipPieceRow = (startRow + endRow) / 2; //Set skipped piece row
@@ -118,7 +130,11 @@ public class BoardView implements Iterable<Row> {
                     board.rows.get(startRow).getSpace(startCell).setPiece(null);
                     board.rows.get(skipPieceRow).getSpace(skipPieceCell).setPiece(null);
                     if (m.equals(board.seeTopMove())) {
-                        board.rows.get(endRow).getSpace(endCell).setPiece(new Piece(pieceType, playerColor));
+                        if (endRow == 0) {
+                            board.rows.get(endRow).getSpace(endCell).setPiece(new Piece(Type.KING,playerColor));
+                        } else {
+                            board.rows.get(endRow).getSpace(endCell).setPiece(new Piece(pieceType,playerColor));
+                        }
                     }
                 }
             }
@@ -139,13 +155,16 @@ public class BoardView implements Iterable<Row> {
     public boolean isValidMove(Move move, BoardView board){
         Color playerColor;
         int movesSize = board.moves.size();
+        Type pieceType;
         if (movesSize >= 1) {
             int startRowI = board.moves.get(movesSize - 1).getStart().getRow();
             int startCellI = board.moves.get(movesSize - 1).getStart().getCell();
 
             playerColor = board.getRow(startRowI).getSpace(startCellI).getPiece().getColor();//Get player colors
+            pieceType = board.getRow(startRowI).getSpace(startCellI).getPiece().getType();
         } else {
             playerColor = board.getRow(move.getStart().getRow()).getSpace(move.getStart().getCell()).getPiece().getColor();
+            pieceType = board.getRow(move.getStart().getRow()).getSpace(move.getStart().getCell()).getPiece().getType();
         }
 
         Color otherPlayer;
@@ -167,8 +186,8 @@ public class BoardView implements Iterable<Row> {
         }
 
         if (board.seeTopMove() == null) {
-                    if(endRow > startRow){ //Check that player is moving up
-                        if (endRow-startRow == 1) { //Check if move up 1 space
+                    if(endRow > startRow || ((pieceType == Type.KING) && startRow > endRow)){ //Check that player is moving up
+                        if (endRow-startRow == 1 || ((pieceType == Type.KING) && (endRow-startRow == -1))) { //Check if move up 1 space
                             if (move.getEnd().getCell()-move.getStart().getCell() == 1 || move.getEnd().getCell()-move.getStart().getCell() == -1) {
                                 return true;
                             }
@@ -191,14 +210,17 @@ public class BoardView implements Iterable<Row> {
     public boolean isValidJump(Move move, BoardView board) {
         int skipPieceRow, skipPieceCell = 0;
         Color playerColor;
+        Type pieceType;
         int movesSize = board.moves.size();
         if (movesSize >= 1) {
             int startRowI = board.moves.get(movesSize - 1).getStart().getRow();
             int startCellI = board.moves.get(movesSize - 1).getStart().getCell();
 
             playerColor = board.getRow(startRowI).getSpace(startCellI).getPiece().getColor();//Get player colors
+            pieceType = board.getRow(startRowI).getSpace(startCellI).getPiece().getType();
         } else {
             playerColor = board.getRow(move.getStart().getRow()).getSpace(move.getStart().getCell()).getPiece().getColor();
+            pieceType = board.getRow(move.getStart().getRow()).getSpace(move.getStart().getCell()).getPiece().getType();
         }
         Color otherPlayer;
         if (playerColor == Color.WHITE) {
@@ -218,7 +240,7 @@ public class BoardView implements Iterable<Row> {
             startRow = move.getEnd().getRow();
         }
 
-        if (endRow-startRow == 2) {
+        if (endRow-startRow == 2 || ((pieceType == Type.KING)&&(endRow-startRow == -2))) {
             if (move.getEnd().getCell()-move.getStart().getCell() == 2 || move.getEnd().getCell()-move.getStart().getCell() == -2) {
                 skipPieceRow = (startRow + endRow) / 2; //Set skipped piece row
                 skipPieceCell = (move.getStart().getCell() + move.getEnd().getCell()) / 2; //Set skipped piece cell
@@ -240,14 +262,17 @@ public class BoardView implements Iterable<Row> {
         }
 
         Color playerColor;
+        Type pieceType;
         int movesSize = board.moves.size();
         if (movesSize >= 1) {
             int startRowI = board.moves.get(movesSize - 1).getStart().getRow();
             int startCellI = board.moves.get(movesSize - 1).getStart().getCell();
 
             playerColor = board.getRow(startRowI).getSpace(startCellI).getPiece().getColor();//Get player colors
+            pieceType = board.getRow(startRowI).getSpace(startCellI).getPiece().getType();
         } else {
             playerColor = board.getRow(move.getStart().getRow()).getSpace(move.getStart().getCell()).getPiece().getColor();
+            pieceType = board.getRow(move.getStart().getRow()).getSpace(move.getStart().getCell()).getPiece().getType();
         }
 
         Color otherPlayer;
@@ -260,7 +285,7 @@ public class BoardView implements Iterable<Row> {
         int endRow = board.seeTopMove().getEnd().getRow();
         int endCell = board.seeTopMove().getEnd().getCell();
 
-        if(playerColor == Color.WHITE) {
+        if(playerColor == Color.WHITE || pieceType == Type.KING) {
             if(endCell < 6) { //Check out of bounds
                 if (endRow < 6) {
                     if (board.getRow(endRow + 1).getSpace(endCell + 1).getPiece() != null) {
@@ -273,7 +298,7 @@ public class BoardView implements Iterable<Row> {
                 }
             }
             if(endCell > 1) { //Check out of bounds
-                if (endRow >6) {
+                if (endRow < 6) {
                     if (board.getRow(endRow + 1).getSpace(endCell - 1).getPiece() != null) {
                         if (board.getRow(endRow + 1).getSpace(endCell - 1).getPiece().getColor() == otherPlayer) {
                             if (board.getRow(endRow + 2).getSpace(endCell - 2).getPiece() == null) {
@@ -283,9 +308,9 @@ public class BoardView implements Iterable<Row> {
                     }
                 }
             }
-            return false;
-        } else {
-            if((endCell < 6) && (endRow < 6) && (endCell > 2) && (endRow > 2)) { //Check out of bounds
+        }
+        if (playerColor == Color.RED || pieceType == Type.KING){
+            if((endCell > 1) && (endRow > 1)) { //Check out of bounds
                 if (board.getRow(endRow - 1).getSpace(endCell - 1).getPiece() != null) {
                     if (board.getRow(endRow - 1).getSpace(endCell - 1).getPiece().getColor() == otherPlayer) {
                         if (board.getRow(endRow - 2).getSpace(endCell - 2).getPiece() == null) {
@@ -294,7 +319,7 @@ public class BoardView implements Iterable<Row> {
                     }
                 }
             }
-            if((endCell > 2) && (endRow > 2) && (endCell < 6) && (endRow < 6)) { //Check out of bounds
+            if((endRow > 1) && (endCell < 6)) { //Check out of bounds
                 if (board.getRow(endRow - 1).getSpace(endCell + 1).getPiece() != null) {
                     if (board.getRow(endRow - 1).getSpace(endCell + 1).getPiece().getColor() == otherPlayer) {
                         if (board.getRow(endRow - 2).getSpace(endCell + 2).getPiece() == null) {
@@ -303,8 +328,8 @@ public class BoardView implements Iterable<Row> {
                     }
                 }
             }
-            return false;
         }
+        return false;
     }
 
     public BoardView flip()
