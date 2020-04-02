@@ -137,8 +137,8 @@ public class BoardView implements Iterable<Row> {
                 }
             }
         } else if (isValidJump(board.seeTopMove(), board)) {
-            if (isValid(move.getStart().getRow(),move.getStart().getCell())) {
-                if (isValid(move.getStart().getRow(),move.getStart().getCell())) {
+            if (isValid(startRow,endRow)) {
+                if (isValid(startRow,endRow)) {
                     if(endRow > startRow){ //Check that player is moving up
                         if (endRow-startRow == 1) { //Check if move up 1 space
                             return false;
@@ -187,6 +187,12 @@ public class BoardView implements Iterable<Row> {
     }
 
     public boolean newMoveExists(Move move, BoardView board) {
+        if (board.moves.size() > 0) {
+            if (!isValidJump(board.seeTopMove(), board)) {
+                return false;
+            }
+        }
+
         Color playerColor = board.getRow(move.getStart().getRow()).getSpace(move.getStart().getCell()).getPiece().getColor();//Get player colors
         Color otherPlayer;
         if (playerColor == Color.WHITE) {
