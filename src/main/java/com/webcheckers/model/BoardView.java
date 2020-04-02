@@ -67,6 +67,10 @@ public class BoardView implements Iterable<Row> {
         this.rows.get(row).setSpace(col, piece);
     }
 
+    public Piece viewPiece(int row,int col) {
+        return this.rows.get(row).viewPiece(col);
+    }
+
     //TODO Stubbed out
     public void movePiece(){
 
