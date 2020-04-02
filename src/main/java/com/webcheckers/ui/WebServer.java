@@ -4,6 +4,7 @@ import static spark.Spark.*;
 
 import java.util.Objects;
 import java.util.logging.Logger;
+import java.util.prefs.BackingStoreException;
 
 import com.google.gson.Gson;
 
@@ -195,6 +196,7 @@ public class WebServer {
     // Check turn
     post(CHECKTURN_URL, new PostCheckTurnRoute(playerLobby, templateEngine, gson));
 
+    post(BACKUP_URL, new PostBackupMoveRoute(playerLobby,templateEngine,gson));
     // Resign
     post(RESIGN_URL, new PostResignRoute(playerLobby, templateEngine, gson));
 

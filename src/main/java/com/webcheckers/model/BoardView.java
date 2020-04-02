@@ -13,6 +13,9 @@ public class BoardView implements Iterable<Row> {
     private Board board;
     private ArrayList<Row> rows;
 
+    /**
+     * The list of made moves
+     */
     private ArrayList<Move> moves;
 
     /**
@@ -62,6 +65,10 @@ public class BoardView implements Iterable<Row> {
 
     public void setPiece(int row, int col, Piece piece) {
         this.rows.get(row).setSpace(col, piece);
+    }
+
+    public Piece viewPiece(int row,int col) {
+        return this.rows.get(row).viewPiece(col);
     }
 
     //TODO Stubbed out
@@ -141,14 +148,28 @@ public class BoardView implements Iterable<Row> {
         return new BoardView(temp);
     }
 
+    /**
+     * Adding a move to the list of moves
+     * @param move the move to be added
+     */
     public void addMove(Move move) {
         this.moves.add(0, move);
     }
 
-    public void removeMove(Move move) {
-        this.moves.remove(move);
+    /**
+     * Removing a move from list
+     */
+    public Move removeMove() {
+        if (this.moves.isEmpty()){
+            return null;
+        }
+        return this.moves.remove(0);
     }
 
+    /**
+     * Return the most recent move
+     * @return null if moves is empty. Otherwise, the top element
+     */
     public Move seeTopMove() {
         if (this.moves.isEmpty()) {
             return null;
@@ -157,6 +178,9 @@ public class BoardView implements Iterable<Row> {
         }
     }
 
+    /**
+     * Remove all the moves from the list of moves
+     */
     public void removeAllMoves() {
         while (seeTopMove() != null) {
             this.moves.remove(seeTopMove());

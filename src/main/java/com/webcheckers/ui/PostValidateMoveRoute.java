@@ -42,7 +42,6 @@ public class PostValidateMoveRoute implements Route {
         final BoardView board = playerServices.getGame();
 
         final Move move = gson.fromJson(JSON, Move.class);
-        move.printString();
 
         final Message message;
         if (isValidMove(board, move)){
@@ -52,6 +51,7 @@ public class PostValidateMoveRoute implements Route {
 
         } else {
             LOG.fine("move is invalid");
+
             message = Message.error("Move is invalid");
         }
         String messageJSON = gson.toJson(message);
