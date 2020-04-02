@@ -13,11 +13,14 @@ public class BoardView implements Iterable<Row> {
     private Board board;
     private ArrayList<Row> rows;
 
+    private ArrayList<Move> moves;
+
     /**
      * The BoardView Contructor, initializes an empty board with 8 rows (0 to 7)
      */
     public BoardView() {
         this.board = new Board();
+        this.moves = new ArrayList<>();
         //Loop to create the Rows of the board(0 to 7)
         this.rows = new ArrayList<>();
         for (int i = 0; i <= 7; i++) {
@@ -26,6 +29,7 @@ public class BoardView implements Iterable<Row> {
     }
 
     public BoardView(ArrayList board) {
+        this.moves = new ArrayList<>();
         this.board = new Board();
         this.rows = board;
     }
@@ -77,15 +81,27 @@ public class BoardView implements Iterable<Row> {
     }
 
     public boolean isValidMove(Move move, BoardView board){
-
-        int skipPieceRow, skipPieceCell = 0;
-        if (isValid(move.getStart().getRow(),move.getStart().getCell())) {
+        if (board.seeTopMove() == null) {
             if (isValid(move.getStart().getRow(),move.getStart().getCell())) {
-                if(move.getEnd().getRow() > move.getStart().getRow()){ //Check that player is moving up
-                    if (move.getEnd().getRow()-move.getStart().getRow() == 1) { //Check if move up 1 space
-                        return true;
-                    } else if (isValidJump(move, board)) { //Check if skipping a piece
-                        return true;
+                if (isValid(move.getStart().getRow(),move.getStart().getCell())) {
+                    if(move.getEnd().getRow() > move.getStart().getRow()){ //Check that player is moving up
+                        if (move.getEnd().getRow()-move.getStart().getRow() == 1) { //Check if move up 1 space
+                            return true;
+                        } else if (isValidJump(move, board)) { //Check if skipping a piece
+                            return true;
+                        }
+                    }
+                }
+            }
+        } else if (isValidJump(board.seeTopMove(), board)) {
+            if (isValid(move.getStart().getRow(),move.getStart().getCell())) {
+                if (isValid(move.getStart().getRow(),move.getStart().getCell())) {
+                    if(move.getEnd().getRow() > move.getStart().getRow()){ //Check that player is moving up
+                        if (move.getEnd().getRow()-move.getStart().getRow() == 1) { //Check if move up 1 space
+                            return false;
+                        } else if (isValidJump(move, board)) { //Check if skipping a piece
+                            return true;
+                        }
                     }
                 }
             }
@@ -124,4 +140,27 @@ public class BoardView implements Iterable<Row> {
         }
         return new BoardView(temp);
     }
+
+    public void addMove(Move move) {
+        this.moves.add(0, move);
+    }
+
+    public void removeMove(Move move) {
+        this.moves.remove(move);
+    }
+
+    public Move seeTopMove() {
+        if (this.moves.isEmpty()) {
+            return null;
+        } else {
+            return this.moves.get(0);
+        }
+    }
+
+    public void removeAllMoves() {
+        while (seeTopMove() != null) {
+            this.moves.remove(seeTopMove());
+        }
+    }
+
 }

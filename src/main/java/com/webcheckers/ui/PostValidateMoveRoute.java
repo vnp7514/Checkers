@@ -46,17 +46,16 @@ public class PostValidateMoveRoute implements Route {
 
         final Message message;
         if (isValidMove(board, move)){
+            board.addMove(move);
             LOG.fine("move is valid");
             message = Message.info("Move is valid.");
 
         } else {
             LOG.fine("move is invalid");
             message = Message.error("Move is invalid");
-
         }
         String messageJSON = gson.toJson(message);
-        response.body(messageJSON);
-        return null;
+        return messageJSON;
     }
 
 
