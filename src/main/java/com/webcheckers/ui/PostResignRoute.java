@@ -1,6 +1,7 @@
 package com.webcheckers.ui;
 
 import com.google.gson.Gson;
+import com.webcheckers.appl.GameLobby;
 import com.webcheckers.appl.PlayerLobby;
 import com.webcheckers.appl.PlayerServices;
 import com.webcheckers.model.Player;
@@ -33,21 +34,19 @@ public class PostResignRoute implements Route {
         final Session httpSession = request.session();
         final PlayerServices playerServices =
                 httpSession.attribute(GetHomeRoute.PLAYER_KEY);
-        if (playerServices == null) {
-            LOG.fine("PlayerServices is null");
-            response.redirect(WebServer.HOME_URL);
-        } else {
-            LOG.fine("PlayerServices is not null");
-            if (playerServices.getPlayer() == null) {
-                LOG.fine("This session has not signed in with a username");
-                response.redirect(WebServer.HOME_URL);
-            } else {
-                LOG.fine("This player has resigned");
-                Player currentPlayer = playerServices.getPlayer();
-                playerLobby.removeGame(playerLobby.playerOfGame(currentPlayer));
-            }
+        Player currentPlayer = playerServices.getPlayer();
+        GameLobby gameLobby = playerLobby.playerOfGame(currentPlayer);
+        Message message;
+        if ( gameLobby == null) {
+            LOG.fine("GameLobby is null");
+            message = Message.error("GameLobby is null");
         }
-        Message message = Message.resign(RESIGN_STR);
+        else {
+            LOG.fine("GameLobby is not null");
+            LOG.fine("This player has resigned");
+            playerLobby.removeGame(gameLobby);
+            message = Message.resign(RESIGN_STR);
+        }
         return gson.toJson(message);
     }
 }
