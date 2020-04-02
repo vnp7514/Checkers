@@ -14,7 +14,7 @@ import java.util.logging.Logger;
 
 public class PostResignRoute implements Route {
 
-    private final String RESIGN_STR = "You have resigned";
+    private final String RESIGN_STR = " have resigned";
 
     private static final Logger LOG = Logger.getLogger(PostResignRoute.class.getName());
     private final Gson gson;
@@ -45,8 +45,10 @@ public class PostResignRoute implements Route {
             LOG.fine("GameLobby is not null");
             LOG.fine("This player has resigned");
             playerLobby.removeGame(gameLobby);
-            message = Message.resign(RESIGN_STR);
+            message = Message.info(currentPlayer.getName() + RESIGN_STR);
         }
+
+        LOG.fine(gson.toJson(message));
         return gson.toJson(message);
     }
 }
