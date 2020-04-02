@@ -88,14 +88,16 @@ public class BoardView implements Iterable<Row> {
         int skipPieceRow, skipPieceCell = 0;
         if (isValid(move.getStart().getRow(),move.getStart().getCell())) {
             if (isValid(move.getStart().getRow(),move.getStart().getCell())) {
-                if(move.getEnd().getCell() < move.getStart().getCell()){ //Check that player is moving up
-                    if (move.getStart().getCell()-move.getEnd().getCell() == 1) { //Check if move up 1 space
+                if(move.getEnd().getRow() > move.getStart().getRow()){ //Check that player is moving up
+                    if (move.getEnd().getRow()-move.getStart().getRow() == 1) { //Check if move up 1 space
                         return true;
-                    } else if (move.getStart().getCell()-move.getEnd().getCell() == 2) { //Check if move up 2 space
-                        skipPieceRow = (move.getStart().getRow() + move.getEnd().getRow()) / 2;
-                        skipPieceCell = (move.getStart().getCell() + move.getEnd().getCell()) / 2;
-                        if (board.getRow(skipPieceRow).getSpace(skipPieceCell).getPiece().getColor() == otherPlayer) {
-                            return true;
+                    } else if (move.getEnd().getRow()-move.getStart().getRow() == 2) { //Check if move up 2 space
+                        skipPieceRow = (move.getStart().getRow() + move.getEnd().getRow()) / 2; //Set skipped piece row
+                        skipPieceCell = (move.getStart().getCell() + move.getEnd().getCell()) / 2; //Set skipped piece cell
+                        if (board.getRow(skipPieceRow).getSpace(skipPieceCell).getPiece() != null) { //Check if piece exists
+                            if (board.getRow(skipPieceRow).getSpace(skipPieceCell).getPiece().getColor() == otherPlayer) { //Check if piece is opposite color
+                                return true;
+                            }
                         }
                     }
                 }
