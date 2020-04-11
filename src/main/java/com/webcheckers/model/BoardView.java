@@ -10,7 +10,9 @@ import com.webcheckers.util.Move;
  */
 public class BoardView implements Iterable<Row> {
 
-    private Board board;
+    /**
+     * List of Rows of Spaces
+     */
     private ArrayList<Row> rows;
 
     /**
@@ -22,7 +24,6 @@ public class BoardView implements Iterable<Row> {
      * The BoardView Contructor, initializes an empty board with 8 rows (0 to 7)
      */
     public BoardView() {
-        this.board = new Board();
         this.moves = new ArrayList<>();
         //Loop to create the Rows of the board(0 to 7)
         this.rows = new ArrayList<>();
@@ -31,9 +32,8 @@ public class BoardView implements Iterable<Row> {
         }
     }
 
-    public BoardView(ArrayList board, ArrayList<Move> moves) {
+    public BoardView(ArrayList<Row> board, ArrayList<Move> moves) {
         this.moves = moves;
-        this.board = new Board();
         this.rows = board;
     }
 
@@ -47,48 +47,55 @@ public class BoardView implements Iterable<Row> {
     }
 
     /**
-     * Gives the instace of the Board
-     *
-     * *********************************
-     * TODO Is this needed? Will we use the Board class?
-     * *********************************
-     *
-     * @return
+     * Get the row from the Row list
+     * @param indx the idx of the row
+     * @return the Row instance
      */
-    public Board getBoard(){
-        return this.board;
-    }
-
     public Row getRow(int indx) {
         return this.rows.get(indx);
     }
 
+    /**
+     * Put a piece on the space at the specific row idx and col idx
+     * @param row the row idx
+     * @param col the col idx
+     * @param piece the piece
+     */
     public void setPiece(int row, int col, Piece piece) {
         this.rows.get(row).setSpace(col, piece);
     }
 
+    /**
+     * View the piece at this space
+     * @param row the row idx
+     * @param col the col idx
+     * @return the piece
+     */
     public Piece viewPiece(int row,int col) {
         return this.rows.get(row).viewPiece(col);
     }
 
-    //TODO Stubbed out
-    public void movePiece(Move move, BoardView board){
-        int movesSize = board.moves.size();
+    /**
+     * Modify the board according to the move
+     */
+    public void movePiece(){
+        Move move = seeTopMove();
+        int movesSize = this.moves.size();
 
         Color playerColor;
         Type pieceType;
         if (movesSize >= 1) {
-            int startRowI = board.moves.get(movesSize - 1).getStart().getRow();
-            int startCellI = board.moves.get(movesSize - 1).getStart().getCell();
+            int startRowI = this.moves.get(movesSize - 1).getStart().getRow();
+            int startCellI = this.moves.get(movesSize - 1).getStart().getCell();
 
-            playerColor = board.getRow(startRowI).getSpace(startCellI).getPiece().getColor();//Get player colors
-            pieceType = board.getRow(startRowI).getSpace(startCellI).getPiece().getType();
+            playerColor = this.getRow(startRowI).getSpace(startCellI).getPiece().getColor();//Get player colors
+            pieceType = this.getRow(startRowI).getSpace(startCellI).getPiece().getType();
         } else {
-            playerColor = board.getRow(move.getStart().getRow()).getSpace(move.getStart().getCell()).getPiece().getColor();
-            pieceType = board.getRow(move.getStart().getRow()).getSpace(move.getStart().getCell()).getPiece().getType();
+            playerColor = this.getRow(move.getStart().getRow()).getSpace(move.getStart().getCell()).getPiece().getColor();
+            pieceType = this.getRow(move.getStart().getRow()).getSpace(move.getStart().getCell()).getPiece().getType();
         }
 
-        for (Move m : board.moves) {
+        for (Move m : this.moves) {
             int endRow = m.getEnd().getRow();
             int endCell = m.getEnd().getCell();
             int startRow = m.getStart().getRow();
@@ -97,21 +104,21 @@ public class BoardView implements Iterable<Row> {
             if (startRow < endRow) {//White
                 if (endRow-startRow == 1) {
                     if (endRow == 7) {
-                        board.rows.get(endRow).getSpace(endCell).setPiece(new Piece(Type.KING,playerColor));
+                        this.rows.get(endRow).getSpace(endCell).setPiece(new Piece(Type.KING,playerColor));
                     } else {
-                        board.rows.get(endRow).getSpace(endCell).setPiece(new Piece(pieceType,playerColor));
+                        this.rows.get(endRow).getSpace(endCell).setPiece(new Piece(pieceType,playerColor));
                     }
-                    board.rows.get(startRow).getSpace(startCell).setPiece(null);
+                    this.rows.get(startRow).getSpace(startCell).setPiece(null);
                 } else if (endRow - startRow == 2) {
                     int skipPieceRow = (startRow + endRow) / 2; //Set skipped piece row
                     int skipPieceCell = (startRow + endRow) / 2; //Set skipped piece cell
-                    board.rows.get(startRow).getSpace(startCell).setPiece(null);
-                    board.rows.get(skipPieceRow).getSpace(skipPieceCell).setPiece(null);
-                    if (m.equals(board.seeTopMove())) {
+                    this.rows.get(startRow).getSpace(startCell).setPiece(null);
+                    this.rows.get(skipPieceRow).getSpace(skipPieceCell).setPiece(null);
+                    if (m.equals(this.seeTopMove())) {
                         if (endRow == 7) {
-                            board.rows.get(endRow).getSpace(endCell).setPiece(new Piece(Type.KING,playerColor));
+                            this.rows.get(endRow).getSpace(endCell).setPiece(new Piece(Type.KING,playerColor));
                         } else {
-                            board.rows.get(endRow).getSpace(endCell).setPiece(new Piece(pieceType,playerColor));
+                            this.rows.get(endRow).getSpace(endCell).setPiece(new Piece(pieceType,playerColor));
                         }
                     }
 
@@ -119,21 +126,21 @@ public class BoardView implements Iterable<Row> {
             } else if (endRow < startRow) { //Red
                 if (startRow-endRow == 1) {
                     if (endRow == 0) {
-                        board.rows.get(endRow).getSpace(endCell).setPiece(new Piece(Type.KING,playerColor));
+                        this.rows.get(endRow).getSpace(endCell).setPiece(new Piece(Type.KING,playerColor));
                     } else {
-                        board.rows.get(endRow).getSpace(endCell).setPiece(new Piece(pieceType,playerColor));
+                        this.rows.get(endRow).getSpace(endCell).setPiece(new Piece(pieceType,playerColor));
                     }
-                    board.rows.get(startRow).getSpace(startCell).setPiece(null);
+                    this.rows.get(startRow).getSpace(startCell).setPiece(null);
                 } else if (startRow - endRow == 2) {
                     int skipPieceRow = (startRow + endRow) / 2; //Set skipped piece row
                     int skipPieceCell = (startCell + endCell) / 2; //Set skipped piece cell
-                    board.rows.get(startRow).getSpace(startCell).setPiece(null);
-                    board.rows.get(skipPieceRow).getSpace(skipPieceCell).setPiece(null);
-                    if (m.equals(board.seeTopMove())) {
+                    this.rows.get(startRow).getSpace(startCell).setPiece(null);
+                    this.rows.get(skipPieceRow).getSpace(skipPieceCell).setPiece(null);
+                    if (m.equals(this.seeTopMove())) {
                         if (endRow == 0) {
-                            board.rows.get(endRow).getSpace(endCell).setPiece(new Piece(Type.KING,playerColor));
+                            this.rows.get(endRow).getSpace(endCell).setPiece(new Piece(Type.KING,playerColor));
                         } else {
-                            board.rows.get(endRow).getSpace(endCell).setPiece(new Piece(pieceType,playerColor));
+                            this.rows.get(endRow).getSpace(endCell).setPiece(new Piece(pieceType,playerColor));
                         }
                     }
                 }
@@ -149,7 +156,7 @@ public class BoardView implements Iterable<Row> {
      * @return true if it is valid. false otherwise
      */
     public boolean isValid(int rowidx, int cellidx){
-        return board.isValid(rowidx, cellidx);
+        return getRow(rowidx).getSpace(cellidx).isValid();
     }
 
     public boolean isValidMove(Move move, BoardView board){
