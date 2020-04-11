@@ -57,9 +57,7 @@ public class Space {
      * WARNING: do nothing if the space is occupied or not black
      */
     public void setPiece(Piece piece) {
-        if (this.isValid()) {
-            this.piece = piece;
-        }
+        this.piece = piece;
     }
 
     /**

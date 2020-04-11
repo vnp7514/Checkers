@@ -46,7 +46,7 @@ public class PostSubmitTurnRoute implements Route {
             LOG.fine("playerServices is not null");
 
             BoardView board = playerServices.getGame();
-            if (board.newMoveExists(board.seeTopMove(), board)) {
+            if (board.newMoveExists()) {
                 LOG.fine("Jump Available!");
                 message = Message.error("Jump Available!");
             } else {
