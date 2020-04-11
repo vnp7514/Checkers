@@ -19,24 +19,35 @@ public class SpaceTest {
     private Space sp7;
     private Space sp8;
 
+    private Piece singleRedPiece = new Piece(Type.SINGLE, Color.RED);
+    private Piece singleWhitePiece = new Piece(Type.SINGLE, Color.WHITE);
+    private Piece kingRedPiece = new Piece(Type.KING, Color.RED);
+    private Piece kingWhitePiece = new Piece(Type.KING, Color.WHITE);
+
+
     /**
      * Setting up Space instances, some with pieces, others without to be used
      * in various tests.
      */
     @BeforeEach
     public void setup() {
+        // Non black
         sp1 = new Space(0, null, 0);
+        // Black
         sp2 = new Space(0, null, 1);
+        // black
         sp3 = new Space(1, null, 0);
+        // not Black
         sp4 = new Space(1, null, 1);
-        sp5 = new Space(0, new Piece(Type.SINGLE, Color.RED), 0);
-        sp6 = new Space(0, new Piece(Type.KING, Color.RED), 1);
-        sp7 = new Space(1, new Piece(Type.SINGLE, Color.WHITE), 0);
-        sp8 = new Space(1, new Piece(Type.KING, Color.WHITE), 1);
+        sp5 = new Space(0, singleRedPiece, 0);
+        sp6 = new Space(0, kingRedPiece, 1);
+        sp7 = new Space(1, singleWhitePiece, 0);
+        sp8 = new Space(1, kingWhitePiece, 1);
     }
 
     /**
-     * Tests the validity of a move on a space.
+     * Tests the function that checks whether a space is black and
+     *     contains no piece
      */
     @Test
     public void isValidTest() {
@@ -59,10 +70,10 @@ public class SpaceTest {
         assertNull(sp2.getPiece());
         assertNull(sp3.getPiece());
         assertNull(sp4.getPiece());
-        assertEquals(new Piece(Type.SINGLE, Color.RED), sp5.getPiece());
-        assertEquals(new Piece(Type.KING, Color.RED), sp6.getPiece());
-        assertEquals(new Piece(Type.SINGLE,Color.WHITE), sp7.getPiece());
-        assertEquals(new Piece(Type.KING, Color.WHITE), sp8.getPiece());
+        assertEquals(singleRedPiece, sp5.getPiece());
+        assertEquals(kingRedPiece, sp6.getPiece());
+        assertEquals(singleWhitePiece, sp7.getPiece());
+        assertEquals(kingWhitePiece, sp8.getPiece());
     }
 
     /**
@@ -70,14 +81,18 @@ public class SpaceTest {
      */
     @Test
     public void setPieceTest() {
-        assertNull(sp1.setPiece(new Piece(Type.KING,Color.WHITE)));
-        assertEquals(new Piece(Type.SINGLE, Color.RED), sp2.setPiece(new Piece(Type.SINGLE, Color.RED)));
-        assertNotEquals(new Piece(Type.SINGLE,Color.WHITE), sp3.setPiece(new Piece(Type.KING,Color.WHITE)));
-        assertNull(sp4.setPiece(new Piece(Type.SINGLE,Color.RED)));
-        assertNotEquals(new Piece(Type.KING, Color.RED), sp5.getPiece());
-        assertNotEquals(new Piece(Type.KING, Color.WHITE), sp6.getPiece());
-        assertNotEquals(new Piece(Type.SINGLE,Color.RED), sp7.getPiece());
-        assertNotEquals(new Piece(Type.SINGLE, Color.WHITE), sp8.getPiece());
+        sp1.setPiece(singleRedPiece);
+        assertNull(sp1.getPiece());
+        sp2.setPiece(singleWhitePiece);
+        assertNotEquals(singleRedPiece, sp2.getPiece());
+        assertEquals(singleWhitePiece, sp2.getPiece());
+        sp2.setPiece(singleRedPiece);
+        assertEquals(singleWhitePiece, sp2.getPiece());
+        assertNotEquals(singleRedPiece, sp2.getPiece());
+        sp5.setPiece(null);
+        assertNotNull(sp5.getPiece());
+        sp5.removePiece();
+        assertNull(sp5.getPiece());
     }
 
     /**
@@ -94,6 +109,14 @@ public class SpaceTest {
         assertEquals(0, sp6.getCellIdx());
         assertNotEquals(0, sp7.getCellIdx());
         assertNotEquals(0, sp8.getCellIdx());
+    }
+
+    /**
+     * Test to make sure that toString works for cases where there is no piece
+     */
+    @Test
+    public void toStringforNoPieceTest(){
+        assertEquals(" ", sp1.toString());
     }
 
 }
