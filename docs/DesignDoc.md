@@ -11,17 +11,17 @@ geometry: margin=1in
 ## Team Information
 * Team name: Wizards
 * Team members
-  * Anthony Prestia (atp4280)
-  * Van Pham (vnp7514)
-  * Kevin Murcia Garcia (krm7205)
-  * Brody Wrighter (baw9895)
+ * Anthony Prestia (atp4280)
+ * Van Pham (vnp7514)
+ * Kevin Murcia Garcia (krm7205)
+ * Brody Wrighter (baw9895)
 
 ## Executive Summary
 
 The WebCheckers application must let two users who are signed in to play a game of checkers. This application has two features that set it apart from a basic checkers game:
- 
+
 * Spectate games that are currently in session
-* Watch a replay of a game  
+* Watch a replay of a game 
 
 ### Purpose
 
@@ -36,14 +36,19 @@ A web-based application for users to play/spectate games of checkers.
 
 ## Requirements
 
-This section describes the features of the application.
-
-> _In this section you do not need to be exhaustive and list every
-> story.  Focus on top-level features from the Vision document and
-> maybe Epics and critical Stories._
+The main functionality for our program are to make sure
+a player can sign in, sign out, and play a game.
+Once a player is signed in they can challenge another
+signed in player. When a game is in session the player
+must be able to move a piece, submit a piece, redo a move
+(before submission) and also resign if they so please.
 
 ### Definition of MVP
-> _Provide a simple description of the Minimum Viable Product._
+
+Our minimal viable product consists of many stories that allow
+the user to sign in, sign out, and play a game with another
+player.
+
 
 ### MVP Features
 > _Provide a list of top-level Epics and/or Stories of the MVP._
@@ -58,7 +63,7 @@ This section describes the application domain.
 
 ![The WebCheckers Domain Model](Domain-Model.png)
 
-The WebCheckers application can have any number of games occurring simultaneously. Each game must have 2 players and any number of spectators. Each game will be saved as a replay for users to watch at a later time. 
+The WebCheckers application can have any number of games occurring simultaneously. Each game must have 2 players and any number of spectators. Each game will be saved as a replay for users to watch at a later time.
 
 
 ## Architecture and Design
@@ -89,7 +94,7 @@ with the WebCheckers application.
 
 ![The WebCheckers Web Interface Statechart](Web-Application-Interface.png)
 
-Once the user is connected to the server, the Home page is rendered. The user then must click on the sign in button to sign in before they are able to play a game. Clicking the sign in page will render the Sign-In page. The user must provide a valid and unique username.  Once the user chooses a valid username, the Home page is rendered. Now the option to play a game is available to the user. The user now challenges another player to a match. Once the challenge is accepted, the Game page is rendered. 
+Once the user is connected to the server, the Home page is rendered. The user then must click on the sign in button to sign in before they are able to play a game. Clicking the sign in page will render the Sign-In page. The user must provide a valid and unique username.  Once the user chooses a valid username, the Home page is rendered. Now the option to play a game is available to the user. The user now challenges another player to a match. Once the challenge is accepted, the Game page is rendered.
 
 ### UI Tier
 > _Provide a summary of the Server-side UI tier of your architecture.
@@ -116,25 +121,44 @@ Once the user is connected to the server, the Home page is rendered. The user th
 
 
 ### Application Tier
-> _Provide a summary of the Application tier of your architecture. This
-> section will follow the same instructions that are given for the UI
-> Tier above._
+
+The Application Tier contains classes that store data that the workinng session can
+ access. Our Application Tier consists of three classes; the GameLobby, the PlayerLobby
+ and PlayerServices.
+
+GameLobby consists of two players who are playing in this
+ game, a BoardView instance which represents the board shared between the two
+ players, and variable that keeps track of whose turn it is to make a move.
+ An instance of a GameLobby is stored within a PlayerLobby.
+ 
+PlayerLobby consists of a list of all players who are currently signed in,
+ a list of GameLobby to keep track of every game instance running. PlayerLobby
+ is a server based instance and there is only ever one instance of PlayerLobby
+ that is shared between all players.
+ 
+PlayerServices is how we keep track of client side functionality. When a new
+ player logs into the server a PlayerServices instance is assigned to the client
+ and is then used to pass information to various function calls such as telling
+ the server what GameLobby they are in, or what move they are making, or what
+ UI they should be seeing.
 
 
 ### Model Tier
-> _Provide a summary of the Application tier of your architecture. This
-> section will follow the same instructions that are given for the UI
-> Tier above._
+
+The Model Tier contains classes that represent the data being used to dictate what
+ happens after a game has been made, for instance the board contains all the pieces
+ stored in their positions that can be moved.
+
+![Class Diagram](UML.png)
 
 ### Design Improvements
-> _Discuss design improvements that you would make if the project were
-> to continue. These improvement should be based on your direct
-> analysis of where there are problems in the code base which could be
-> addressed with design changes, and describe those suggested design
-> improvements. After completion of the Code metrics exercise, you
-> will also discuss the resutling metric measurements.  Indicate the
-> hot spots the metrics identified in your code base, and your
-> suggested design improvements to address those hot spots._
+
+One thing we could implement to help make our design better is by creating
+   a class that checks the validity of a move and a jump as we discussed during
+   the Presentation my group gave on 4/2/2020 at around 2pm EST. This would
+   help reduce coupling within our program because as of right now a lot of the
+   functionality is stored in the BoardView class which can be problematic
+   down the road.
 
 ## Testing
 > _This section will provide information about the testing performed
@@ -148,9 +172,14 @@ Once the user is connected to the server, the Home page is rendered. The user th
 > acceptance testing and if there are any concerns._
 
 ### Unit Testing and Code Coverage
-> _Discuss your unit testing strategy. Report on the code coverage
-> achieved from unit testing of the code base. Discuss the team's
-> coverage targets, why you selected those values, and how well your
-> code coverage met your targets. If there are any anomalies, discuss
-> those._
 
+While we have not yet fully implemented all of our program's unit
+   testing and our Code Coverage is very low because of it, we have done
+   a lot of stress testing by having every member of our group run and play the
+   game and try as hard as we could to break the program. As of right now we know
+   of two bugs that need to be fixed:
+   1. In certain cases (have not yet been able to reliably recreate the error)
+       while submitting a move, it will not give the player an error if they are making a
+       non jump move while a jump move exists for them to make.
+   2. At the end of a game when someone has won, the game does not end by itself. The
+       only way to end the game is by having a player Resign.

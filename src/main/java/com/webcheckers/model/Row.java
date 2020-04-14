@@ -10,7 +10,6 @@ public class Row implements Iterable<Space> {
 
     private int index;
     private ArrayList<Space> spaces;
-    private Space current;
 
     /**
      * Row constructor. Initializes the list of 8 spaces to contain no pieces.
@@ -24,8 +23,7 @@ public class Row implements Iterable<Space> {
         //Create ArrayList of spaces without pieces
         this.spaces = new ArrayList<>();
         for (int i = 0; i <= 7; i++) {
-            if (this.index == 0)
-            {
+            if (this.index == 0) {
                 if ((i % 2) == 1){
                     this.spaces.add(new Space(i, new Piece(Type.SINGLE, Color.WHITE), this.index));
                 } else {
@@ -72,6 +70,10 @@ public class Row implements Iterable<Space> {
         this.index = index;
     }
 
+    public ArrayList<Space> getSpaces() {
+        return spaces;
+    }
+
     /**
      * Returns the ArrayList as a Iterator<></>
      * @return An Iterator of the spaces
@@ -99,11 +101,20 @@ public class Row implements Iterable<Space> {
 
     /**
      * Put a piece on the space
-     * @param space the space
+     * @param spaceID the column idx (on the board) of the space
+     *              or the idx of the space on the row counting from left to right
      * @param piece the piece
      */
-    public void setSpace(int space, Piece piece) {
-        this.spaces.get(space).setPiece(piece);
+    public void setSpace(int spaceID, Piece piece) {
+        this.getSpace(spaceID).setPiece(piece);
+    }
+
+    /**
+     * Remove the piece from the space
+     * @param spaceID the idx of the space
+     */
+    public void clearSpace(int spaceID){
+        this.getSpace(spaceID).removePiece();
     }
 
     /**
@@ -116,5 +127,20 @@ public class Row implements Iterable<Space> {
             temp.add(this.spaces.get(i));
         }
         return new Row(this.index, temp);
+    }
+
+    /**
+     * Return a representation of the Row. Ex:
+     * 2 | |W| |R| |r|
+     *  where 2 is the indx of the row
+     * @return the String representation
+     */
+    @Override
+    public String toString() {
+        String res = this.getIndex() + " |";
+        for (Space space : spaces){
+            res = res.concat(" " + space.toString() + " |");
+        }
+        return res;
     }
 }
