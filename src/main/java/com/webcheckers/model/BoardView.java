@@ -230,23 +230,23 @@ public class BoardView implements Iterable<Row> {
         // Begin validation
         //-----------------------------------------------------------------
         if (board.seeTopMove() == null) { // Check if its the first move
-                    if(endRow > startRow || ((pieceType == Type.KING) && startRow > endRow)){ //Check that player is moving up
-                        if (endRow-startRow == 1 || ((pieceType == Type.KING) && (endRow-startRow == -1))) { //Check if move up 1 space
-                            if (move.getEnd().getCell()-move.getStart().getCell() == 1 || move.getEnd().getCell()-move.getStart().getCell() == -1) { // make sure that the player doesnt go too far left or right
-                                return true;
-                            }
-                        } else if (isValidJump(move, board)) { //Check if skipping a piece, go to is valid jump
-                            return true;
-                        }
+            if(endRow > startRow || ((pieceType == Type.KING) && startRow > endRow)){ //Check that player is moving up
+                if (endRow-startRow == 1 || ((pieceType == Type.KING) && (endRow-startRow == -1))) { //Check if move up 1 space
+                    if (move.getEnd().getCell()-move.getStart().getCell() == 1 || move.getEnd().getCell()-move.getStart().getCell() == -1) { // make sure that the player doesnt go too far left or right
+                        return true;
                     }
+                } else if (isValidJump(move, board)) { //Check if skipping a piece, go to is valid jump
+                    return true;
+                }
+            }
         } else if (isValidJump(board.seeTopMove(), board)) {
-                    if(endRow > startRow ||  ((pieceType == Type.KING) && startRow > endRow)) { //Check that player is moving up
-                        if (endRow-startRow == 1  || ((pieceType == Type.KING) && (endRow-startRow == -1))) { //Check if move up 1 space
-                            return false;
-                        } else if (isValidJump(move, board)) { //Check if skipping a piece
-                            return true;
-                        }
-                    }
+            if(endRow > startRow ||  ((pieceType == Type.KING) && startRow > endRow)) { //Check that player is moving up
+                if (endRow-startRow == 1  || ((pieceType == Type.KING) && (endRow-startRow == -1))) { //Check if move up 1 space
+                    return false;
+                } else if (isValidJump(move, board)) { //Check if skipping a piece
+                    return true;
+                }
+            }
         }
         return false;
         //-----------------------------------------------------------------
