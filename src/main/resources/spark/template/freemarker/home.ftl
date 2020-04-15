@@ -25,6 +25,7 @@
     <div class="playerList">
       <#if currentUser??>
         <form action="/game" method="POST">
+
           <table border=1>
             <th>Current Players</th>
             <#list players as player>
@@ -37,6 +38,22 @@
             </#list>
           </table>
           <input type="submit" value="Challenge">
+
+        </form>
+        <form action="/spectate/game" method="GET">
+
+          <table border=1>
+            <th>Watch a Game</th>
+              <#list activeGames as player>
+                <tr>
+                  <td>
+                    <input type="radio" id="game" name="game" value=${player}>
+                    <label for="game">${player}</label><br>
+                  </td>
+                </tr>
+              </#list>
+            </table>
+            <input type="submit" value="Spectate">
         </form>
       </#if>
     </div>

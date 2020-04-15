@@ -69,6 +69,10 @@ public class WebServer {
    */
   public static final String GAME_URL = "/game";
   /**
+   * The URL pattern to spectate a game
+   */
+  public static final String SPECTATE_GAME_URL = "/spectate/game";
+  /**
    * The URL pattern for submitting a turn
    */
   public static final String SUBMIT_URL = "/submitTurn";
@@ -177,6 +181,9 @@ public class WebServer {
 
     //Shows the Checkers game page
     get(GAME_URL, new GetGameRoute(playerLobby, templateEngine, gson));
+
+    //Shows the Checkers game page in Spectator mode
+    get(SPECTATE_GAME_URL, new GetSpectateGameRoute(playerLobby,templateEngine, gson));
 
     // Keeps SignIn page up after trying to sign in
     post(SIGNIN_URL, new PostSignInRoute(playerLobby, templateEngine));

@@ -107,6 +107,7 @@ public class PlayerLobby {
      */
     public void addGame(GameLobby gameLobby) {
         this.games.add(gameLobby);
+        numGames++;
     }
 
     /**
@@ -132,6 +133,15 @@ public class PlayerLobby {
         return false;
     }
 
+    public GameLobby getGame(int gameID) {
+        for (GameLobby i : games) {
+            if (i.getGameID() == gameID) {
+                return i;
+            }
+        }
+        return null;
+    }
+
     /**
      * Return which GameLobby the player is in
      * @param player the player
@@ -147,6 +157,12 @@ public class PlayerLobby {
         }
         return null;
     }
+
+    /**
+     * Return the list of currently active GameLobby type instances.
+     * @return List<GameLobby> containing active games
+     */
+    public List<GameLobby> getGames() { return this.games; }
 
     /**
      * Get the board instance of the specific gameLobby
@@ -167,5 +183,13 @@ public class PlayerLobby {
      */
     public BoardView getFlippedBoard(GameLobby game) {
         return game.getBoardFlipped();
+    }
+
+    /**
+     * Gets the number of games that have been created
+     * @return int
+     */
+    public int getNumGames() {
+        return numGames;
     }
 }

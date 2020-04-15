@@ -16,6 +16,8 @@ public class GameLobby {
     // a list of players currently in the game
     private List<Player> players;
 
+    private int gameID;
+
     // The index where the specified player is in the list
     private int red = 0;
     private int white = 1;
@@ -37,9 +39,10 @@ public class GameLobby {
         this.board = new BoardView();
     }
 
-    public GameLobby(Player player){
+    public GameLobby(Player player, int gameID){
         this();
         this.players.add(player);
+        this.gameID = gameID;
     }
 
     /**
@@ -146,6 +149,12 @@ public class GameLobby {
     }
 
     /**
+     * Gets the gameID of this game lobby
+     * @return int
+     */
+    public int getGameID() { return this.gameID; }
+
+    /**
      * Two gameLobbies are equal if they have the same players
      * @param obj the other gameLobby
      * @return
@@ -161,5 +170,17 @@ public class GameLobby {
         GameLobby o = (GameLobby)obj;
         return Arrays.equals(players.toArray(new Player[0]),
                 o.getPlayers().toArray(new Player[0]));
+    }
+
+    /**
+     * The name of the GameLobby instance is based on the names of the
+     * two player names who are playing a game of checkers
+     * @return
+     */
+    @Override
+    public String toString() {
+        String p1 = this.players.get(0).getName();
+        String p2 = this.players.get(1).getName();
+        return gameID + " : " + p1 + " vs " + p2;
     }
 }

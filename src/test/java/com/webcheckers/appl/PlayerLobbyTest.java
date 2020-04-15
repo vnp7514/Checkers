@@ -27,7 +27,7 @@ public class PlayerLobbyTest {
     Player p2 = new Player("Player 2");
     Player p3 = new Player("Player 3");
     Player p4 = new Player("Player 4");
-    GameLobby gameLobby = new GameLobby(p1);
+    GameLobby gameLobby = new GameLobby(p1, 0);
 
 
     /**

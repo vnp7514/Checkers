@@ -18,7 +18,7 @@ public class GameLobbyTest {
     Player p2 = new Player("Player 2");
     Player p3 = new Player("Player 3");
     Player p4 = new Player("Player 4");
-    GameLobby gameLobby = new GameLobby(p1);
+    GameLobby gameLobby = new GameLobby(p1, 0);
 
 
     /**
@@ -30,7 +30,7 @@ public class GameLobbyTest {
         final GameLobby test1 = new GameLobby();
         assertNotNull(test1);
         //Second constructor
-        final GameLobby test2 = new GameLobby(p1);
+        final GameLobby test2 = new GameLobby(p1, 0);
         assertNotNull(test2);
     }
 

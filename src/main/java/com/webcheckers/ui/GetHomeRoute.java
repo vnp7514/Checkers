@@ -3,6 +3,7 @@ package com.webcheckers.ui;
 import java.util.*;
 import java.util.logging.Logger;
 
+import com.webcheckers.appl.GameLobby;
 import com.webcheckers.appl.PlayerLobby;
 import com.webcheckers.appl.PlayerServices;
 import spark.*;
@@ -38,6 +39,7 @@ public class GetHomeRoute implements Route {
     static final String PLAYER_LIST_ATTR = "players";
     static final String VIEW_NAME = "home.ftl";
     static final String ACTIVE_USERS_ATTR = "otherUsers";
+    static final String ACTIVE_GAMES = "activeGames";
 
     static final String WELCOME = "Welcome!";
 
@@ -116,6 +118,11 @@ public class GetHomeRoute implements Route {
                 players.remove(playerServices.getPlayer().getName());
 
                 vm.put(PLAYER_LIST_ATTR, players);
+
+                //Get a list of the games being currently played
+                List<GameLobby> games = playerLobby.getGames();
+
+                vm.put(ACTIVE_GAMES, games);
 
                 // If the player is already in a game, redirect to /game
                 if (playerLobby.playerInGame(playerServices.getPlayer())){

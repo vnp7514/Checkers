@@ -1,20 +1,22 @@
 package com.webcheckers.ui;
 
 import com.google.gson.Gson;
-import com.webcheckers.model.*;
 import com.webcheckers.appl.GameLobby;
 import com.webcheckers.appl.PlayerLobby;
 import com.webcheckers.appl.PlayerServices;
+import com.webcheckers.model.BoardView;
+import com.webcheckers.model.Player;
+import com.webcheckers.model.ViewMode;
 import spark.*;
 
+import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 import java.util.logging.Logger;
 
 import static spark.Spark.halt;
 
-public class GetGameRoute implements Route {
+public class GetSpectateGameRoute implements Route {
 
     private final String TITLE = "title";
     private final String VIEW_NAME = "game.ftl";
@@ -27,31 +29,19 @@ public class GetGameRoute implements Route {
     private final String WHITE_PLAYER = "whitePlayer";
     private final String ACTIVE_COLOR = "activeColor";
 
+    private final String GAME = "game";
+
     private static final Logger LOG = Logger.getLogger(GetGameRoute.class.getName());
 
     private final PlayerLobby playerLobby;
     private final TemplateEngine templateEngine;
     private final Gson gson;
 
-    //private final BoardView boardView;
-
-    /**
-     * Constructor
-     * @param playerLobby
-     * @param templateEngine
-     */
-    public GetGameRoute (final PlayerLobby playerLobby, final TemplateEngine templateEngine, final Gson gson) {
-        //validation
-        Objects.requireNonNull(templateEngine, "templateEngine must not be null");
-        //
-        //this.boardView = new BoardView();
+    public GetSpectateGameRoute(PlayerLobby playerLobby, TemplateEngine templateEngine, Gson gson) {
+        this.playerLobby = playerLobby;
         this.templateEngine = templateEngine;
-        this.gson = Objects.requireNonNull(gson, "gson must not be null");
-
-        this.playerLobby = Objects.requireNonNull(playerLobby, "playerLobby must not be null");
+        this.gson = gson;
     }
-
-
     @Override
     public Object handle(Request request, Response response) throws Exception {
 
@@ -64,41 +54,30 @@ public class GetGameRoute implements Route {
 
         final PlayerServices playerServices = httpSession.attribute(GetHomeRoute.PLAYER_KEY);
 
-        final BoardView board;
-
-        final BoardView PSBoard;
+        final String temp = request.queryParams(GAME);
+        int gameID = Integer.parseInt(temp);
 
         if (playerServices != null) {
             Player currentPlayer = playerServices.getPlayer();
             if (currentPlayer != null) {
-                GameLobby gameLobby = playerLobby.playerOfGame(currentPlayer);
+                //uses gameID to access the GameLobby the user is spectating
+                GameLobby gameLobby = playerLobby.getGame(gameID);
                 if (gameLobby != null && !playerLobby.getBoard(gameLobby).winCondition()) {
-                    if (gameLobby.getWhitePlayer().equals(currentPlayer)) { // the current player is white
-                        PSBoard = gameLobby.getBoard();
-                        board = playerLobby.getFlippedBoard(gameLobby);
-                        LOG.fine("Flipping Board!");
-                    } else { // the current player is red
-                        PSBoard = gameLobby.getBoard();
-                        board = gameLobby.getBoard();
-                        LOG.fine("Not Flipping Board!");
-                    }
-                    playerServices.addBoard(PSBoard);
-                    vm.put(GetHomeRoute.MESSAGE_ATTR,playerServices.getMessage());
-                    playerServices.removeMessage();
+                    //populates the view model with info contained in gameLobby
+                    vm.put(GAME_ID, gameID);
+                    vm.put(CURRENT_USER, currentPlayer);
                     vm.put(ACTIVE_COLOR, gameLobby.getActiveColor());
                     vm.put(TITLE, "Checkers game!");
-                    vm.put(VIEW, ViewMode.PLAY);
+                    vm.put(VIEW, ViewMode.SPECTATOR);
                     //need to put player instances in all of these below
-                    vm.put(CURRENT_USER, currentPlayer);
                     vm.put(RED_PLAYER, gameLobby.getRedPlayer());
                     vm.put(WHITE_PLAYER, gameLobby.getWhitePlayer());
-                    vm.put(GAME_ID, gameLobby.getGameID());
-                    vm.put(GAME_BOARD, board);
+                    vm.put(GAME_BOARD, gameLobby.getBoard());
                     vm.put(MODE, null);
 
                     return templateEngine.render(new ModelAndView(vm, VIEW_NAME));
                 } else {
-                    LOG.fine("gameLobby is null so the player is not in a game");
+                    LOG.fine("gameLobby is null so the player is not watching a game");
                     modeOptions.put("isGameOver", true);
                     modeOptions.put("gameOverMessage", request.body());
                     vm.put(MODE, gson.toJson(modeOptions));

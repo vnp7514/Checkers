@@ -16,15 +16,6 @@ import java.util.logging.Logger;
 import static spark.Spark.halt;
 
 public class PostGameRoute implements Route {
-    private final String TITLE = "title";
-    private final String VIEW_NAME = "game.ftl";
-    private final String CURRENT_USER = "currentUser";
-    private final String GAME_BOARD = "board";
-    private final String VIEW = "viewMode";
-    private final String MODE = "modeOptions";
-    private final String RED_PLAYER = "redPlayer";
-    private final String WHITE_PLAYER = "whitePlayer";
-    private final String ACTIVE_COLOR = "activeColor";
 
     private final String OTHER_PLAYER_PARAM = "otherPlayer";
 
@@ -51,7 +42,6 @@ public class PostGameRoute implements Route {
 
     @Override
     public Object handle(Request request, Response response) throws Exception {
-        final Map<String, Object> vm = new HashMap<>();
 
         LOG.fine("Initialized");
         // Retrieve the HTTP session
@@ -91,9 +81,11 @@ public class PostGameRoute implements Route {
                     halt();
                     return null;
                 }
-                final GameLobby gameLobby = new GameLobby(currentPlayer);
+                final GameLobby gameLobby = new GameLobby(currentPlayer, playerLobby.getNumGames());
                 gameLobby.addPlayer(opponent);
                 this.playerLobby.addGame(gameLobby);
+
+
 
                 LOG.fine("Successfully create a gameLobby!");
                 // GetGameRoute will handle the rendering and the game

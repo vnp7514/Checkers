@@ -3,7 +3,7 @@ package com.webcheckers.model;
 import java.util.*;
 import com.webcheckers.util.Move;
 import com.webcheckers.util.Position;
-import javafx.geometry.Pos;
+
 
 /**
  * The Board representation, creates and Arraylist of Rows,
