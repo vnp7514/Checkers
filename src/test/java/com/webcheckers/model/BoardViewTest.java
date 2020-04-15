@@ -19,6 +19,7 @@ public class BoardViewTest {
     private Piece kingRedPiece = new Piece(Type.KING, Color.RED);
     private Piece kingWhitePiece = new Piece(Type.KING, Color.WHITE);
 
+
     @BeforeEach
     public void setup(){
         boardView1 = new BoardView();
@@ -28,17 +29,19 @@ public class BoardViewTest {
     public void flippedBoard(){
         System.out.println("Visually verify: ");
         BoardView flip = boardView1.flip();
-        //assertEquals(flip.getRow(0).getSpace(0).getPiece(),
-         //       boardView1.getRow(0).getSpace(0).getPiece());
-        //assertEquals(flip.getRow(7).getSpace(6).getPiece(),
-         //       boardView1.getRow(0).getSpace(1).getPiece());
-        //assertEquals(flip.getRow(1).getSpace(0).getPiece(),
-        //        boardView1.getRow(7).getSpace(0).getPiece());
-        print_helper();
+        assertEquals(flip.viewPiece(0,0),
+                boardView1.viewPiece(0,0));
+        assertEquals(flip.viewPiece(7,6),
+                boardView1.viewPiece(7,6));
+        assertEquals(flip.viewPiece(1,0),
+                boardView1.viewPiece(1,0));
+        print_helper(boardView1);
         assertNull(boardView1.viewPiece(0,0));
         assertEquals(singleWhitePiece, boardView1.viewPiece(0,1));
         assertNull(flip.viewPiece(0,0));
         assertEquals(singleWhitePiece, flip.viewPiece(0,1));
+        BoardView test = BoardView.testBoard();
+        print_helper(test);
     }
 
     @Test
@@ -46,20 +49,33 @@ public class BoardViewTest {
         BoardView flip = boardView1.flip();
         assertFalse(boardView1.isValid(0,0));
         assertFalse(boardView1.isValid(2, 1));
+        assertFalse(boardView1.isValid(3,1));
         assertTrue(boardView1.isValid(3,0));
         assertTrue(boardView1.isValid(4, 1));
         assertFalse(flip.isValid(0,0));
         assertFalse(flip.isValid(2, 1));
+        assertFalse(flip.isValid(3,1));
         assertTrue(flip.isValid(3,0));
         assertTrue(flip.isValid(4, 1));
+    }
+
+    @Test
+    public void winCondititionTest(){
+        BoardView test = BoardView.testBoard();
+        test.setPiece(0,1, singleRedPiece);
+        print_helper(test);
+        assertTrue(test.winCondition());
+        test.setPiece(1,0, singleWhitePiece);
+        print_helper(test);
+        assertFalse(test.winCondition());
     }
 
     /**
      * Help to print out both the original board and the flipped board view
      */
-    public void print_helper(){
-        BoardView flip = boardView1.flip();
-        System.out.println("Origin:\n"+boardView1.toString()+"\n");
+    public void print_helper(BoardView board){
+        BoardView flip = board.flip();
+        System.out.println("Origin:\n"+board.toString()+"\n");
         System.out.println("Flipped:\n"+flip.toString());
     }
 

@@ -38,6 +38,22 @@ public class BoardView implements Iterable<Row> {
     }
 
     /**
+     * Create an empty board that is used for testing
+     * @return a BoardView instance with all Spaces initialized with null
+     */
+    public static BoardView testBoard(){
+        ArrayList<Row> list_rows = new ArrayList<>();
+        for (int i =0; i <= 7; i++){
+            ArrayList<Space> list_spaces = new ArrayList<>();
+            for (int a=0; a<=7;a++){
+                 list_spaces.add(new Space(a,null,i));
+            }
+            list_rows.add(new Row(i, list_spaces));
+        }
+        return new BoardView(list_rows, new ArrayList<>());
+    }
+
+    /**
      * Returns the Iterator of the Arraylist of Rows
      * @return An Iterator of the Rows
      */
@@ -51,7 +67,7 @@ public class BoardView implements Iterable<Row> {
      * @param indx the index of the Row to be found
      * @return the Row if found. null otherwise.
      */
-    public Row getRow(int indx) {
+    private Row getRow(int indx) {
         for(Row row : rows){
             if(row.getIndex() == indx){
                 return row;
