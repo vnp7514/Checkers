@@ -77,6 +77,8 @@ public class BoardViewTest {
           Position p45 = new Position(4,5);
           Position p47 = new Position(4,7);
           BoardView flip = boardView1.flip();
+
+          // Testing single moves
           assertFalse(boardView1.isValidMove(new Move(p11, p12)));
           assertFalse(boardView1.isValidMove(new Move(p10, p21)));
           assertFalse(boardView1.isValidMove(new Move(p21,p11)));
@@ -109,6 +111,74 @@ public class BoardViewTest {
         assertTrue(boardView1.isValidMove(new Move(p30,p21)));
         assertFalse(flip.isValidMove(new Move(p32,p21)));
         assertTrue(flip.isValidMove(new Move(p30,p21)));
+
+        BoardView test = BoardView.testBoard();
+        test.setPiece(3,2,singleWhitePiece);
+        test.setPiece(4,3,singleRedPiece);
+        test.setPiece(4,1,singleRedPiece);
+        test.setPiece(2,1,singleRedPiece);
+        test.setPiece(2,3,singleRedPiece);
+        print_helper(test);
+        assertTrue(test.isValidMove(new Move(new Position(3,2),
+                new Position(5,4))));
+        assertTrue(test.isValidMove(new Move(new Position(3,2),
+                new Position(5,0))));
+        assertFalse(test.isValidMove(new Move(new Position(3,2),
+                new Position(1,0))));
+        assertFalse(test.isValidMove(new Move(new Position(3,2),
+                new Position(1,4))));
+
+        test = BoardView.testBoard();
+        test.setPiece(3,2,singleRedPiece);
+        test.setPiece(4,3,singleWhitePiece);
+        test.setPiece(4,1,singleWhitePiece);
+        test.setPiece(2,1,singleWhitePiece);
+        test.setPiece(2,3,singleWhitePiece);
+        print_helper(test);
+        assertFalse(test.isValidMove(new Move(new Position(3,2),
+                new Position(5,4))));
+        assertFalse(test.isValidMove(new Move(new Position(3,2),
+                new Position(5,0))));
+        assertTrue(test.isValidMove(new Move(new Position(3,2),
+                new Position(1,0))));
+        assertTrue(test.isValidMove(new Move(new Position(3,2),
+                new Position(1,4))));
+
+        test = BoardView.testBoard();
+        test.setPiece(3,2,kingRedPiece);
+        test.setPiece(4,3,singleWhitePiece);
+        test.setPiece(4,1,singleWhitePiece);
+        test.setPiece(2,1,kingWhitePiece);
+        test.setPiece(2,3,singleWhitePiece);
+        print_helper(test);
+        assertTrue(test.isValidMove(new Move(new Position(3,2),
+                new Position(5,4))));
+        assertTrue(test.isValidMove(new Move(new Position(3,2),
+                new Position(5,0))));
+        assertTrue(test.isValidMove(new Move(new Position(3,2),
+                new Position(1,0))));
+        assertTrue(test.isValidMove(new Move(new Position(3,2),
+                new Position(1,4))));
+    }
+
+    @Test
+    public void movePieceTest(){
+        boardView1.addMove(new Move(new Position(2,1), new Position(3,2)));
+        print_helper(boardView1);
+        boardView1.movePiece();
+        print_helper(boardView1);
+        boardView1.addMove(new Move(new Position(5,2),
+                new Position(4,3)));
+        boardView1.movePiece();
+        print_helper(boardView1);
+        boardView1.addMove(new Move(new Position(2,3),
+                new Position(3,4)));
+        boardView1.movePiece();
+        print_helper(boardView1);
+        boardView1.addMove(new Move(new Position(4,3), new Position(2,1)));
+        boardView1.movePiece();
+        print_helper(boardView1);
+
     }
 
     @Test

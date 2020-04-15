@@ -143,7 +143,9 @@ public class BoardView implements Iterable<Row> {
      * Handles the movements of the piece based on the stored moves in the moves array list(Part of BoardView)
      */
     public void movePiece(){
-        int movesSize = this.moves.size();
+        removeAllMoves();
+        popToBeRemovedStack();
+       /** int movesSize = this.moves.size();
         Move move = this.seeTopMove();
 
         //-----------------------------------------------------------------
@@ -221,6 +223,7 @@ public class BoardView implements Iterable<Row> {
                 }
             }
         }
+        */
     }
 
     /**
@@ -358,8 +361,6 @@ public class BoardView implements Iterable<Row> {
                 Piece middle_piece = viewPiece(skipPieceRow,skipPieceCell);
                 if (middle_piece != null) { //Check if piece exists
                     if (middle_piece.getColor() == Color.RED) { //Check if piece is opposite color
-                        // Add to the list of pieces to be removed
-                        toBeRemoveList.push(new Position(skipPieceRow,skipPieceCell));
                         return true;
                     }
                 }
@@ -375,8 +376,6 @@ public class BoardView implements Iterable<Row> {
                 Piece piece = viewPiece(skipPieceRow,skipPieceCell);
                 if (piece != null) { //Check if piece exists
                     if (piece.getColor() == Color.WHITE) { //Check if piece is opposite color
-                        // Add to the list of pieces to be removed
-                        toBeRemoveList.push(new Position(skipPieceRow,skipPieceCell));
                         return true;
                     }
                 }
@@ -522,10 +521,20 @@ public class BoardView implements Iterable<Row> {
      */
     public void addMove(Move move) {
         this.moves.add(0, move);
+        int endCol = move.getEnd().getCell();
+        int startCol = move.getStart().getCell();
+        int startRow = move.getStart().getRow();
+        int endRow = move.getEnd().getRow();
+        if (endCol == startCol +2 || endCol ==startCol-2){
+            int skipRow = (startRow+endRow)/2;
+            int skilCol = (startCol+endCol)/2;
+            toBeRemoveList.push(new Position(skipRow,skilCol));
+        }
     }
 
     /**
-     * Removing the move at index 0 from list
+     * Removing the move at index 0 from list as well as the position of the removed
+     *  piece stored in the stack that is associated with this move
      */
     public Move removeMove() {
         if (this.moves.isEmpty()){
@@ -556,11 +565,18 @@ public class BoardView implements Iterable<Row> {
     }
 
     /**
-     * Remove all the moves from the list of moves
+     * Remove all the moves from the list of moves and update the board according
+     * to the moves removed
      */
-    public void removeAllMoves() {
-        while (seeTopMove() != null) {
-            this.moves.remove(seeTopMove());
+    private void removeAllMoves() {
+        Move move = seeTopMove();
+        Move first = moves.get(moves.size()-1);
+        Piece piece = viewPiece(first.getStart().getRow(), first.getStart().getCell());
+        setPiece(move.getEnd().getRow(),move.getEnd().getCell(), piece);
+        while (move != null) {
+            setPiece(move.getStart().getRow(), move.getStart().getCell(), null);
+            this.moves.remove(move);
+            move = seeTopMove();
         }
     }
 
