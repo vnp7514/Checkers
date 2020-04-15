@@ -3,6 +3,7 @@ package com.webcheckers.model;
 import java.util.*;
 import com.webcheckers.util.Move;
 import com.webcheckers.util.Position;
+import javafx.geometry.Pos;
 
 /**
  * The Board representation, creates and Arraylist of Rows,
@@ -387,10 +388,10 @@ public class BoardView implements Iterable<Row> {
 
     /**
      * Checks if there is another available jump for the player
-     * @return boolean
+     * @return boolean true if there is
      */
-    public boolean newMoveExists() {
-        if (this.moves.size() > 0) {
+    public boolean newMoveExists(Color playerColor) {
+        /**if (this.moves.size() > 0) {
             if (!isValidJump(this.seeTopMove())) {
                 return false;
             }
@@ -399,7 +400,6 @@ public class BoardView implements Iterable<Row> {
         //-----------------------------------------------------------------
         // COLOR AND TYPE FINDER
         //-----------------------------------------------------------------
-        Color playerColor;
         Type pieceType;
         int movesSize = this.moves.size();
         if (movesSize >= 1) {
@@ -416,10 +416,33 @@ public class BoardView implements Iterable<Row> {
                     move.getStart().getCell()).getType();
         }
         //-----------------------------------------------------------------
-
+*/
         //-----------------------------------------------------------------
         // Get other player color
         //-----------------------------------------------------------------
+        if (moves.size() > 0){
+            Move move = seeTopMove();
+            if (!isValidJump(move)){ // If the player only did a single
+                // move then no need to check for more jumps
+                return false;
+            }
+            int endRow = move.getEnd().getRow();
+            int endCol = move.getEnd().getCell();
+            Position current = new Position(endRow,endCol);
+            Position upperleft = new Position(endRow-2, endCol-2);
+            Position upperright = new Position(endRow-2, endCol+2);
+            Position lowerleft = new Position(endRow+2, endCol-2);
+            Position lowerright = new Position(endRow+2, endCol+2);
+            // Check all possible jumps
+            if (endRow-2>=0&&endCol-2>=0&&isValidJump(new Move(current,upperleft))){
+                return true;
+            } else if (endRow-2>=0&&endCol+2<=7&&isValidJump(new Move(current,upperright))){
+                return true;
+            } else if (endRow+2<=7&&endCol-2>=0&&isValidJump(new Move(current,lowerleft))){
+                return true;
+            } else return endRow+2<=7&&endCol+2<=7&&isValidJump(new Move(current,lowerright));
+        }
+        // else statement
         Color otherPlayer;
         if (playerColor == Color.WHITE) {
             otherPlayer = Color.RED;
@@ -428,73 +451,92 @@ public class BoardView implements Iterable<Row> {
         }
         //-----------------------------------------------------------------
 
-
-        //-----------------------------------------------------------------
-        // Get start and end positions
-        //-----------------------------------------------------------------
-        int endRow = this.seeTopMove().getEnd().getRow();
-        int endCell = this.seeTopMove().getEnd().getCell();
-        int startRow = this.seeTopMove().getStart().getRow();
-        int startCell = this.seeTopMove().getStart().getCell();
-        //-----------------------------------------------------------------
-
-
-        //-----------------------------------------------------------------
-        // Begin checking for an available move
-        //-----------------------------------------------------------------
-        if(playerColor == Color.WHITE || pieceType == Type.KING) { // Check if its a White player
-            if(endCell < 6) { //Check out of bounds
-                if (endRow < 6) { //Check out of bounds
-                    if (this.viewPiece(endRow + 1,endCell + 1)
-                            != null) { // Check the the space that is being jumped is occupied
-                        if (this.viewPiece(endRow + 1, endCell + 1).getColor()
-                                == otherPlayer) { // Check the the space that is being jumped is the other player
-                            if ((this.viewPiece(endRow + 2,endCell + 2) == null)
-                                    && ((endRow + 2 != startRow) ||
-                                    (endCell + 2 != startCell))) { //Check the space is free to jump
-                                return true;
-                            }
-                        }
-                    }
-                }
-            }
-            if(endCell > 1) { //Check out of bounds
-                if (endRow < 6) { //Check out of bounds
-                    if (this.viewPiece(endRow + 1,endCell - 1) != null) { // Check the the space that is being jumped is occupied
-                        if (this.viewPiece(endRow + 1,endCell - 1).getColor()
-                                == otherPlayer) { // Check the the space that is being jumped is the other player
-                            if ((this.viewPiece(endRow + 2,endCell - 2) == null)
-                                    && ((endRow + 2 != startRow)
-                                    || (endCell - 2 != startCell))) { //Check the space is free to jump
-                                return true;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        if (playerColor == Color.RED || pieceType == Type.KING){
-            if((endCell > 1) && (endRow > 1)) { //Check out of bounds
-                if (this.viewPiece(endRow - 1,endCell - 1) != null) { // Check the the space that is being jumped is occupied
-                    if (this.viewPiece(endRow - 1,endCell - 1).getColor()
-                            == otherPlayer) { // Check the the space that is being jumped is the other player
-                        if ((this.viewPiece(endRow - 2,endCell - 2) == null)
-                                && ((endRow - 2 != startRow) ||
-                                (endCell - 2 != startCell))) { //Check the space is free to jump
+        for (int i = 0; i < 8; i++ ) {
+            Row r = getRow(i);
+            for (Space s : r.getSpaces()) {
+                //-----------------------------------------------------------------
+                // Get start and end positions
+                //-----------------------------------------------------------------
+                if (s.getPiece() != null) {
+                    if (s.getPiece().getColor() == playerColor) {
+                        int startRow = i;
+                        int startCell = s.getCellIdx();
+                        Position current = new Position(startRow, startCell);
+                        Position upperleft = new Position(startRow-2, startCell-2);
+                        Position upperright = new Position(startRow-2, startCell+2);
+                        Position lowerleft = new Position(startRow+2, startCell-2);
+                        Position lowerright = new Position(startRow+2, startCell+2);
+                        if (startRow-2>=0&&startCell-2>=0&&isValidJump(new Move(current,upperleft))){
+                            return true;
+                        } else if (startRow-2>=0&&startCell+2<=7&&isValidJump(new Move(current,upperright))){
+                            return true;
+                        } else if (startRow+2<=7&&startCell-2>=0&&isValidJump(new Move(current,lowerleft))){
+                            return true;
+                        } else if(startRow+2<=7&&startCell+2<=7&&isValidJump(new Move(current,lowerright))){
                             return true;
                         }
-                    }
-                }
-            }
-            if((endRow > 1) && (endCell < 6)) { //Check out of bounds
-                if (this.viewPiece(endRow - 1,endCell + 1) != null) { // Check the the space that is being jumped is occupied
-                    if (this.viewPiece(endRow - 1,endCell + 1).getColor()
-                            == otherPlayer) {
-                        if ((this.viewPiece(endRow - 2,endCell + 2) == null)
-                                && ((endRow - 2 != startRow)
-                                || (endCell + 2 != startCell))) { //Check the space is free to jump
-                            return true;
+                        //-----------------------------------------------------------------
+                        /**
+                        //-----------------------------------------------------------------
+                        // Begin checking for an available move
+                        //-----------------------------------------------------------------
+                        if (playerColor == Color.WHITE || pieceType == Type.KING) { // Check if its a White player
+                            if (endCell < 6) { //Check out of bounds
+                                if (endRow < 6) { //Check out of bounds
+                                    if (this.viewPiece(endRow + 1, endCell + 1)
+                                            != null) { // Check the the space that is being jumped is occupied
+                                        if (this.viewPiece(endRow + 1, endCell + 1).getColor()
+                                                == otherPlayer) { // Check the the space that is being jumped is the other player
+                                            if ((this.viewPiece(endRow + 2, endCell + 2) == null)
+                                                    && ((endRow + 2 != startRow) ||
+                                                    (endCell + 2 != startCell))) { //Check the space is free to jump
+                                                return true;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            if (endCell > 1) { //Check out of bounds
+                                if (endRow < 6) { //Check out of bounds
+                                    if (this.viewPiece(endRow + 1, endCell - 1) != null) { // Check the the space that is being jumped is occupied
+                                        if (this.viewPiece(endRow + 1, endCell - 1).getColor()
+                                                == otherPlayer) { // Check the the space that is being jumped is the other player
+                                            if ((this.viewPiece(endRow + 2, endCell - 2) == null)
+                                                    && ((endRow + 2 != startRow)
+                                                    || (endCell - 2 != startCell))) { //Check the space is free to jump
+                                                return true;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
                         }
+                        if (playerColor == Color.RED || pieceType == Type.KING) {
+                            if ((endCell > 1) && (endRow > 1)) { //Check out of bounds
+                                if (this.viewPiece(endRow - 1, endCell - 1) != null) { // Check the the space that is being jumped is occupied
+                                    if (this.viewPiece(endRow - 1, endCell - 1).getColor()
+                                            == otherPlayer) { // Check the the space that is being jumped is the other player
+                                        if ((this.viewPiece(endRow - 2, endCell - 2) == null)
+                                                && ((endRow - 2 != startRow) ||
+                                                (endCell - 2 != startCell))) { //Check the space is free to jump
+                                            return true;
+                                        }
+                                    }
+                                }
+                            }
+                            if ((endRow > 1) && (endCell < 6)) { //Check out of bounds
+                                if (this.viewPiece(endRow - 1, endCell + 1) != null) { // Check the the space that is being jumped is occupied
+                                    if (this.viewPiece(endRow - 1, endCell + 1).getColor()
+                                            == otherPlayer) {
+                                        if ((this.viewPiece(endRow - 2, endCell + 2) == null)
+                                                && ((endRow - 2 != startRow)
+                                                || (endCell + 2 != startCell))) { //Check the space is free to jump
+                                            return true;
+                                        }
+                                    }
+                                }
+                            }
+                        } */
                     }
                 }
             }

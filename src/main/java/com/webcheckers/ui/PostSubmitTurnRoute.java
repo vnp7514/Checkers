@@ -4,6 +4,8 @@ import com.google.gson.Gson;
 import com.webcheckers.appl.PlayerLobby;
 import com.webcheckers.appl.PlayerServices;
 import com.webcheckers.model.BoardView;
+import com.webcheckers.model.Color;
+import com.webcheckers.model.Player;
 import com.webcheckers.util.Message;
 import spark.*;
 
@@ -43,8 +45,15 @@ public class PostSubmitTurnRoute implements Route {
         } else {
             LOG.fine("playerServices is not null");
 
-            BoardView board = playerServices.getGame();
-            if (board.newMoveExists()) {
+            Player player = playerServices.getPlayer();
+            BoardView board = playerLobby.playerOfGame(player).getBoard();
+            Color playerColor = null;
+            if (player.equals(playerLobby.playerOfGame(player).getWhitePlayer())){
+                playerColor = Color.WHITE;
+            } else {
+                playerColor = Color.RED;
+            }
+            if (board.newMoveExists(playerColor)) {
                 LOG.fine("Jump Available!");
                 message = Message.error("Jump Available!");
             } else {
