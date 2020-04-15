@@ -77,20 +77,20 @@ public class SpaceTest {
     }
 
     /**
-     * Tests to make sure that a piece can be placed if it is a valid move.
+     * Tests to make sure that a piece can be placed no matter what
      */
     @Test
     public void setPieceTest() {
         sp1.setPiece(singleRedPiece);
-        assertNull(sp1.getPiece());
+        assertNotNull(sp1.getPiece());
         sp2.setPiece(singleWhitePiece);
         assertNotEquals(singleRedPiece, sp2.getPiece());
         assertEquals(singleWhitePiece, sp2.getPiece());
         sp2.setPiece(singleRedPiece);
-        assertEquals(singleWhitePiece, sp2.getPiece());
-        assertNotEquals(singleRedPiece, sp2.getPiece());
+        assertEquals(singleRedPiece, sp2.getPiece());
+        assertNotEquals(singleWhitePiece, sp2.getPiece());
         sp5.setPiece(null);
-        assertNotNull(sp5.getPiece());
+        assertNull(sp5.getPiece());
         sp5.removePiece();
         assertNull(sp5.getPiece());
     }

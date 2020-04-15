@@ -91,12 +91,31 @@ public class Row implements Iterable<Space> {
         return this.index;
     }
 
+    /**
+     * Get the Piece at the space with the specified column index
+     * @param col the column index
+     * @return the Piece at that Space
+     */
     public Piece viewPiece(int col) {
-        return this.spaces.get(col).getPiece();
+        Space s = getSpace(col);
+        if (s != null){
+            return s.getPiece();
+        }
+        return null;
     }
 
+    /**
+     * Get the Space at the specified index
+     * @param index the index of the Space that is occupied
+     * @return the Space
+     */
     public Space getSpace(int index) {
-        return this.spaces.get(index);
+        for (Space s :spaces){
+            if(s.getCellIdx() == index){
+                return s;
+            }
+        }
+        return null;
     }
 
     /**

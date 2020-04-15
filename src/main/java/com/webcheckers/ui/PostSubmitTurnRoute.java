@@ -18,13 +18,11 @@ public class PostSubmitTurnRoute implements Route {
 
     private final PlayerLobby playerLobby;
     private final TemplateEngine templateEngine;
-    private final BoardView boardView;
     private final Gson gson;
 
     public PostSubmitTurnRoute(final PlayerLobby playerLobby, final TemplateEngine templateEngine, Gson gson) {
 
         this.gson = gson;
-        this.boardView = new BoardView();
         this.playerLobby = Objects.requireNonNull(playerLobby, "playerLobby must not be null");
         this.templateEngine = Objects.requireNonNull(templateEngine, "templateEngine must not be null");
     }

@@ -45,12 +45,24 @@ public class RowTest {
     @Test
     public void flipTest(){
         System.out.println("Clarify visually (flip = reverse order): \n");
-        System.out.println("original: " + zeroRow.toString());
-        System.out.println("flipped:  " + zeroRow.flip().toString());
-        System.out.println("original: " + threeRow.toString());
-        System.out.println("flipped:  " + threeRow.flip().toString());
-        System.out.println("original: " + sixRow.toString());
-        System.out.println("flipped:  " + sixRow.flip().toString());
+        System.out.print("original: ");
+        print_helper(zeroRow);
+        System.out.println("          "+ zeroRow.toString());
+        System.out.print("flipped:  ");
+        print_helper(zeroRow.flip());
+        System.out.println("          "+ zeroRow.flip().toString());
+        System.out.print("original: ");
+        print_helper(threeRow);
+        System.out.println("          "+ threeRow.toString());
+        System.out.print("flipped:  ");
+        print_helper(threeRow.flip());
+        System.out.println("          "+ threeRow.flip().toString());
+        System.out.print("original: ");
+        print_helper(sixRow);
+        System.out.println("          "+  sixRow.toString());
+        System.out.print("flipped:  ");
+        print_helper(sixRow.flip());
+        System.out.println("          "+ sixRow.flip().toString());
     }
 
     @Test
@@ -85,7 +97,19 @@ public class RowTest {
         System.out.println("Removing piece on space 1 in zero Row");
         zeroRow.clearSpace(1);
         System.out.println(zeroRow.toString());
+    }
 
+    /**
+     * A Print helper function to print our the id associated with the space
+     * @param row the row where the spaces are
+     */
+    private void print_helper(Row row){
+        String res = "    ";
+        for (Space s : row){
+            res = res.concat(String.valueOf(s.getCellIdx()));
+            res =res.concat("   ");
+        }
+        System.out.println(res);
     }
 }
 
