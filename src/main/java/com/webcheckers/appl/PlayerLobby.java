@@ -142,6 +142,16 @@ public class PlayerLobby {
         return null;
     }
 
+    public GameLobby getSpecGame(Player player) {
+        for (GameLobby i : games) {
+            if (i.containSpectator(player)) {
+                return i;
+            }
+        }
+        return null;
+    }
+
+
     /**
      * Return which GameLobby the player is in
      * @param player the player

@@ -27,13 +27,14 @@ public class PostValidateMoveRoute implements Route {
     }
 
 
+    @Override
     public Object handle(Request request, Response response){
         // Get the string from the body
         String JSON = request.body();
         try {
             JSON = URLDecoder.decode(JSON, "UTF-8");
         } catch (Exception e){}
-        JSON = JSON.substring(11);
+        JSON = JSON.substring(20);
         LOG.fine(JSON + " returned from the request.body()");
         final Session httpSession = request.session();
 
@@ -41,6 +42,7 @@ public class PostValidateMoveRoute implements Route {
 
         final BoardView board = playerServices.getGame();
 
+        System.out.println(JSON);
         final Move move = gson.fromJson(JSON, Move.class);
 
         final Message message;

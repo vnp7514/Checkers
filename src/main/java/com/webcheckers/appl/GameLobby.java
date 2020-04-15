@@ -16,6 +16,8 @@ public class GameLobby {
     // a list of players currently in the game
     private List<Player> players;
 
+    private List<Player> spectators;
+
     private int gameID;
 
     // The index where the specified player is in the list
@@ -37,6 +39,7 @@ public class GameLobby {
     public GameLobby() {
         this.players = new ArrayList<>();
         this.board = new BoardView();
+        this.spectators = new ArrayList<>();
     }
 
     public GameLobby(Player player, int gameID){
@@ -114,6 +117,25 @@ public class GameLobby {
     public boolean containPlayer(Player player){
         return this.players.contains(player);
     }
+
+    /**
+     * Adds a spectator to the gamelobby
+     * @param player
+     */
+    public void addSpectator(Player player) { this.spectators.add(player); }
+
+    /**
+     * Removes a spectator from the gamelobby
+     * @param player
+     */
+    public void removeSpectator(Player player) {this.spectators.remove(player); }
+
+    /**
+     * Check whether the lobby already has a spectator with the same name
+     * @param player the spectator
+     * @return true if lobby contains the spectator, otherwise false
+     */
+    public boolean containSpectator(Player player) { return this.spectators.contains(player); }
 
     /**
      * Get the red player

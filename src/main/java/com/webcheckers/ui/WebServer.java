@@ -91,6 +91,8 @@ public class WebServer {
 
   public static final String CHECKTURN_URL = "/checkTurn";
 
+  public static final String SPEC_CHECK_TURN = "/spectator/checkTurn";
+
   //
   // Attributes
   //
@@ -206,6 +208,8 @@ public class WebServer {
     post(BACKUP_URL, new PostBackupMoveRoute(playerLobby,templateEngine,gson));
     // Resign
     post(RESIGN_URL, new PostResignRoute(playerLobby, templateEngine, gson));
+
+    post(SPEC_CHECK_TURN, new PostSpectatorCheckTurnRoute(playerLobby, templateEngine, gson));
 
     LOG.config("WebServer is initialized.");
   }
