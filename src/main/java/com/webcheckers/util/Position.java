@@ -15,4 +15,14 @@ public class Position {
     public int getCell() {
         return this.cell;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof Position)){
+            return false;
+        }
+        Position o = (Position) obj;
+        return o.getCell()==this.getCell() && o.getRow()==this.getRow();
+
+    }
 }

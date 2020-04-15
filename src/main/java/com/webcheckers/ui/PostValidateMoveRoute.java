@@ -66,7 +66,6 @@ public class PostValidateMoveRoute implements Route {
      * @return true if the above conditions are true
      */
     public boolean isValidMove(BoardView board, Move move){
-        Position end = move.getEnd();
         return board.isValidMove(move);
     }
 }
