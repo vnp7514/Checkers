@@ -5,7 +5,6 @@ import com.webcheckers.appl.GameLobby;
 import com.webcheckers.appl.PlayerLobby;
 import com.webcheckers.appl.PlayerServices;
 import com.webcheckers.model.Player;
-import com.webcheckers.model.ViewMode;
 import com.webcheckers.util.Message;
 import spark.*;
 
@@ -45,13 +44,11 @@ public class PostSpectatorCheckTurnRoute implements Route {
 
         if (playerServices != null) {
             Player currentPlayer = playerServices.getPlayer();
-            GameLobby currentGame = playerLobby.getSpecGame(currentPlayer);
             if (currentPlayer != null) {
                 //uses gameID to access the GameLobby the user is spectating
                 GameLobby gameLobby = playerLobby.getGame(gameID);
                 if (gameLobby != null) {
-                    if (playerLobby.getBoard(gameLobby).winCondition() ||
-                        currentGame.getActiveColor() != gameLobby.getActiveColor()) {
+                    if (playerLobby.getBoard(gameLobby).winCondition() || gameLobby.specColor()) {
                         message = Message.info("true");
                     }
                     else {

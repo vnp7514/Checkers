@@ -26,6 +26,7 @@ public class GameLobby {
     // The current player, white gets the first turn
     private int current_player = white;
 
+    private Color spectatorColor = null;
     private Color activeColor = Color.WHITE;
 
     // the game board
@@ -194,6 +195,14 @@ public class GameLobby {
                 o.getPlayers().toArray(new Player[0]));
     }
 
+    public boolean specColor() {
+        if (spectatorColor != activeColor) {
+            this.spectatorColor = activeColor;
+            return true;
+        }
+        return false;
+    }
+
     /**
      * The name of the GameLobby instance is based on the names of the
      * two player names who are playing a game of checkers
@@ -205,4 +214,5 @@ public class GameLobby {
         String p2 = this.players.get(1).getName();
         return gameID + " : " + p1 + " vs " + p2;
     }
+
 }
