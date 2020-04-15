@@ -16,7 +16,7 @@ public class BoardView implements Iterable<Row> {
     private ArrayList<Row> rows;
 
     /**
-     * The list of made moves
+     * Operates like a Stack. First in Last Out
      */
     private ArrayList<Move> moves;
 
@@ -46,16 +46,50 @@ public class BoardView implements Iterable<Row> {
         return this.rows.iterator();
     }
 
+    /**
+     * Get the Row that has the index
+     * @param indx the index of the Row to be found
+     * @return the Row if found. null otherwise.
+     */
     public Row getRow(int indx) {
-        return this.rows.get(indx);
+        for(Row row : rows){
+            if(row.getIndex() == indx){
+                return row;
+            }
+        }
+        return null;
     }
 
+    /**
+     * Set the piece at the specified row or col into the specifed piece
+     * @param row the row indx of the space
+     * @param col the col index of the space
+     * @param piece the piece to be put there
+     */
     public void setPiece(int row, int col, Piece piece) {
-        this.rows.get(row).setSpace(col, piece);
+        this.getRow(row).setSpace(col, piece);
     }
 
+    /**
+     * View the piece that is at this coordinate
+     * @param row the row index
+     * @param col the col index
+     * @return the piece at that space
+     */
     public Piece viewPiece(int row,int col) {
         return this.getRow(row).viewPiece(col);
+    }
+
+
+    /**
+     * Check whether the space at rowidx and cellidx (colidx) is
+     *    a valid space (aka. a black title and does not hold a piece)
+     * @param rowidx the row index
+     * @param cellidx the cell index
+     * @return true if it is valid. false otherwise
+     */
+    public boolean isValid(int rowidx, int cellidx){
+        return this.getRow(rowidx).getSpace(cellidx).isValid();
     }
 
     /**
@@ -141,18 +175,6 @@ public class BoardView implements Iterable<Row> {
             }
         }
     }
-
-    /**
-     * Check whether the space at rowidx and cellidx (colidx) is
-     *    a valid space (aka. a black title and does not hold a piece)
-     * @param rowidx the row index
-     * @param cellidx the cell index
-     * @return true if it is valid. false otherwise
-     */
-    public boolean isValid(int rowidx, int cellidx){
-        return this.getRow(rowidx).getSpace(cellidx).isValid();
-    }
-
 
     /**
      * Check if the players move was a valid move to make
@@ -421,7 +443,7 @@ public class BoardView implements Iterable<Row> {
     }
 
     /**
-     * Adding a move to the list of moves
+     * Adding a move to the start of list of moves
      * @param move the move to be added
      */
     public void addMove(Move move) {
@@ -429,7 +451,7 @@ public class BoardView implements Iterable<Row> {
     }
 
     /**
-     * Removing a move from list
+     * Removing the move at index 0 from list
      */
     public Move removeMove() {
         if (this.moves.isEmpty()){
@@ -484,7 +506,6 @@ public class BoardView implements Iterable<Row> {
             return false;
         }
     }
-
 
     /**
      * A string representation of the BoardView(aka board)
