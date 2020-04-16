@@ -76,6 +76,9 @@ public class BoardViewTest {
           Position p56 = new Position(5,6);
           Position p45 = new Position(4,5);
           Position p47 = new Position(4,7);
+          Position p50 = new Position(5,0);
+          Position p54 = new Position(5,4);
+          Position p14 = new Position(1,4);
           BoardView flip = boardView1.flip();
 
           // Testing single moves
@@ -159,25 +162,166 @@ public class BoardViewTest {
                 new Position(1,0))));
         assertTrue(test.isValidMove(new Move(new Position(3,2),
                 new Position(1,4))));
+
+
+        test = BoardView.testBoard();
+        test.setPiece(3,2, kingWhitePiece);
+        test.setPiece(2,1,kingRedPiece);
+        test.setPiece(2,3, kingRedPiece);
+        test.setPiece(4,1 , kingRedPiece);
+        test.setPiece(1,4, kingRedPiece);
+        printb(test);
+        assertFalse(test.isValidMove(new Move(p32, p14)));
+        assertTrue(test.isValidMove(new Move (p32,p50)));
+        assertTrue(test.isValidMove(new Move(p32,p10)));
+        assertFalse(test.isValidMove(new Move(p32, p54)));
+        assertTrue(test.isValidMove(new Move(p21,new Position(4,3))));
+        assertFalse(test.isValidMove(new Move(p14, p32)));
+        assertFalse(test.isValidMove(new Move(new Position(2,3),
+                new Position(4,1))));
     }
 
     @Test
     public void movePieceTest(){
         boardView1.addMove(new Move(new Position(2,1), new Position(3,2)));
-        print_helper(boardView1);
+        printb(boardView1);
+        System.out.println("Moving row2cell1 to row3cell2");
         boardView1.movePiece();
-        print_helper(boardView1);
+        printb(boardView1);
         boardView1.addMove(new Move(new Position(5,2),
                 new Position(4,3)));
         boardView1.movePiece();
-        print_helper(boardView1);
+        System.out.println("Moving row5cell2 to row4cell3");
+        printb(boardView1);
         boardView1.addMove(new Move(new Position(2,3),
                 new Position(3,4)));
         boardView1.movePiece();
-        print_helper(boardView1);
+        System.out.println("Moving row2cell3 to row3cell4");
+        printb(boardView1);
         boardView1.addMove(new Move(new Position(4,3), new Position(2,1)));
         boardView1.movePiece();
-        print_helper(boardView1);
+        System.out.println("Moving row4cell3 to row2cell1");
+        printb(boardView1);
+
+        BoardView test = BoardView.testBoard();
+        test.setPiece(4,3,singleRedPiece);
+        test.setPiece(3,2, singleWhitePiece);
+        test.setPiece(1,2,singleWhitePiece);
+        test.addMove(new Move (new Position(4,3),
+                new Position(2,1)));
+        test.addMove(new Move( new Position(2,1),
+                new Position(0,3) ));
+        printb(test);
+        test.movePiece();
+        System.out.println("Doing a double jump");
+        printb(test);
+    }
+
+    @Test
+    public void newJumpExists(){
+        // Check if there is a jump available
+        assertFalse(boardView1.newJumpExists(Color.WHITE));
+        assertFalse(boardView1.newJumpExists(Color.RED));
+        boardView1.setPiece(4,1,singleWhitePiece);
+        printb(boardView1);
+        assertTrue(boardView1.newJumpExists(Color.RED));
+        assertFalse(boardView1.newJumpExists(Color.WHITE));
+        BoardView test = BoardView.testBoard();
+
+        // If the piece is adjacent to no pieces
+        test.setPiece(3,2, kingRedPiece);
+        assertFalse(test.newJumpExists(Color.RED));
+        test.setPiece(3,2,singleRedPiece);
+        assertFalse(test.newJumpExists(Color.RED));
+        test.setPiece(3,2,kingRedPiece);
+
+        // If upperright piece is of different color
+        test.setPiece(2,3,singleWhitePiece);
+        assertTrue(test.newJumpExists(Color.RED));
+        test.setPiece(3,2,singleRedPiece);
+        assertTrue(test.newJumpExists(Color.RED));
+        test.setPiece(3,2,kingRedPiece);
+        test.setPiece(2,3,null);
+
+        // If upperleft piece is of different color
+        test.setPiece(2,1,singleWhitePiece);
+        assertTrue(test.newJumpExists(Color.RED));
+        test.setPiece(3,2,singleRedPiece);
+        assertTrue(test.newJumpExists(Color.RED));
+        test.setPiece(3,2,kingRedPiece);
+
+        // If upperleft piece is of same color
+        test.setPiece(2,1,singleRedPiece);
+        assertFalse(test.newJumpExists(Color.RED));
+        test.setPiece(3,2,singleRedPiece);
+        assertFalse(test.newJumpExists(Color.RED));
+        test.setPiece(3,2,kingRedPiece);
+        test.setPiece(2,1, null);
+
+        // If lower left piece is of different color
+        test.setPiece(4,1,kingWhitePiece);
+        assertTrue(test.newJumpExists(Color.RED));
+        test.setPiece(3,2,singleRedPiece);
+        assertFalse(test.newJumpExists(Color.RED)); // single piece cannot go backward
+        test.setPiece(3,2,kingRedPiece);
+        test.setPiece(4,1, null);
+
+        test.setPiece(4,3, singleWhitePiece);
+        assertTrue(test.newJumpExists(Color.RED));
+        test.setPiece(3,2,singleRedPiece);
+        assertFalse(test.newJumpExists(Color.RED)); // single piece cannot go backward
+        test.setPiece(3,2,kingRedPiece);
+        test.setPiece(4,3, null);
+
+        test = BoardView.testBoard();
+        // Testing corners
+        // upper right corner
+        test.setPiece(0,7,singleWhitePiece);
+        assertFalse(test.newJumpExists(Color.WHITE));
+        test.setPiece(1,6,singleRedPiece);
+        assertTrue(test.newJumpExists(Color.WHITE));
+        test.setPiece(0,7,null);
+        test.setPiece(1,6, null);
+
+        //lower left corner
+        test.setPiece(7,0, singleRedPiece);
+        assertFalse(test.newJumpExists(Color.RED));
+        test.setPiece(6,1,singleWhitePiece);
+        assertTrue(test.newJumpExists(Color.RED));
+        test.setPiece(7,0, null);
+        test.setPiece(6,1,null);
+
+        // upper left corner
+        test.setPiece(0,1,singleWhitePiece);
+        test.setPiece(1,0,singleRedPiece);
+        assertFalse(test.newJumpExists(Color.WHITE));
+        assertFalse(test.newJumpExists(Color.RED));
+        test.setPiece(0,1, null);
+        test.setPiece(1,0, null);
+
+
+        // lower right corner
+        test.setPiece(6,7,singleWhitePiece);
+        test.setPiece(7,6,singleRedPiece);
+        assertFalse(test.newJumpExists(Color.WHITE));
+        assertFalse(test.newJumpExists(Color.RED));
+    }
+
+    @Test
+    public void newMoveExists(){
+        assertTrue(boardView1.newMoveExists(Color.RED));
+        assertTrue(boardView1.newMoveExists(Color.WHITE));
+        boardView1.setPiece(3,0, singleRedPiece);
+        boardView1.setPiece(3,2,singleRedPiece);
+        boardView1.setPiece(3,4,singleRedPiece);
+        boardView1.setPiece(3,6,singleRedPiece);
+        boardView1.setPiece(4,1,singleRedPiece);
+        boardView1.setPiece(4,3,singleRedPiece);
+        boardView1.setPiece(4,5,singleRedPiece);
+        boardView1.setPiece(4,7,singleRedPiece);
+        // boardview is at a state where no pieces could move
+        assertFalse(boardView1.newMoveExists(Color.WHITE));
+        assertFalse(boardView1.newMoveExists(Color.RED));
 
     }
 
@@ -199,6 +343,11 @@ public class BoardViewTest {
         BoardView flip = board.flip();
         System.out.println("Origin:\n"+board.toString()+"\n");
         System.out.println("Flipped:\n"+flip.toString());
+    }
+
+    public void printb(BoardView board){
+        System.out.println("Origin:\n"+board.toString()+"\n");
+
     }
 
 }

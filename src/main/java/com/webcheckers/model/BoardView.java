@@ -310,10 +310,15 @@ public class BoardView implements Iterable<Row> {
 
     /**
      * Check if the move made by the player is a valid jump move
+     * Pre-condition: the Position end is a valid space to move to
      * @param move The move that the player
      * @return boolean
      */
     private boolean isValidJump(Move move) {
+        if (viewPiece(move.getEnd().getRow(), move.getEnd().getCell()) != null){
+            // if the space the piece moving to is occupied then it shouldnt be allowed
+            return false;
+        }
         int skipPieceRow, skipPieceCell = 0;
         Color playerColor;
         Type pieceType;
@@ -390,7 +395,7 @@ public class BoardView implements Iterable<Row> {
      * Checks if there is another available jump for the player
      * @return boolean true if there is
      */
-    public boolean newMoveExists(Color playerColor) {
+    public boolean newJumpExists(Color playerColor) {
         /**if (this.moves.size() > 0) {
             if (!isValidJump(this.seeTopMove())) {
                 return false;
@@ -434,13 +439,21 @@ public class BoardView implements Iterable<Row> {
             Position lowerleft = new Position(endRow+2, endCol-2);
             Position lowerright = new Position(endRow+2, endCol+2);
             // Check all possible jumps
-            if (endRow-2>=0&&endCol-2>=0&&isValidJump(new Move(current,upperleft))){
+            if (endRow-2>=0&&endCol-2>=0&&
+                    viewPiece(endRow-2,endCol-2) == null &&
+                    isValidJump(new Move(current,upperleft))){
                 return true;
-            } else if (endRow-2>=0&&endCol+2<=7&&isValidJump(new Move(current,upperright))){
+            } else if (endRow-2>=0&&endCol+2<=7&&
+                    viewPiece(endRow-2,endCol+2) == null &&
+                    isValidJump(new Move(current,upperright))){
                 return true;
-            } else if (endRow+2<=7&&endCol-2>=0&&isValidJump(new Move(current,lowerleft))){
+            } else if (endRow+2<=7&&endCol-2>=0&&
+                    viewPiece(endRow+2,endCol-2) == null &&
+                    isValidJump(new Move(current,lowerleft))){
                 return true;
-            } else return endRow+2<=7&&endCol+2<=7&&isValidJump(new Move(current,lowerright));
+            } else return endRow+2<=7&&endCol+2<=7&&
+                    viewPiece(endRow+2,endCol+2) == null &&
+                    isValidJump(new Move(current,lowerright));
         }
         // else statement
         Color otherPlayer;
@@ -466,13 +479,21 @@ public class BoardView implements Iterable<Row> {
                         Position upperright = new Position(startRow-2, startCell+2);
                         Position lowerleft = new Position(startRow+2, startCell-2);
                         Position lowerright = new Position(startRow+2, startCell+2);
-                        if (startRow-2>=0&&startCell-2>=0&&isValidJump(new Move(current,upperleft))){
+                        if (startRow-2>=0&&startCell-2>=0&&
+                                viewPiece(startRow-2,startCell-2) == null &&
+                                isValidJump(new Move(current,upperleft))){
                             return true;
-                        } else if (startRow-2>=0&&startCell+2<=7&&isValidJump(new Move(current,upperright))){
+                        } else if (startRow-2>=0&&startCell+2<=7&&
+                                viewPiece(startRow-2,startCell-2) == null &&
+                                isValidJump(new Move(current,upperright))){
                             return true;
-                        } else if (startRow+2<=7&&startCell-2>=0&&isValidJump(new Move(current,lowerleft))){
+                        } else if (startRow+2<=7&&startCell-2>=0&&
+                                viewPiece(startRow+2,startCell-2) == null &&
+                                isValidJump(new Move(current,lowerleft))){
                             return true;
-                        } else if(startRow+2<=7&&startCell+2<=7&&isValidJump(new Move(current,lowerright))){
+                        } else if(startRow+2<=7&&startCell+2<=7&&
+                                viewPiece(startRow+2, startCell+2) == null &&
+                                isValidJump(new Move(current,lowerright))){
                             return true;
                         }
                         //-----------------------------------------------------------------
@@ -537,6 +558,58 @@ public class BoardView implements Iterable<Row> {
                                 }
                             }
                         } */
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Check whether there are more moves to be made by this player
+     * @param playerColor the color of the current player
+     * @return true if the player can make more moves
+     */
+    public boolean newMoveExists(Color playerColor){
+        if (moves.isEmpty()) {
+            // The first move of the player
+            if (newJumpExists(playerColor)) {
+                return true;
+            }
+            for (int i = 0; i < 8; i++) {
+                Row r = getRow(i);
+                for (Space s : r.getSpaces()) {
+                    if (s.getPiece() != null &&
+                            s.getPiece().getColor() == playerColor){
+                        int startRow = i;
+                        int startCell = s.getCellIdx();
+                        Position current = new Position(startRow , startCell);
+                        Position upperleft = new Position(startRow-1 ,
+                                startCell-1);
+                        Position lowerleft = new Position(startRow+1,
+                                startCell-1);
+                        Position upperright = new Position(startRow-1 ,
+                                startCell+1);
+                        Position lowerright = new Position(startRow+1,
+                                startCell+1);
+                        if (startRow-1>=0&&startCell-1>=0&&
+                                viewPiece(startRow-1,startCell-1) == null &&
+                                isValidMove(new Move(current,upperleft))){
+                            return true;
+                        } else if (startRow-1>=0&&startCell+1<=7&&
+                                viewPiece(startRow-1,startCell-1) == null &&
+                                isValidMove(new Move(current,upperright))){
+                            return true;
+                        } else if (startRow+1<=7&&startCell-1>=0&&
+                                viewPiece(startRow+1,startCell-1) == null &&
+                                isValidMove(new Move(current,lowerleft))){
+                            return true;
+                        } else if(startRow+1<=7&&startCell+1<=7&&
+                                viewPiece(startRow+1, startCell+1) == null &&
+                                isValidMove(new Move(current,lowerright))){
+                            return true;
+                        }
+
                     }
                 }
             }
