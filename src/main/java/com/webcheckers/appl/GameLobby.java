@@ -42,11 +42,21 @@ public class GameLobby {
         this.players = new ArrayList<>(5);
         //this.board = new BoardView();
         // TODO FOR TESTING ONLY
+        /** For testing winConditions
         this.board = BoardView.testBoard();
         board.setPiece(4,5, new Piece(Type.SINGLE, Color.RED));
         board.setPiece(3,4, new Piece(Type.SINGLE, Color.WHITE));
         board.setPiece(1,4, new Piece(Type.SINGLE, Color.WHITE));
         board.setPiece(0,7, new Piece(Type.SINGLE, Color.WHITE));
+         */
+        this.board = new BoardView();
+        board.setPiece(3,0, new Piece(Type.SINGLE,Color.RED));
+        board.setPiece(3,2, new Piece(Type.SINGLE,Color.RED));
+        board.setPiece(3,4, new Piece(Type.SINGLE,Color.RED));
+        board.setPiece(4,5, new Piece(Type.SINGLE,Color.RED));
+        board.setPiece(4,3, new Piece(Type.SINGLE,Color.RED));
+        board.setPiece(4,1, new Piece(Type.SINGLE,Color.RED));
+        board.setPiece(3,6, new Piece(Type.SINGLE,Color.RED));
         // TODO END OF TESTING
         this.spectators = new ArrayList<>();
     }

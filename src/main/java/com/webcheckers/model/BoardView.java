@@ -613,7 +613,7 @@ public class BoardView implements Iterable<Row> {
                                 isValidMove(new Move(current,upperleft))){
                             return true;
                         } else if (startRow-1>=0&&startCell+1<=7&&
-                                viewPiece(startRow-1,startCell-1) == null &&
+                                viewPiece(startRow-1,startCell+1) == null &&
                                 isValidMove(new Move(current,upperright))){
                             return true;
                         } else if (startRow+1<=7&&startCell-1>=0&&

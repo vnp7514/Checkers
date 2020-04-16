@@ -318,6 +318,8 @@ public class BoardViewTest {
         boardView1.setPiece(4,1,singleRedPiece);
         boardView1.setPiece(4,3,singleRedPiece);
         boardView1.setPiece(4,5,singleRedPiece);
+        assertTrue(boardView1.newMoveExists(Color.WHITE));
+        assertTrue(boardView1.newMoveExists(Color.RED));
         boardView1.setPiece(4,7,singleRedPiece);
         // boardview is at a state where no pieces could move
         assertFalse(boardView1.newMoveExists(Color.WHITE));

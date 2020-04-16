@@ -208,6 +208,7 @@ public class GetGameRoute implements Route {
         Player currentPlayer = playerServices.getPlayer();
         boolean isGameOver;
         String gameOverMessage;
+        Message message = null;
 
         if (boardView.winCondition()){
             isGameOver = true;
@@ -225,6 +226,7 @@ public class GetGameRoute implements Route {
             LOG.fine("Game is over because white player cannot move");
             isGameOver = true;
             gameLobby.end();
+            message = Message.info(gameLobby.getRedPlayer().getName() + " won.");
             gameOverMessage = gameLobby.getWhitePlayer().getName()
                     + " cannot move anymore.";
         }
@@ -233,6 +235,7 @@ public class GetGameRoute implements Route {
             LOG.fine("Game is over because Red player cannot move");
             isGameOver = true;
             gameLobby.end();
+            message = Message.info(gameLobby.getWhitePlayer().getName()+ " won.");
             gameOverMessage = gameLobby.getRedPlayer().getName()
                     + " cannot move anymore.";
         }
@@ -253,7 +256,7 @@ public class GetGameRoute implements Route {
         }
 
         Map<String, Object> vm = new HashMap<>();
-        vm.put(GetHomeRoute.MESSAGE_ATTR, playerServices.getMessage());
+        vm.put(GetHomeRoute.MESSAGE_ATTR, message);
         playerServices.removeMessage();
         vm.put(ACTIVE_COLOR, gameLobby.getActiveColor());
         vm.put(TITLE, "Checkers game!");
@@ -307,7 +310,7 @@ public class GetGameRoute implements Route {
         vm.put(GAME_BOARD, boardView);
         final Map<String, Object> modeOptions = new HashMap<>(2);
         modeOptions.put("isGameOver", true);
-        modeOptions.put("gameOverMessage", message.getText());
+        modeOptions.put("gameOverMessage", null);
         vm.put("modeOptionsAsJSON", gson.toJson(modeOptions));
         return vm;
     }
