@@ -40,7 +40,7 @@ public class GameLobby {
      */
     public GameLobby() {
         this.players = new ArrayList<>(5);
-        this.board = new BoardView();
+        //this.board = new BoardView();
         // TODO FOR TESTING ONLY
         /** For testing winConditions
         this.board = BoardView.testBoard();
@@ -49,16 +49,16 @@ public class GameLobby {
         board.setPiece(1,4, new Piece(Type.SINGLE, Color.WHITE));
         board.setPiece(0,7, new Piece(Type.SINGLE, Color.WHITE));
          */
-        /**
-         * this.board = new BoardView();
-         * board.setPiece(3,0, new Piece(Type.SINGLE,Color.RED));
-         * board.setPiece(3,2, new Piece(Type.SINGLE,Color.RED));
-         * board.setPiece(3,4, new Piece(Type.SINGLE,Color.RED));
-         * board.setPiece(4,5, new Piece(Type.SINGLE,Color.RED));
-         * board.setPiece(4,3, new Piece(Type.SINGLE,Color.RED));
-         * board.setPiece(4,1, new Piece(Type.SINGLE,Color.RED));
-         * board.setPiece(3,6, new Piece(Type.SINGLE,Color.RED));
-         */
+
+          this.board = new BoardView();
+          board.setPiece(3,0, new Piece(Type.SINGLE,Color.RED));
+          board.setPiece(3,2, new Piece(Type.SINGLE,Color.RED));
+          board.setPiece(3,4, new Piece(Type.SINGLE,Color.RED));
+          board.setPiece(4,5, new Piece(Type.SINGLE,Color.RED));
+          board.setPiece(4,3, new Piece(Type.SINGLE,Color.RED));
+          board.setPiece(4,1, new Piece(Type.SINGLE,Color.RED));
+          board.setPiece(3,6, new Piece(Type.SINGLE,Color.RED));
+
         // TODO END OF TESTING
         this.spectators = new ArrayList<>();
         this.spectatorColor = new HashMap<>();
@@ -184,6 +184,14 @@ public class GameLobby {
      * @return true if lobby contains the spectator, otherwise false
      */
     public boolean containSpectator(Player player) { return this.spectators.contains(player); }
+
+    /**
+     * Return true if there are spectators
+     * @return true if it is so
+     */
+    public boolean hasSpectator(){
+        return !spectators.isEmpty();
+    }
 
     /**
      * Get the red player

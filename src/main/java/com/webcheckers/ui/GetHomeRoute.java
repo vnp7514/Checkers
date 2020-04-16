@@ -24,7 +24,7 @@ public class GetHomeRoute implements Route {
     public static final Message WELCOME_MSG = Message.info("Welcome to the world of online Checkers.");
 
     // The length of the session timeout in seconds
-    static final int SESSION_TIMEOUT_PERIOD = 120;
+    static final int SESSION_TIMEOUT_PERIOD = 1200;
 
     private final TemplateEngine templateEngine;
     private final PlayerLobby playerLobby;
@@ -130,7 +130,8 @@ public class GetHomeRoute implements Route {
                     GameLobby gameLobby = playerLobby.playerOfGame(playerServices.getPlayer());
                     BoardView board = gameLobby.getBoard();
                     if (!gameLobby.isRunning()) {
-                        if (!playerServices.getPlayer().equals(gameLobby.getQuitter())) {
+                        if (!playerServices.getPlayer().equals(gameLobby.getQuitter())
+                        && !gameLobby.hasSpectator()) {
                             // Making sure the other player who got resigned on be able
                             //   to access necessary data. In other words, make sure all players
                             //   exit the game before removing it.

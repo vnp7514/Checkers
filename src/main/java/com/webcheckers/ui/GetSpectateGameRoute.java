@@ -5,8 +5,10 @@ import com.webcheckers.appl.GameLobby;
 import com.webcheckers.appl.PlayerLobby;
 import com.webcheckers.appl.PlayerServices;
 import com.webcheckers.model.BoardView;
+import com.webcheckers.model.Color;
 import com.webcheckers.model.Player;
 import com.webcheckers.model.ViewMode;
+import com.webcheckers.util.Message;
 import spark.*;
 
 import java.net.URLDecoder;
@@ -29,6 +31,7 @@ public class GetSpectateGameRoute implements Route {
     private final String WHITE_PLAYER = "whitePlayer";
     private final String ACTIVE_COLOR = "activeColor";
 
+    private final String WIN_MSG = " has captured all the pieces";
     private final String GAME = "game";
 
     private static final Logger LOG = Logger.getLogger(GetGameRoute.class.getName());
@@ -45,7 +48,7 @@ public class GetSpectateGameRoute implements Route {
     @Override
     public Object handle(Request request, Response response) throws Exception {
 
-        final Map<String, Object> vm = new HashMap<>();
+        final Map<String, Object> vm;
 
         final Map<String, Object> modeOptions = new HashMap<>(2);
 
@@ -62,28 +65,27 @@ public class GetSpectateGameRoute implements Route {
             if (currentPlayer != null) {
                 //uses gameID to access the GameLobby the user is spectating
                 GameLobby gameLobby = playerLobby.getGame(gameID);
-                if (gameLobby != null && !playerLobby.getBoard(gameLobby).winCondition()) {
+                if (gameLobby != null) {
                     if (!gameLobby.containSpectator(currentPlayer)) {
                         gameLobby.addSpectator(currentPlayer);
                     }
-                    //populates the view model with info contained in gameLobby
-                    vm.put(GAME_ID, gameID);
-                    vm.put(CURRENT_USER, currentPlayer);
-                    vm.put(ACTIVE_COLOR, gameLobby.getActiveColor());
-                    vm.put(TITLE, "Checkers game!");
-                    vm.put(VIEW, ViewMode.SPECTATOR);
-                    //need to put player instances in all of these below
-                    vm.put(RED_PLAYER, gameLobby.getRedPlayer());
-                    vm.put(WHITE_PLAYER, gameLobby.getWhitePlayer());
-                    vm.put(GAME_BOARD, gameLobby.getBoard());
-                    vm.put(MODE, null);
-
+                    if (gameLobby.isRunning()){
+                        LOG.fine("Noone has resigned or lost the game");
+                        vm = noResignation(gameLobby, playerServices);
+                    } else {
+                        if (gameLobby.getQuitter() != null){
+                            LOG.fine("Someone has resigned the game");
+                            vm = resignation(gameLobby, playerServices);
+                        } else {
+                            LOG.fine("Someone has lost");
+                            vm = noResignation(gameLobby, playerServices);
+                        }
+                    }
                     return templateEngine.render(new ModelAndView(vm, VIEW_NAME));
                 } else {
                     LOG.fine("gameLobby is null so the player is not watching a game");
-                    modeOptions.put("isGameOver", true);
-                    modeOptions.put("gameOverMessage", request.body());
-                    vm.put(MODE, gson.toJson(modeOptions));
+                    playerServices.storeMessage(Message.info("GameLobby "
+                            + gameID + " is not available anymore"));
                 }
             } else {
                 LOG.fine("the client has not signed in");
@@ -95,4 +97,104 @@ public class GetSpectateGameRoute implements Route {
         halt();
         return null;
     }
+
+
+    /**
+     * Return the ViewModel for the case where both players are playing the game and noone
+     *  has resigned
+     * @param gameLobby the game lobby that 2 players are in
+     * @param playerServices the current player session
+     * @return the ViewModel used for rendering the page
+     */
+    private Map<String, Object> noResignation(GameLobby gameLobby, PlayerServices playerServices){
+        BoardView boardView = gameLobby.getBoard();
+        Player currentPlayer = playerServices.getPlayer();
+        boolean isGameOver;
+        String gameOverMessage;
+        Message message = null;
+
+        if (boardView.winCondition()){
+            isGameOver = true;
+            if(gameLobby.getActiveColor() == Color.WHITE){
+                LOG.fine("Game is over because white has no pieces left");
+                gameOverMessage = gameLobby.getRedPlayer().getName() + WIN_MSG;
+            } else {
+                LOG.fine("game is over because red has no pieces left");
+                gameOverMessage = gameLobby.getWhitePlayer().getName() + WIN_MSG;
+            }
+        }
+        else if (gameLobby.getActiveColor() == Color.WHITE &&
+                !boardView.newMoveExists(Color.WHITE)){
+            LOG.fine("Game is over because white player cannot move");
+            isGameOver = true;
+            message = Message.info(gameLobby.getRedPlayer().getName() + " won.");
+            gameOverMessage = gameLobby.getWhitePlayer().getName()
+                    + " cannot move anymore.";
+        }
+        else if (gameLobby.getActiveColor() == Color.RED &&
+                !boardView.newMoveExists(Color.RED)){
+            LOG.fine("Game is over because Red player cannot move");
+            isGameOver = true;
+            message = Message.info(gameLobby.getWhitePlayer().getName()+ " won.");
+            gameOverMessage = gameLobby.getRedPlayer().getName()
+                    + " cannot move anymore.";
+        }
+        else {
+            LOG.fine("Game is still going");
+            isGameOver = false;
+            gameOverMessage = "";
+        }
+
+        Map<String, Object> vm = new HashMap<>();
+        vm.put(GetHomeRoute.MESSAGE_ATTR, message);
+        playerServices.removeMessage();
+        vm.put(ACTIVE_COLOR, gameLobby.getActiveColor());
+        vm.put(TITLE, "Checkers game!");
+        vm.put(VIEW, ViewMode.SPECTATOR);
+        //need to put player instances in all of these below
+        vm.put(CURRENT_USER, currentPlayer);
+        vm.put(RED_PLAYER, gameLobby.getRedPlayer());
+        vm.put(WHITE_PLAYER, gameLobby.getWhitePlayer());
+        vm.put(GAME_ID, gameLobby.getGameID());
+        vm.put(GAME_BOARD, boardView);
+        final Map<String, Object> modeOptions = new HashMap<>(2);
+        modeOptions.put("isGameOver", isGameOver);
+        modeOptions.put("gameOverMessage", gameOverMessage);
+        vm.put("modeOptionsAsJSON", gson.toJson(modeOptions));
+        return vm;
+    }
+
+    /**
+     * Someone has surrender the game
+     * @param gameLobby the game lobby that 2 players were in
+     * @param playerServices the current player session
+     * @return the ViewModel used for rendering the page of the person who did not resign
+     */
+    private Map<String, Object> resignation(GameLobby gameLobby, PlayerServices playerServices){
+        Player current = playerServices.getPlayer();
+        Message message;
+        BoardView boardView;
+        // Someone quits.
+
+        message = Message.info(gameLobby.getQuitter().getName() +
+                " has resigned!");
+        boardView = gameLobby.getBoard();
+        Map<String, Object> vm = new HashMap<>();
+        vm.put(GetHomeRoute.MESSAGE_ATTR, message);
+        vm.put(ACTIVE_COLOR, gameLobby.getActiveColor());
+        vm.put(TITLE, "Checkers game!");
+        vm.put(VIEW, ViewMode.SPECTATOR);
+        //need to put player instances in all of these below
+        vm.put(CURRENT_USER, current);
+        vm.put(RED_PLAYER, gameLobby.getRedPlayer());
+        vm.put(WHITE_PLAYER, gameLobby.getWhitePlayer());
+        vm.put(GAME_ID, gameLobby.getGameID());
+        vm.put(GAME_BOARD, boardView);
+        final Map<String, Object> modeOptions = new HashMap<>(2);
+        modeOptions.put("isGameOver", true);
+        modeOptions.put("gameOverMessage", null);
+        vm.put("modeOptionsAsJSON", gson.toJson(modeOptions));
+        return vm;
+    }
+
 }
