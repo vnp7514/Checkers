@@ -63,7 +63,9 @@ public class GetSpectateGameRoute implements Route {
                 //uses gameID to access the GameLobby the user is spectating
                 GameLobby gameLobby = playerLobby.getGame(gameID);
                 if (gameLobby != null && !playerLobby.getBoard(gameLobby).winCondition()) {
-                    gameLobby.addSpectator(currentPlayer);
+                    if (!gameLobby.containSpectator(currentPlayer)) {
+                        gameLobby.addSpectator(currentPlayer);
+                    }
                     //populates the view model with info contained in gameLobby
                     vm.put(GAME_ID, gameID);
                     vm.put(CURRENT_USER, currentPlayer);

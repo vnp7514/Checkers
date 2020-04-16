@@ -93,6 +93,8 @@ public class WebServer {
 
   public static final String SPEC_CHECK_TURN = "/spectator/checkTurn";
 
+  public static final String SPEC_STOP_WATCH = "/spectator/stopWatching";
+
   //
   // Attributes
   //
@@ -186,6 +188,8 @@ public class WebServer {
 
     //Shows the Checkers game page in Spectator mode
     get(SPECTATE_GAME_URL, new GetSpectateGameRoute(playerLobby,templateEngine, gson));
+
+    get(SPEC_STOP_WATCH, new GetSpectatorStopWatchingRoute(playerLobby, templateEngine));
 
     // Keeps SignIn page up after trying to sign in
     post(SIGNIN_URL, new PostSignInRoute(playerLobby, templateEngine));
