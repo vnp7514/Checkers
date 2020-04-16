@@ -6,6 +6,7 @@ import java.util.logging.Logger;
 import com.webcheckers.appl.GameLobby;
 import com.webcheckers.appl.PlayerLobby;
 import com.webcheckers.appl.PlayerServices;
+import com.webcheckers.model.BoardView;
 import spark.*;
 
 import com.webcheckers.util.Message;
@@ -126,6 +127,12 @@ public class GetHomeRoute implements Route {
 
                 // If the player is already in a game, redirect to /game
                 if (playerLobby.playerInGame(playerServices.getPlayer())){
+                    GameLobby gameLobby = playerLobby.playerOfGame(playerServices.getPlayer());
+                    BoardView board = gameLobby.getBoard();
+                    if (board.winCondition()) {
+                        playerLobby.removeGame(gameLobby);
+                        return templateEngine.render(new ModelAndView(vm, VIEW_NAME));
+                    }
                     response.redirect(WebServer.GAME_URL);
                     halt();
                     return null;

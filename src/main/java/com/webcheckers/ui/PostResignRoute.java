@@ -45,7 +45,7 @@ public class PostResignRoute implements Route {
         else {
             LOG.fine("GameLobby is not null");
             LOG.fine("This player has resigned");
-            message = Message.info(gameLobby.getCurrent_player().getName() + RESIGN_STR);
+            message = Message.info(currentPlayer.getName() + RESIGN_STR);
             // Get the opposing player
             Player opposingPlayer;
             if (gameLobby.getWhitePlayer().equals(currentPlayer)) {

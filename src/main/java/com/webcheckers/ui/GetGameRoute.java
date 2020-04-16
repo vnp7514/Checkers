@@ -26,6 +26,7 @@ public class GetGameRoute implements Route {
     private final String RED_PLAYER = "redPlayer";
     private final String WHITE_PLAYER = "whitePlayer";
     private final String ACTIVE_COLOR = "activeColor";
+    private final String WIN_MSG = " has captured all the pieces";
 
     private static final Logger LOG = Logger.getLogger(GetGameRoute.class.getName());
 
@@ -96,20 +97,63 @@ public class GetGameRoute implements Route {
                 }
 
                 else {
-                    LOG.fine("gameLobby is null so the player is not in a game");
-                    GameLobby gameOver = currentPlayer.getGameLobbyCopy();
-                    vm.put(ACTIVE_COLOR, gameOver.getActiveColor());
-                    vm.put(TITLE, "Game Over!");
-                    vm.put(VIEW, ViewMode.PLAY);
-                    vm.put(CURRENT_USER, currentPlayer);
-                    vm.put(RED_PLAYER, gameOver.getRedPlayer());
-                    vm.put(WHITE_PLAYER, gameOver.getWhitePlayer());
-                    vm.put(GAME_ID, gameOver.getGameID());
-                    vm.put(GAME_BOARD, gameOver.getBoard());
-                    modeOptions.put("isGameOver", true);
-                    modeOptions.put("gameOverMessage", currentPlayer.getGameOverMessage());
-                    vm.put(MODE, gson.toJson(modeOptions));
-                    return templateEngine.render(new ModelAndView(vm, VIEW_NAME));
+                    if (gameLobby != null) {
+                        LOG.fine("The game has ended");
+                        Color yourColor;
+                        if (gameLobby.getWhitePlayer().equals(currentPlayer)) {
+                            yourColor = Color.WHITE;
+                        }
+                        else {
+                            yourColor = Color.RED;
+                        }
+                        Player opposingPlayer;
+                        if (gameLobby.getWhitePlayer().equals(currentPlayer)) {
+                            opposingPlayer = gameLobby.getRedPlayer();
+                        }
+                        else {
+                            opposingPlayer = gameLobby.getWhitePlayer();
+                        }
+                        String gameOverMessage;
+                        if (yourColor == gameLobby.getActiveColor()) {
+                            gameOverMessage = opposingPlayer.getName() + WIN_MSG;
+
+                        }
+                        else {
+                            gameOverMessage = currentPlayer.getName() + WIN_MSG;
+                        }
+                        LOG.fine(gameOverMessage);
+                        vm.put(ACTIVE_COLOR, gameLobby.getActiveColor());
+                        vm.put(TITLE, "Game Over!");
+                        vm.put(VIEW, ViewMode.PLAY);
+                        vm.put(CURRENT_USER, currentPlayer);
+                        vm.put(RED_PLAYER, gameLobby.getRedPlayer());
+                        vm.put(WHITE_PLAYER, gameLobby.getWhitePlayer());
+                        vm.put(GAME_ID, gameLobby.getGameID());
+                        vm.put(GAME_BOARD, gameLobby.getBoard());
+                        modeOptions.put("isGameOver", true);
+                        modeOptions.put("gameOverMessage", gameOverMessage);
+                        vm.put(MODE, gson.toJson(modeOptions));
+                        // TODO
+                        // Clicking exit button does not redirect to home
+                        // Removing game lobby or removing current player does not work
+                        return templateEngine.render(new ModelAndView(vm, VIEW_NAME));
+                    }
+                    else {
+                        LOG.fine("gameLobby is null so the player is not in a game");
+                        GameLobby gameOver = currentPlayer.getGameLobbyCopy();
+                        vm.put(ACTIVE_COLOR, gameOver.getActiveColor());
+                        vm.put(TITLE, "Game Over!");
+                        vm.put(VIEW, ViewMode.PLAY);
+                        vm.put(CURRENT_USER, currentPlayer);
+                        vm.put(RED_PLAYER, gameOver.getRedPlayer());
+                        vm.put(WHITE_PLAYER, gameOver.getWhitePlayer());
+                        vm.put(GAME_ID, gameOver.getGameID());
+                        vm.put(GAME_BOARD, gameOver.getBoard());
+                        modeOptions.put("isGameOver", true);
+                        modeOptions.put("gameOverMessage", currentPlayer.getGameOverMessage());
+                        vm.put(MODE, gson.toJson(modeOptions));
+                        return templateEngine.render(new ModelAndView(vm, VIEW_NAME));
+                    }
                 }
             } else {
                 LOG.fine("the client has not signed in");
