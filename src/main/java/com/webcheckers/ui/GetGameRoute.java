@@ -223,21 +223,45 @@ public class GetGameRoute implements Route {
         }
         else if (gameLobby.getActiveColor() == Color.WHITE &&
                 !boardView.newMoveExists(Color.WHITE)){
-            LOG.fine("Game is over because white player cannot move");
-            isGameOver = true;
-            gameLobby.end();
-            message = Message.info(gameLobby.getRedPlayer().getName() + " won.");
-            gameOverMessage = gameLobby.getWhitePlayer().getName()
-                    + " cannot move anymore.";
+            Color currentColor;
+            if (gameLobby.getWhitePlayer().equals(currentPlayer)){
+                currentColor = Color.WHITE;
+            } else {
+                currentColor = Color.RED;
+            }
+            if (currentColor == gameLobby.getActiveColor()) {
+                // if the current player cannot move
+                LOG.fine("Game is over because white player cannot move");
+                isGameOver = true;
+                gameLobby.end();
+                message = Message.info(gameLobby.getRedPlayer().getName() + " won.");
+                gameOverMessage = gameLobby.getWhitePlayer().getName()
+                        + " cannot move anymore.";
+            } else {
+                // Not this player turn so of course he cant move
+                isGameOver = false;
+                gameOverMessage = "";
+            }
         }
         else if (gameLobby.getActiveColor() == Color.RED &&
                 !boardView.newMoveExists(Color.RED)){
-            LOG.fine("Game is over because Red player cannot move");
-            isGameOver = true;
-            gameLobby.end();
-            message = Message.info(gameLobby.getWhitePlayer().getName()+ " won.");
-            gameOverMessage = gameLobby.getRedPlayer().getName()
-                    + " cannot move anymore.";
+            Color currentColor;
+            if (gameLobby.getWhitePlayer().equals(currentPlayer)){
+                currentColor = Color.WHITE;
+            } else {
+                currentColor = Color.RED;
+            }
+            if (currentColor == gameLobby.getActiveColor()) {
+                LOG.fine("Game is over because Red player cannot move");
+                isGameOver = true;
+                gameLobby.end();
+                message = Message.info(gameLobby.getWhitePlayer().getName() + " won.");
+                gameOverMessage = gameLobby.getRedPlayer().getName()
+                        + " cannot move anymore.";
+            } else {
+                isGameOver = false;
+                gameOverMessage = "";
+            }
         }
         else {
             LOG.fine("Game is still going");
