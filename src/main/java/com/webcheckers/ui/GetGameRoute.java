@@ -239,8 +239,16 @@ public class GetGameRoute implements Route {
                         + " cannot move anymore.";
             } else {
                 // Not this player turn so of course he cant move
-                isGameOver = false;
-                gameOverMessage = "";
+                if (gameLobby.isRunning()) {
+                    isGameOver = false;
+                    gameOverMessage = "";
+                } else {
+                    isGameOver = true;
+                    gameLobby.end();
+                    message = Message.info(gameLobby.getRedPlayer().getName() + " won.");
+                    gameOverMessage = gameLobby.getWhitePlayer().getName()
+                            + " cannot move anymore.";
+                }
             }
         }
         else if (gameLobby.getActiveColor() == Color.RED &&
@@ -259,8 +267,16 @@ public class GetGameRoute implements Route {
                 gameOverMessage = gameLobby.getRedPlayer().getName()
                         + " cannot move anymore.";
             } else {
-                isGameOver = false;
-                gameOverMessage = "";
+                if (gameLobby.isRunning()) {
+                    isGameOver = false;
+                    gameOverMessage = "";
+                } else {
+                    isGameOver = true;
+                    gameLobby.end();
+                    message = Message.info(gameLobby.getWhitePlayer().getName() + " won.");
+                    gameOverMessage = gameLobby.getRedPlayer().getName()
+                            + " cannot move anymore.";
+                }
             }
         }
         else {
