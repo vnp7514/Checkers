@@ -93,11 +93,23 @@ public class GetGameRoute implements Route {
                     vm.put(MODE, null);
 
                     return templateEngine.render(new ModelAndView(vm, VIEW_NAME));
-                } else {
+                }
+
+                else {
                     LOG.fine("gameLobby is null so the player is not in a game");
+                    GameLobby gameOver = currentPlayer.getGameLobbyCopy();
+                    vm.put(ACTIVE_COLOR, gameOver.getActiveColor());
+                    vm.put(TITLE, "Game Over!");
+                    vm.put(VIEW, ViewMode.PLAY);
+                    vm.put(CURRENT_USER, currentPlayer);
+                    vm.put(RED_PLAYER, gameOver.getRedPlayer());
+                    vm.put(WHITE_PLAYER, gameOver.getWhitePlayer());
+                    vm.put(GAME_ID, gameOver.getGameID());
+                    vm.put(GAME_BOARD, gameOver.getBoard());
                     modeOptions.put("isGameOver", true);
-                    modeOptions.put("gameOverMessage", request.body());
+                    modeOptions.put("gameOverMessage", currentPlayer.getGameOverMessage());
                     vm.put(MODE, gson.toJson(modeOptions));
+                    return templateEngine.render(new ModelAndView(vm, VIEW_NAME));
                 }
             } else {
                 LOG.fine("the client has not signed in");

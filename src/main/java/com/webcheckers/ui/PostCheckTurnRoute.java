@@ -36,6 +36,12 @@ public class PostCheckTurnRoute implements Route {
         Player player = playerServices.getPlayer();
         GameLobby gameLobby = playerLobby.playerOfGame(player);
 
+        if (gameLobby == null){
+            // gameLobby is null if a player resigned
+            LOG.fine("gameLobby is null");
+            return gson.toJson(Message.info("true"));
+        }
+
         Player opponent;
         Color yourColor;
         // If the white player is the current player
@@ -51,12 +57,6 @@ public class PostCheckTurnRoute implements Route {
         if (player == null) {
             LOG.fine("Player is null");
             return null;
-        }
-        if (gameLobby == null){
-            // gameLobby is null if a player resigned
-            LOG.fine("gameLobby is null");
-            playerServices.storeMessage(gson.fromJson(response.body(), Message.class));
-            return gson.toJson(Message.info("true"));
         }
 
         if (yourColor == gameLobby.getActiveColor()) {

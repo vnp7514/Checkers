@@ -15,7 +15,7 @@ import java.util.logging.Logger;
 
 public class PostResignRoute implements Route {
 
-    private final String RESIGN_STR = " have resigned";
+    private final String RESIGN_STR = " has resigned";
 
     private static final Logger LOG = Logger.getLogger(PostResignRoute.class.getName());
     private final Gson gson;
@@ -38,20 +38,30 @@ public class PostResignRoute implements Route {
         Player currentPlayer = playerServices.getPlayer();
         GameLobby gameLobby = playerLobby.playerOfGame(currentPlayer);
         Message message;
-        ModeOptions end;
         if ( gameLobby == null) {
             LOG.fine("GameLobby is null");
             message = Message.error("GameLobby is null");
-            end = null;
         }
         else {
             LOG.fine("GameLobby is not null");
             LOG.fine("This player has resigned");
+            message = Message.info(gameLobby.getCurrent_player().getName() + RESIGN_STR);
+            // Get the opposing player
+            Player opposingPlayer;
+            if (gameLobby.getWhitePlayer().equals(currentPlayer)) {
+                opposingPlayer = gameLobby.getRedPlayer();
+            }
+            else {
+                opposingPlayer = gameLobby.getWhitePlayer();
+            }
+            // Swap the active color so the opposing player's color is the active color
+            gameLobby.swapActiveColor();
+            // Give the opposing player a copy of the game lobby
+            opposingPlayer.setGameLobbyCopy(gameLobby);
+            // Give the opposing player the game over message
+            opposingPlayer.setGameOverMessage(message.getText());
             playerLobby.removeGame(gameLobby);
-             end = new ModeOptions(true,currentPlayer.getName() + RESIGN_STR);
         }
-
-        LOG.fine(gson.toJson(end));
-        return gson.toJson(end);
+        return gson.toJson(message);
     }
 }

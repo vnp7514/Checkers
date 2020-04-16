@@ -2,7 +2,6 @@ package com.webcheckers.model;
 
 import java.util.*;
 
-import com.sun.deploy.security.ValidationState;
 import com.webcheckers.util.Move;
 import com.webcheckers.util.Position;
 
