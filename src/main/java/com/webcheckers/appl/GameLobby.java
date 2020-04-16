@@ -49,8 +49,8 @@ public class GameLobby {
         board.setPiece(1,4, new Piece(Type.SINGLE, Color.WHITE));
         board.setPiece(0,7, new Piece(Type.SINGLE, Color.WHITE));
          */
-
-          /**this.board = new BoardView();
+        /**
+          this.board = new BoardView();
           board.setPiece(3,0, new Piece(Type.SINGLE,Color.RED));
           board.setPiece(3,2, new Piece(Type.SINGLE,Color.RED));
           board.setPiece(3,4, new Piece(Type.SINGLE,Color.RED));

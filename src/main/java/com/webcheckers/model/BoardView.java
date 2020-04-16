@@ -500,7 +500,7 @@ public class BoardView implements Iterable<Row> {
                                 isValidJump(new Move(current,upperleft))){
                             return true;
                         } else if (startRow-2>=0&&startCell+2<=7&&
-                                viewPiece(startRow-2,startCell-2) == null &&
+                                viewPiece(startRow-2,startCell+2) == null &&
                                 isValidJump(new Move(current,upperright))){
                             return true;
                         } else if (startRow+2<=7&&startCell-2>=0&&
