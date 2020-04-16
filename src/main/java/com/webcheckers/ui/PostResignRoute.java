@@ -41,12 +41,12 @@ public class PostResignRoute implements Route {
         if ( gameLobby == null) {
             LOG.fine("GameLobby is null");
             message = Message.error("GameLobby is null");
-        }
-        else {
+        } else {
             LOG.fine("GameLobby is not null");
-            LOG.fine("This player has resigned");
+            LOG.fine(currentPlayer.getName() + " has resigned");
             message = Message.info(currentPlayer.getName() + RESIGN_STR);
-            // Get the opposing player
+            gameLobby.resign(currentPlayer);
+            /*// Get the opposing player
             Player opposingPlayer;
             if (gameLobby.getWhitePlayer().equals(currentPlayer)) {
                 opposingPlayer = gameLobby.getRedPlayer();
@@ -61,6 +61,7 @@ public class PostResignRoute implements Route {
             // Give the opposing player the game over message
             opposingPlayer.setGameOverMessage(message.getText());
             playerLobby.removeGame(gameLobby);
+            */
         }
         return gson.toJson(message);
     }

@@ -5,8 +5,10 @@ import com.webcheckers.model.*;
 import com.webcheckers.appl.GameLobby;
 import com.webcheckers.appl.PlayerLobby;
 import com.webcheckers.appl.PlayerServices;
+import com.webcheckers.util.Message;
 import spark.*;
 
+import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -56,7 +58,7 @@ public class GetGameRoute implements Route {
     @Override
     public Object handle(Request request, Response response) throws Exception {
 
-        final Map<String, Object> vm = new HashMap<>();
+        final Map<String, Object> vm;
 
         final Map<String, Object> modeOptions = new HashMap<>(2);
 
@@ -70,8 +72,35 @@ public class GetGameRoute implements Route {
         if (playerServices != null) {
             Player currentPlayer = playerServices.getPlayer();
             if (currentPlayer != null) {
+                if (playerLobby.resignerOfGame(currentPlayer) != null){
+                    playerServices.storeMessage(Message.info("Successfully resigned the game"));
+                    response.redirect(WebServer.HOME_URL);
+                    halt();
+                    return null;
+                }
                 GameLobby gameLobby = playerLobby.playerOfGame(currentPlayer);
-                if (gameLobby != null && !playerLobby.getBoard(gameLobby).winCondition()) {
+                if (gameLobby == null){
+                    playerServices.storeMessage(Message.error("The game you were in is no longer active"));
+                    response.redirect(WebServer.HOME_URL);
+                    halt();
+                    return null;
+                }
+                if (gameLobby.isRunning()){
+                    LOG.fine("gameLobby is active/ Noone has resigned/lost the game");
+                    vm = noResignation(gameLobby, playerServices);
+                    return templateEngine.render(new ModelAndView(vm, VIEW_NAME));
+
+                } else {
+                    if (gameLobby.getQuitter() != null) {
+                        LOG.fine("gameLobby is not active/ Someone has resigned/Game is over");
+                        vm = resignation(gameLobby, playerServices);
+                    } else {
+                        LOG.fine("gameLobby is not active/ Someone has lost");
+                        vm = noResignation(gameLobby, playerServices);
+                    }
+                    return templateEngine.render (new ModelAndView(vm, VIEW_NAME));
+                }
+                /**if (gameLobby != null && !playerLobby.getBoard(gameLobby).winCondition()) {
                     if (gameLobby.getWhitePlayer().equals(currentPlayer)) { // the current player is white
                         board = playerLobby.getFlippedBoard(gameLobby);
                         LOG.fine("Flipping Board!");
@@ -155,6 +184,7 @@ public class GetGameRoute implements Route {
                         return templateEngine.render(new ModelAndView(vm, VIEW_NAME));
                     }
                 }
+                 */
             } else {
                 LOG.fine("the client has not signed in");
             }
@@ -164,5 +194,121 @@ public class GetGameRoute implements Route {
         response.redirect(WebServer.HOME_URL);
         halt();
         return null;
+    }
+
+    /**
+     * Return the ViewModel for the case where both players are playing the game and noone
+     *  has resigned
+     * @param gameLobby the game lobby that 2 players are in
+     * @param playerServices the current player session
+     * @return the ViewModel used for rendering the page
+     */
+    private Map<String, Object> noResignation(GameLobby gameLobby, PlayerServices playerServices){
+        BoardView boardView = gameLobby.getBoard();
+        Player currentPlayer = playerServices.getPlayer();
+        boolean isGameOver;
+        String gameOverMessage;
+
+        if (boardView.winCondition()){
+            isGameOver = true;
+            gameLobby.end();
+            if(gameLobby.getActiveColor() == Color.WHITE){
+                LOG.fine("Game is over because white has no pieces left");
+                gameOverMessage = gameLobby.getRedPlayer().getName() + WIN_MSG;
+            } else {
+                LOG.fine("game is over because red has no pieces left");
+                gameOverMessage = gameLobby.getWhitePlayer().getName() + WIN_MSG;
+            }
+        }
+        else if (gameLobby.getActiveColor() == Color.WHITE &&
+                !boardView.newMoveExists(Color.WHITE)){
+            LOG.fine("Game is over because white player cannot move");
+            isGameOver = true;
+            gameLobby.end();
+            gameOverMessage = gameLobby.getWhitePlayer().getName()
+                    + " cannot move anymore.";
+        }
+        else if (gameLobby.getActiveColor() == Color.RED &&
+                !boardView.newMoveExists(Color.RED)){
+            LOG.fine("Game is over because Red player cannot move");
+            isGameOver = true;
+            gameLobby.end();
+            gameOverMessage = gameLobby.getRedPlayer().getName()
+                    + " cannot move anymore.";
+        }
+        else {
+            LOG.fine("Game is still going");
+            isGameOver = false;
+            gameOverMessage = "";
+        }
+
+        // Giving to each player their unique view of the board
+        if (gameLobby.getWhitePlayer().equals(currentPlayer)){
+            // The current player is white
+            boardView = gameLobby.getBoardFlipped();
+
+        } else {
+            // The current player is red
+            boardView = gameLobby.getBoard();
+        }
+
+        Map<String, Object> vm = new HashMap<>();
+        vm.put(GetHomeRoute.MESSAGE_ATTR, playerServices.getMessage());
+        playerServices.removeMessage();
+        vm.put(ACTIVE_COLOR, gameLobby.getActiveColor());
+        vm.put(TITLE, "Checkers game!");
+        vm.put(VIEW, ViewMode.PLAY);
+        //need to put player instances in all of these below
+        vm.put(CURRENT_USER, currentPlayer);
+        vm.put(RED_PLAYER, gameLobby.getRedPlayer());
+        vm.put(WHITE_PLAYER, gameLobby.getWhitePlayer());
+        vm.put(GAME_ID, gameLobby.getGameID());
+        vm.put(GAME_BOARD, boardView);
+        final Map<String, Object> modeOptions = new HashMap<>(2);
+        modeOptions.put("isGameOver", isGameOver);
+        modeOptions.put("gameOverMessage", gameOverMessage);
+        vm.put("modeOptionsAsJSON", gson.toJson(modeOptions));
+        return vm;
+    }
+
+    /**
+     * Someone has surrender the game
+     * @param gameLobby the game lobby that 2 players were in
+     * @param playerServices the current player session
+     * @return the ViewModel used for rendering the page of the person who did not resign
+     */
+    private Map<String, Object> resignation(GameLobby gameLobby, PlayerServices playerServices){
+        Player current = playerServices.getPlayer();
+        Message message;
+        BoardView boardView;
+            // Someone quits.
+        if (current.equals(gameLobby.getRedPlayer())) {
+            LOG.fine(current.getName() + "is a red player who got resigned on");
+            message = Message.info(gameLobby.getWhitePlayer().getName() +
+                    " has resigned!");
+            boardView = gameLobby.getBoardFlipped();
+
+        } else {
+            LOG.fine(current.getName() + " is a white player who got resigned on");
+            message = Message.info(gameLobby.getRedPlayer().getName() +
+                    " has resigned!");
+            boardView = gameLobby.getBoard();
+        }
+        Map<String, Object> vm = new HashMap<>();
+        vm.put(GetHomeRoute.MESSAGE_ATTR, message);
+        vm.put(ACTIVE_COLOR, gameLobby.getActiveColor());
+        vm.put(TITLE, "Checkers game!");
+        vm.put(VIEW, ViewMode.PLAY);
+        //need to put player instances in all of these below
+        vm.put(CURRENT_USER, current);
+        vm.put(RED_PLAYER, gameLobby.getRedPlayer());
+        vm.put(WHITE_PLAYER, gameLobby.getWhitePlayer());
+        vm.put(GAME_ID, gameLobby.getGameID());
+        vm.put(GAME_BOARD, boardView);
+        final Map<String, Object> modeOptions = new HashMap<>(2);
+        modeOptions.put("isGameOver", true);
+        modeOptions.put("gameOverMessage", message.getText());
+        vm.put("modeOptionsAsJSON", gson.toJson(modeOptions));
+        return vm;
     }
 }

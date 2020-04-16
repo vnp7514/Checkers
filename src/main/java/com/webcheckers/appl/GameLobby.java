@@ -21,11 +21,14 @@ public class GameLobby {
     // The index where the specified player is in the list
     private int red = 0;
     private int white = 1;
-    // The current player, white gets the first turn
-    private int current_player = white;
+
+    // Determine whether the Game is still running
+    private boolean running = true;
+    // This is the Player who has resigned the game
+    private Player quitter = null;
 
     private Color spectatorColor = null;
-    private Color activeColor = Color.WHITE;
+    private Color activeColor = Color.RED;
 
     // the game board
     private BoardView board;
@@ -36,14 +39,14 @@ public class GameLobby {
      * A Constructor
      */
     public GameLobby() {
-        this.players = new ArrayList<>();
+        this.players = new ArrayList<>(5);
         //this.board = new BoardView();
         // TODO FOR TESTING ONLY
         this.board = BoardView.testBoard();
-        board.setPiece(3,6, new Piece(Type.SINGLE, Color.WHITE));
         board.setPiece(4,5, new Piece(Type.SINGLE, Color.RED));
-        board.setPiece(6,3, new Piece(Type.SINGLE, Color.RED));
-        board.setPiece(7,0, new Piece(Type.SINGLE, Color.RED));
+        board.setPiece(3,4, new Piece(Type.SINGLE, Color.WHITE));
+        board.setPiece(1,4, new Piece(Type.SINGLE, Color.WHITE));
+        board.setPiece(0,7, new Piece(Type.SINGLE, Color.WHITE));
         // TODO END OF TESTING
         this.spectators = new ArrayList<>();
     }
@@ -55,19 +58,35 @@ public class GameLobby {
     }
 
     /**
-     * Get the current player
-     * @return the current player
+     * Return true if both Players are defined
+     * @return true if both Players are not null
      */
-    public Player getCurrent_player() {
-        return players.get(current_player);
+    public boolean isRunning(){
+        return running;
     }
 
     /**
-     * Set the current player
-     * @param player 0 for red, 1 for white
+     * End the game
      */
-    public void setCurrent_player(int player) {
-        this.current_player = player;
+    public void end(){
+        running = false;
+    }
+
+    /**
+     * The player has resigned the game. The game is no longer running
+     * @param player the player who has resigned
+     */
+    public void resign(Player player){
+        running = false;
+        quitter = player;
+    }
+
+    /**
+     * Get the person who resigned
+     * @return the Player instance that resigned
+     */
+    public Player getQuitter() {
+        return quitter;
     }
 
     /**
@@ -117,10 +136,14 @@ public class GameLobby {
 
     /**
      * Check whether the lobby already has the player with same name
+     * If the player has resigned, they are considered not in the game lobby
      * @param player the player
      * @return true if the lobby already has the player, false otherwise
      */
     public boolean containPlayer(Player player){
+        if (player.equals(quitter)){
+            return false;
+        }
         return this.players.contains(player);
     }
 
@@ -215,8 +238,14 @@ public class GameLobby {
      */
     @Override
     public String toString() {
-        String p1 = this.players.get(0).getName();
-        String p2 = this.players.get(1).getName();
+        String p1 = "nobody";
+        String p2 = "nobody";
+        if (players.get(0) != null) {
+            p1 = this.players.get(0).getName();
+        }
+        if (players.get(1)!= null) {
+            p2 = this.players.get(1).getName();
+        }
         return gameID + " : " + p1 + " vs " + p2;
     }
 

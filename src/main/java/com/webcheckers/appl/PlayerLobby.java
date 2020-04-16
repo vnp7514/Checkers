@@ -169,10 +169,32 @@ public class PlayerLobby {
     }
 
     /**
+     * Get the GameLobby that the player has resigned
+     * @param player the player who might have resigned a game
+     * @return the game lobby that the player was in
+     */
+    public GameLobby resignerOfGame(Player player){
+        for (GameLobby i : games){
+            if (i.getQuitter()!= null && i.getQuitter().equals(player)){
+                return i;
+            }
+        }
+        return null;
+    }
+
+    /**
      * Return the list of currently active GameLobby type instances.
      * @return List<GameLobby> containing active games
      */
-    public List<GameLobby> getGames() { return this.games; }
+    public List<GameLobby> getGames() {
+        List<GameLobby> listOfActives = new ArrayList<>();
+        for (GameLobby g : games){
+            if (g.isRunning()){
+                listOfActives.add(g);
+            }
+        }
+        return listOfActives;
+    }
 
     /**
      * Get the board instance of the specific gameLobby

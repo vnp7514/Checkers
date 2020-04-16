@@ -67,6 +67,10 @@ public class PostCheckTurnRoute implements Route {
             LOG.fine("It is not your turn");
             message = Message.info("false");
         }
+        if (!gameLobby.isRunning()){ // Someone resigned
+            LOG.fine("Someone has resigned");
+            message = Message.info("true");
+        }
         return gson.toJson(message);
     }
 

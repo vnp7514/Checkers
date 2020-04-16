@@ -129,8 +129,13 @@ public class GetHomeRoute implements Route {
                 if (playerLobby.playerInGame(playerServices.getPlayer())){
                     GameLobby gameLobby = playerLobby.playerOfGame(playerServices.getPlayer());
                     BoardView board = gameLobby.getBoard();
-                    if (board.winCondition()) {
-                        playerLobby.removeGame(gameLobby);
+                    if (!gameLobby.isRunning()) {
+                        if (!playerServices.getPlayer().equals(gameLobby.getQuitter())) {
+                            // Making sure the other player who got resigned on be able
+                            //   to access necessary data. In other words, make sure all players
+                            //   exit the game before removing it.
+                            playerLobby.removeGame(gameLobby);
+                        }
                         return templateEngine.render(new ModelAndView(vm, VIEW_NAME));
                     }
                     response.redirect(WebServer.GAME_URL);
