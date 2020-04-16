@@ -23,7 +23,7 @@ public class PlayerServices {
     // String representing the availability of the player
     private Message message;
 
-    private BoardView game;
+    //private BoardView board;
 
     /**
      * Construct a new PlayerServices but wait for player to sign in
@@ -102,11 +102,12 @@ public class PlayerServices {
         this.message = null;
     }
 
-    public void addBoard(BoardView boardView){
+    /**public void addBoard(BoardView boardView){
         this.game = boardView;
     }
 
     public BoardView getGame() {
         return game;
     }
+     */
 }

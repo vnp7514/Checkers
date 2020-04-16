@@ -1,8 +1,6 @@
 package com.webcheckers.appl;
 
-import com.webcheckers.model.BoardView;
-import com.webcheckers.model.Color;
-import com.webcheckers.model.Player;
+import com.webcheckers.model.*;
 
 
 import java.util.*;
@@ -38,7 +36,14 @@ public class GameLobby {
      */
     public GameLobby() {
         this.players = new ArrayList<>();
-        this.board = new BoardView();
+        //this.board = new BoardView();
+        // TODO FOR TESTING ONLY
+        this.board = BoardView.testBoard();
+        board.setPiece(3,6, new Piece(Type.SINGLE, Color.WHITE));
+        board.setPiece(4,5, new Piece(Type.SINGLE, Color.RED));
+        board.setPiece(6,3, new Piece(Type.SINGLE, Color.RED));
+        board.setPiece(7,0, new Piece(Type.SINGLE, Color.RED));
+        // TODO END OF TESTING
         this.spectators = new ArrayList<>();
     }
 

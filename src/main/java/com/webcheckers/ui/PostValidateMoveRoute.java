@@ -1,9 +1,11 @@
 package com.webcheckers.ui;
 
 import com.google.gson.Gson;
+import com.webcheckers.appl.GameLobby;
 import com.webcheckers.appl.PlayerLobby;
 import com.webcheckers.appl.PlayerServices;
 import com.webcheckers.model.BoardView;
+import com.webcheckers.model.Color;
 import com.webcheckers.util.Message;
 import com.webcheckers.util.Move;
 import com.webcheckers.util.Position;
@@ -40,13 +42,25 @@ public class PostValidateMoveRoute implements Route {
 
         final PlayerServices playerServices = httpSession.attribute(GetHomeRoute.PLAYER_KEY);
 
-        final BoardView board = playerServices.getGame();
+        //final BoardView board = playerServices.getGame();
 
+        GameLobby gameLobby = playerLobby.playerOfGame(playerServices.getPlayer());
+        if (gameLobby == null){
+            LOG.fine("gameLobby is null");
+            return null;
+        }
+        BoardView board = gameLobby.getBoard();
         System.out.println(JSON);
         final Move move = gson.fromJson(JSON, Move.class);
 
         final Message message;
-        if (isValidMove(board, move)){
+        final Color playerColor;
+        if (gameLobby.getWhitePlayer().equals(playerServices.getPlayer())){
+            playerColor = Color.WHITE;
+        } else {
+            playerColor = Color.RED;
+        }
+        if (isValidMove(board, move, playerColor)){
             board.addMove(move);
             LOG.fine("move is valid");
             message = Message.info("Move is valid.");
@@ -65,9 +79,13 @@ public class PostValidateMoveRoute implements Route {
      * Return true if the move is valid
      * @param board the board
      * @param move the move
+     * @param playerColor the color of the player
      * @return true if the above conditions are true
      */
-    public boolean isValidMove(BoardView board, Move move){
+    public boolean isValidMove(BoardView board, Move move, Color playerColor){
+        if (board.newJumpExists(playerColor)){
+            return board.isValidJump(move);
+        }
         return board.isValidMove(move);
     }
 }

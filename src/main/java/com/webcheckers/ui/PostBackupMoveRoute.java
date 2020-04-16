@@ -1,6 +1,7 @@
 package com.webcheckers.ui;
 
 import com.google.gson.Gson;
+import com.webcheckers.appl.GameLobby;
 import com.webcheckers.appl.PlayerLobby;
 import com.webcheckers.appl.PlayerServices;
 import com.webcheckers.model.BoardView;
@@ -27,7 +28,13 @@ public class PostBackupMoveRoute implements Route {
     public Object handle(Request request, Response response){
         final Session httpSession = request.session();
         final PlayerServices playerServices = httpSession.attribute(GetHomeRoute.PLAYER_KEY);
-        final BoardView boardView = playerServices.getGame();
+        //final BoardView boardView = playerServices.getGame();
+        GameLobby gameLobby = playerLobby.playerOfGame(playerServices.getPlayer());
+        if (gameLobby == null){
+            LOG.fine("gameLobby is null");
+            return null;
+        }
+        BoardView boardView = gameLobby.getBoard();
         Move move = boardView.removeMove();
         final Message message;
         if (move == null){

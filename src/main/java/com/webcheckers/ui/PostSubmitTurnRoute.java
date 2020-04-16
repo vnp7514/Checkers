@@ -47,21 +47,21 @@ public class PostSubmitTurnRoute implements Route {
 
             Player player = playerServices.getPlayer();
             BoardView board = playerLobby.playerOfGame(player).getBoard();
-            Color playerColor = null;
+            Color playerColor;
             if (player.equals(playerLobby.playerOfGame(player).getWhitePlayer())){
                 playerColor = Color.WHITE;
             } else {
                 playerColor = Color.RED;
             }
-            if (board.newMoveExists(playerColor)) {
+            if (board.newJumpExists(playerColor)) {
                 LOG.fine("Jump Available!");
                 message = Message.error("Jump Available!");
             } else {
                 board.movePiece();
                 LOG.fine("Submitted Move!");
                 message = Message.info("Submitted Move!");
+                playerLobby.playerOfGame(playerServices.getPlayer()).swapActiveColor();
             }
-            playerLobby.playerOfGame(playerServices.getPlayer()).swapActiveColor();
             String messageJSON = gson.toJson(message);
             return messageJSON;
         }

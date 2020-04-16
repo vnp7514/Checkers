@@ -1,6 +1,8 @@
 package com.webcheckers.model;
 
 import java.util.*;
+
+import com.sun.deploy.security.ValidationState;
 import com.webcheckers.util.Move;
 import com.webcheckers.util.Position;
 
@@ -88,6 +90,15 @@ public class BoardView implements Iterable<Row> {
      * @param piece the piece to be put there
      */
     public void setPiece(int row, int col, Piece piece) {
+        if (piece != null){
+            Color color = piece.getColor();
+            Type type = piece.getType();
+            if (color == Color.RED && type == Type.SINGLE && row == 0){
+                piece = new Piece(Type.KING, color);
+            } else if (color == Color.WHITE && type == Type.SINGLE && row ==7){
+                piece = new Piece(Type.KING, color);
+            }
+        }
         this.getRow(row).setSpace(col, piece);
     }
 
@@ -314,9 +325,15 @@ public class BoardView implements Iterable<Row> {
      * @param move The move that the player
      * @return boolean
      */
-    private boolean isValidJump(Move move) {
+    public boolean isValidJump(Move move) {
         if (viewPiece(move.getEnd().getRow(), move.getEnd().getCell()) != null){
             // if the space the piece moving to is occupied then it shouldnt be allowed
+            return false;
+        }
+        if (move.getEnd().getCell() - move.getStart().getCell() == 1 ||
+        move.getEnd().getCell() -move.getStart().getCell() ==-1 ||
+        move.getEnd().getRow() - move.getStart().getRow() ==-1 ||
+        move.getEnd().getRow() - move.getStart().getRow() ==1){ // if this is a single move
             return false;
         }
         int skipPieceRow, skipPieceCell = 0;
