@@ -48,7 +48,7 @@ public class PostSpectatorCheckTurnRoute implements Route {
                 //uses gameID to access the GameLobby the user is spectating
                 GameLobby gameLobby = playerLobby.getGame(gameID);
                 if (gameLobby != null) {
-                    if (playerLobby.getBoard(gameLobby).winCondition() || gameLobby.specColor()) {
+                    if (playerLobby.getBoard(gameLobby).winCondition() || gameLobby.specColor(currentPlayer)) {
                         message = Message.info("true");
                     }
                     else {

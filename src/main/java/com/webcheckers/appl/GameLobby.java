@@ -27,7 +27,7 @@ public class GameLobby {
     // This is the Player who has resigned the game
     private Player quitter = null;
 
-    private Color spectatorColor = null;
+    private Map<Player, Color> spectatorColor;
     private Color activeColor = Color.RED;
 
     // the game board
@@ -40,7 +40,7 @@ public class GameLobby {
      */
     public GameLobby() {
         this.players = new ArrayList<>(5);
-        //this.board = new BoardView();
+        this.board = new BoardView();
         // TODO FOR TESTING ONLY
         /** For testing winConditions
         this.board = BoardView.testBoard();
@@ -49,16 +49,19 @@ public class GameLobby {
         board.setPiece(1,4, new Piece(Type.SINGLE, Color.WHITE));
         board.setPiece(0,7, new Piece(Type.SINGLE, Color.WHITE));
          */
-        this.board = new BoardView();
-        board.setPiece(3,0, new Piece(Type.SINGLE,Color.RED));
-        board.setPiece(3,2, new Piece(Type.SINGLE,Color.RED));
-        board.setPiece(3,4, new Piece(Type.SINGLE,Color.RED));
-        board.setPiece(4,5, new Piece(Type.SINGLE,Color.RED));
-        board.setPiece(4,3, new Piece(Type.SINGLE,Color.RED));
-        board.setPiece(4,1, new Piece(Type.SINGLE,Color.RED));
-        board.setPiece(3,6, new Piece(Type.SINGLE,Color.RED));
+        /**
+         * this.board = new BoardView();
+         * board.setPiece(3,0, new Piece(Type.SINGLE,Color.RED));
+         * board.setPiece(3,2, new Piece(Type.SINGLE,Color.RED));
+         * board.setPiece(3,4, new Piece(Type.SINGLE,Color.RED));
+         * board.setPiece(4,5, new Piece(Type.SINGLE,Color.RED));
+         * board.setPiece(4,3, new Piece(Type.SINGLE,Color.RED));
+         * board.setPiece(4,1, new Piece(Type.SINGLE,Color.RED));
+         * board.setPiece(3,6, new Piece(Type.SINGLE,Color.RED));
+         */
         // TODO END OF TESTING
         this.spectators = new ArrayList<>();
+        this.spectatorColor = new HashMap<>();
     }
 
     public GameLobby(Player player, int gameID){
@@ -161,13 +164,19 @@ public class GameLobby {
      * Adds a spectator to the gamelobby
      * @param player
      */
-    public void addSpectator(Player player) { this.spectators.add(player); }
+    public void addSpectator(Player player) {
+        this.spectators.add(player);
+        this.spectatorColor.put(player, null);
+    }
 
     /**
      * Removes a spectator from the gamelobby
      * @param player
      */
-    public void removeSpectator(Player player) {this.spectators.remove(player); }
+    public void removeSpectator(Player player) {
+        this.spectators.remove(player);
+        this.spectatorColor.remove(player);
+    }
 
     /**
      * Check whether the lobby already has a spectator with the same name
@@ -233,10 +242,12 @@ public class GameLobby {
                 o.getPlayers().toArray(new Player[0]));
     }
 
-    public boolean specColor() {
-        if (spectatorColor != activeColor) {
-            this.spectatorColor = activeColor;
-            return true;
+    public boolean specColor(Player player) {
+        if (this.containSpectator(player)) {
+            if (this.spectatorColor.get(player) != this.activeColor) {
+                this.spectatorColor.put(player, this.activeColor);
+                return true;
+            }
         }
         return false;
     }
@@ -244,7 +255,7 @@ public class GameLobby {
     /**
      * The name of the GameLobby instance is based on the names of the
      * two player names who are playing a game of checkers
-     * @return
+     * @return String
      */
     @Override
     public String toString() {
