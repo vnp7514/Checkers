@@ -228,6 +228,9 @@ Get rid of duplicate code by making the duplicate code into its own function whi
 > have not had any testing yet. Highlight the issues found during
 > acceptance testing and if there are any concerns._
 
+9 user stories have passed the acceptance criteria tests.
+There are no known issues with user stories.
+
 ### Unit Testing and Code Coverage
 
 Model Tier
