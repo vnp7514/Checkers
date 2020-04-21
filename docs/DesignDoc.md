@@ -122,6 +122,59 @@ Once the user is connected to the server, the Home page is rendered. The user th
 > separate section for describing significant features. Place this after
 > you describe the design of the three tiers._
 
+The UI Tier is responsible for rendering the HTML page and if necessary, dealing with Ajax actions.
+
+GetGameRoute renders the /game page according to the state of the game.
+It renders the page for three different situations: the game is currently going,
+the game has a quitter and the game has a winner.
+It also reroutes if the user has not signed in or tried to access an 
+unavailable game.  
+![GetGameRouteUML](GetGameRouteUML.png)
+
+GetHomeRoute renders the / page. It is in charge of showing the list of
+players to challenge and a list of ongoing games if the current user has 
+signed in. It is also in charge of removing the GameLobby instance when
+all players and spectators have left the lobby.
+
+![GetHomeRouteUML](GetHomeRouteUML.png)
+
+GetSignInRoute renders the /signin page. It tells the users whether their
+usernames are acceptable or not. If the usernames are acceptable, the users are
+redirected to the / page.
+
+GetSpectateGameRoute renders the /spectate/game page. It starts the process of 
+spectating an ongoing game.
+
+GetSpectateStopWatchingRoute handles the removal of a spectator from a game.
+
+PostBackupMoveRoute handles the Backup button on the /game page. It will removes
+the last move that was performed on the board.
+
+PostCheckTurnRoute checks if the current user can have their turn. If they can
+then the /game Page is rendered so that the player can perform moves.
+
+PostGameRoute is responsible for informing the server that a game has been
+made between two Players.
+
+PostResignRoute is responsible for informing the sever that someone has
+resigned and the game that the player is in should be terminated.
+
+PostSignInRoute validates the username that the user entered to see
+whether it is acceptable.
+
+PostSignOutRoute removes a signed in Player from the PlayerLobby.
+
+PostSpectatorCheckTurnRoute informs the client that the game state has
+changed and the page should be updated.
+
+PostSubmitTurnRoute validates the set of moves that the current user made. Then
+It will inform the server that the user has finished their turn.
+
+PostValidateMoveRoute validates a move that was made by the player. The move
+is sent through Gson so this route deciphers that info and validates the info. 
+
+Below is the Sequence Diagram of how a User can sign in and get into a game:
+
 
 ### Application Tier
 
