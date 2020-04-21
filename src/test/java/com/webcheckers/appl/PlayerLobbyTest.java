@@ -1,5 +1,6 @@
 package com.webcheckers.appl;
 
+import com.webcheckers.model.BoardView;
 import com.webcheckers.model.Player;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -87,6 +88,28 @@ public class PlayerLobbyTest {
         CuT.addPlayer(p3);
         rlt = Arrays.equals(three_names, CuT.availablePlayers().toArray(new String[0]));
         assertTrue(rlt);
+    }
+
+    @Test
+    public void testResigningandgetGame(){
+        PlayerLobby CuT = new PlayerLobby();
+        GameLobby g1 = new GameLobby(p1,1);
+        g1.addPlayer(p2);
+        GameLobby g2 = new GameLobby(p3, 2);
+        g2.addPlayer(p4);
+        g1.resign(p1);
+        g2.addSpectator(new Player("joe"));
+        CuT.addGame(g1);
+        CuT.addGame(g2);
+        assertNotNull(CuT.resignerOfGame(p1));
+        assertNull(CuT.resignerOfGame(p2));
+        assertNull(CuT.getGame(10));
+        assertNotNull(CuT.getGame(1));
+        BoardView board = new BoardView();
+        assertNotNull(CuT.getBoard(g1));
+        assertNotNull(CuT.getFlippedBoard(g1));
+        assertNotNull(CuT.getSpecGame(new Player("joe")));
+
     }
 
     /**
