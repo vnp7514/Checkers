@@ -149,7 +149,7 @@ The Model Tier contains classes that represent the data being used to dictate wh
  happens after a game has been made, for instance the board contains all the pieces
  stored in their positions that can be moved.
 
-![Class Diagram](UML.png)
+![Class Diagram](ClassDiagram.png)
 
 ### Design Improvements
 
