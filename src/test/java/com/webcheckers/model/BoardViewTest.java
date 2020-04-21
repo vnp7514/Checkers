@@ -179,6 +179,15 @@ public class BoardViewTest {
         assertFalse(test.isValidMove(new Move(p14, p32)));
         assertFalse(test.isValidMove(new Move(new Position(2,3),
                 new Position(4,1))));
+        test = new BoardView();
+        assertFalse(test.isValidMove(new Move (new Position(0,1), new
+                Position(2,3))));
+        assertFalse(test.isValidJump(new Move (new Position(0,1), new
+                Position(2,3))));
+        test.addMove(new Move(new Position(2,1), new Position(3,2)));
+        assertFalse(test.isValidMove(new Move(new Position(3,2), new Position(4,3))));
+        test.addMove(new Move(new Position(2,1), new Position(3,2)));
+        assertFalse(test.isValidJump(new Move(new Position(3,2), new Position(5,4))));
     }
 
     @Test
@@ -305,6 +314,44 @@ public class BoardViewTest {
         test.setPiece(7,6,singleRedPiece);
         assertFalse(test.newJumpExists(Color.WHITE));
         assertFalse(test.newJumpExists(Color.RED));
+
+        test = BoardView.testBoard();
+        test.setPiece(3,2, singleWhitePiece);
+        test.setPiece(1,2, singleWhitePiece);
+        test.setPiece(4,3, singleRedPiece);
+        assertTrue(test.newJumpExists(Color.RED));
+        assertTrue(test.newJumpExists(Color.WHITE));
+        test.addMove(new Move(new Position(4,3), new Position(2,1)));
+        assertTrue(test.newJumpExists(Color.RED));
+
+        test = BoardView.testBoard();
+        test.setPiece(3,2, singleWhitePiece);
+        test.setPiece(1,2, singleWhitePiece);
+        test.setPiece(4,1, kingRedPiece);
+        assertTrue(test.newJumpExists(Color.RED));
+        assertTrue(test.newJumpExists(Color.WHITE));
+        test.addMove(new Move(new Position(4,1), new Position(2,3)));
+        assertTrue(test.newJumpExists(Color.RED));
+
+        test = BoardView.testBoard();
+        test.setPiece(5,2, singleWhitePiece);
+        test.setPiece(5,4, singleWhitePiece);
+        test.setPiece(4,1, kingRedPiece);
+        assertTrue(test.newJumpExists(Color.RED));
+        assertFalse(test.newJumpExists(Color.WHITE));
+        test.addMove(new Move(new Position(4,1), new Position(6,3)));
+        assertTrue(test.newJumpExists(Color.RED));
+
+        test = BoardView.testBoard();
+        test.setPiece(5,2, singleWhitePiece);
+        test.setPiece(5,4, singleWhitePiece);
+        test.setPiece(4,5, kingRedPiece);
+        assertTrue(test.newJumpExists(Color.RED));
+        assertFalse(test.newJumpExists(Color.WHITE));
+        test.addMove(new Move(new Position(4,5), new Position(6,3)));
+        assertTrue(test.newJumpExists(Color.RED));
+
+
     }
 
     @Test
