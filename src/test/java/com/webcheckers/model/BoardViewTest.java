@@ -338,6 +338,15 @@ public class BoardViewTest {
         assertFalse(test.winCondition());
     }
 
+    @Test
+    public void removeMoveTest(){
+        assertNull(boardView1.removeMove());
+        boardView1.addMove(new Move(new Position(1,2), new Position(2,3)));
+        assertNotNull(boardView1.removeMove());
+        boardView1.addMove((new Move(new Position(1,2), new Position(3, 4))));
+        assertNotNull(boardView1.removeMove());
+    }
+
     /**
      * Help to print out both the original board and the flipped board view
      */

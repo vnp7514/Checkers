@@ -156,85 +156,6 @@ public class BoardView implements Iterable<Row> {
     public void movePiece(){
         removeAllMoves();
         popToBeRemovedStack();
-       /** int movesSize = this.moves.size();
-        Move move = this.seeTopMove();
-
-        //-----------------------------------------------------------------
-        //  COLOR AND TYPE FINDER
-        //-----------------------------------------------------------------
-        Color playerColor;
-        Type pieceType;
-        if (movesSize >= 1) {
-            int startRowI = this.moves.get(movesSize - 1).getStart().getRow();
-            int startCellI = this.moves.get(movesSize - 1).getStart().getCell();
-
-            playerColor = this.getRow(startRowI).getSpace(startCellI).getPiece().getColor();//Get player colors
-            pieceType = this.getRow(startRowI).getSpace(startCellI).getPiece().getType();
-        } else {
-            playerColor = this.getRow(move.getStart().getRow()).getSpace(move.getStart().getCell()).getPiece().getColor();
-            pieceType = this.getRow(move.getStart().getRow()).getSpace(move.getStart().getCell()).getPiece().getType();
-        }
-        //-----------------------------------------------------------------
-
-
-        //-----------------------------------------------------------------
-        //  For each loop, goes through each move in the list of moves and handles
-        // moving the piece as well as destroying jumped over pieces
-        //
-        // Also handles the Kingking of pieces
-        //-----------------------------------------------------------------
-        for (Move m : this.moves) {
-            int endRow = m.getEnd().getRow();
-            int endCell = m.getEnd().getCell();
-            int startRow = m.getStart().getRow();
-            int startCell = m.getStart().getCell();
-
-            if (startRow < endRow) { //Player is a White player
-                if (endRow-startRow == 1) { // Check if it was a single move
-                    if (endRow == 7) { // Check if the piece needs to be kinged
-                        this.rows.get(endRow).getSpace(endCell).setPiece(new Piece(Type.KING,playerColor));
-                    } else {
-                        this.rows.get(endRow).getSpace(endCell).setPiece(new Piece(pieceType,playerColor));
-                    }
-                    this.rows.get(startRow).getSpace(startCell).setPiece(null); // Remove the piece from the start position
-                } else if (endRow - startRow == 2) { // Check if it was a jump move
-                    int skipPieceRow = (startRow + endRow) / 2; //The row of the piece that has been jumped over
-                    int skipPieceCell = (startCell + endCell) / 2; //The row of the piece that has been jumped over
-                    this.rows.get(startRow).getSpace(startCell).setPiece(null); // Remove the piece from the start position
-                    this.rows.get(skipPieceRow).getSpace(skipPieceCell).setPiece(null); // Remove the jumped over piece from the start position
-                    if (m.equals(this.seeTopMove())) { //Check if it is the last move/jump
-                        if (endRow == 7) { //Check if the piece needs to be kinged
-                            this.rows.get(endRow).getSpace(endCell).setPiece(new Piece(Type.KING,playerColor));
-                        } else {
-                            this.rows.get(endRow).getSpace(endCell).setPiece(new Piece(pieceType,playerColor));
-                        }
-                    }
-
-                }
-            } else if (endRow < startRow) { //Player is a Red Player
-                if (startRow-endRow == 1) {// Check if it was a single move
-                    if (endRow == 0) {// Check if the piece needs to be kinged
-                        this.rows.get(endRow).getSpace(endCell).setPiece(new Piece(Type.KING,playerColor));
-                    } else {
-                        this.rows.get(endRow).getSpace(endCell).setPiece(new Piece(pieceType,playerColor));
-                    }
-                    this.rows.get(startRow).getSpace(startCell).setPiece(null);
-                } else if (startRow - endRow == 2) {
-                    int skipPieceRow = (startRow + endRow) / 2; //Set skipped piece row
-                    int skipPieceCell = (startCell + endCell) / 2; //Set skipped piece cell
-                    this.rows.get(startRow).getSpace(startCell).setPiece(null);// Remove the piece from the start position
-                    this.rows.get(skipPieceRow).getSpace(skipPieceCell).setPiece(null);// Remove the jumped over piece from the start position
-                    if (m.equals(this.seeTopMove())) {//Check if it is the last move/jump
-                        if (endRow == 0) {// Check if the piece needs to be kinged
-                            this.rows.get(endRow).getSpace(endCell).setPiece(new Piece(Type.KING,playerColor));
-                        } else {
-                            this.rows.get(endRow).getSpace(endCell).setPiece(new Piece(pieceType,playerColor));
-                        }
-                    }
-                }
-            }
-        }
-        */
     }
 
     /**
@@ -412,33 +333,7 @@ public class BoardView implements Iterable<Row> {
      * @return boolean true if there is
      */
     public boolean newJumpExists(Color playerColor) {
-        /**if (this.moves.size() > 0) {
-            if (!isValidJump(this.seeTopMove())) {
-                return false;
-            }
-        }
-        Move move = seeTopMove();
-        //-----------------------------------------------------------------
-        // COLOR AND TYPE FINDER
-        //-----------------------------------------------------------------
-        Type pieceType;
-        int movesSize = this.moves.size();
-        if (movesSize >= 1) {
-            int startRowI = this.moves.get(movesSize - 1).getStart().getRow();
-            int startCellI = this.moves.get(movesSize - 1).getStart().getCell();
-
-            playerColor = this.viewPiece(startRowI,
-                    startCellI).getColor();//Get player colors
-            pieceType = this.viewPiece(startRowI,startCellI).getType();
-        } else {
-            playerColor = this.viewPiece(move.getStart().getRow(),
-                    move.getStart().getCell()).getColor();
-            pieceType = this.viewPiece(move.getStart().getRow(),
-                    move.getStart().getCell()).getType();
-        }
-        //-----------------------------------------------------------------
-*/
-        //-----------------------------------------------------------------
+       //-----------------------------------------------------------------
         // Get other player color
         //-----------------------------------------------------------------
         if (moves.size() > 0){
@@ -513,67 +408,6 @@ public class BoardView implements Iterable<Row> {
                             return true;
                         }
                         //-----------------------------------------------------------------
-                        /**
-                        //-----------------------------------------------------------------
-                        // Begin checking for an available move
-                        //-----------------------------------------------------------------
-                        if (playerColor == Color.WHITE || pieceType == Type.KING) { // Check if its a White player
-                            if (endCell < 6) { //Check out of bounds
-                                if (endRow < 6) { //Check out of bounds
-                                    if (this.viewPiece(endRow + 1, endCell + 1)
-                                            != null) { // Check the the space that is being jumped is occupied
-                                        if (this.viewPiece(endRow + 1, endCell + 1).getColor()
-                                                == otherPlayer) { // Check the the space that is being jumped is the other player
-                                            if ((this.viewPiece(endRow + 2, endCell + 2) == null)
-                                                    && ((endRow + 2 != startRow) ||
-                                                    (endCell + 2 != startCell))) { //Check the space is free to jump
-                                                return true;
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                            if (endCell > 1) { //Check out of bounds
-                                if (endRow < 6) { //Check out of bounds
-                                    if (this.viewPiece(endRow + 1, endCell - 1) != null) { // Check the the space that is being jumped is occupied
-                                        if (this.viewPiece(endRow + 1, endCell - 1).getColor()
-                                                == otherPlayer) { // Check the the space that is being jumped is the other player
-                                            if ((this.viewPiece(endRow + 2, endCell - 2) == null)
-                                                    && ((endRow + 2 != startRow)
-                                                    || (endCell - 2 != startCell))) { //Check the space is free to jump
-                                                return true;
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        if (playerColor == Color.RED || pieceType == Type.KING) {
-                            if ((endCell > 1) && (endRow > 1)) { //Check out of bounds
-                                if (this.viewPiece(endRow - 1, endCell - 1) != null) { // Check the the space that is being jumped is occupied
-                                    if (this.viewPiece(endRow - 1, endCell - 1).getColor()
-                                            == otherPlayer) { // Check the the space that is being jumped is the other player
-                                        if ((this.viewPiece(endRow - 2, endCell - 2) == null)
-                                                && ((endRow - 2 != startRow) ||
-                                                (endCell - 2 != startCell))) { //Check the space is free to jump
-                                            return true;
-                                        }
-                                    }
-                                }
-                            }
-                            if ((endRow > 1) && (endCell < 6)) { //Check out of bounds
-                                if (this.viewPiece(endRow - 1, endCell + 1) != null) { // Check the the space that is being jumped is occupied
-                                    if (this.viewPiece(endRow - 1, endCell + 1).getColor()
-                                            == otherPlayer) {
-                                        if ((this.viewPiece(endRow - 2, endCell + 2) == null)
-                                                && ((endRow - 2 != startRow)
-                                                || (endCell + 2 != startCell))) { //Check the space is free to jump
-                                            return true;
-                                        }
-                                    }
-                                }
-                            }
-                        } */
                     }
                 }
             }
