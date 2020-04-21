@@ -173,13 +173,27 @@ One thing we could implement to help make our design better is by creating
 
 ### Unit Testing and Code Coverage
 
-While we have not yet fully implemented all of our program's unit
-   testing and our Code Coverage is very low because of it, we have done
-   a lot of stress testing by having every member of our group run and play the
-   game and try as hard as we could to break the program. As of right now we know
-   of two bugs that need to be fixed:
-   1. In certain cases (have not yet been able to reliably recreate the error)
-       while submitting a move, it will not give the player an error if they are making a
-       non jump move while a jump move exists for them to make.
-   2. At the end of a game when someone has won, the game does not end by itself. The
-       only way to end the game is by having a player Resign.
+Model Tier
+![Model Code Coverage](ModelTier.png)
+Our model tier code coverage is pretty high. This is because of the unit tests that 
+we created on the BoardView class. Our BoardView class is a complete representation 
+of a board. It holds the pieces and validates moves that are trying to be made on the
+board. Using different edge cases and examples of moves we were able to gain a lot
+of coverage.
+
+UI Tier
+![UI Code Coverage](UITier.png)
+Our UI tier has lower coverage because this tier specifically was a lot harder
+to test with unit testing. We decided as a team to instead focus primarily on real time
+testing with our web application to make sure that the UI was correct and handled all kinds
+of combination of players online doing separate actions that might have interactions with
+other players and their active UI, etc etc. So while our code coverage is low for this
+tier we believe that sufficient testing was done to ensure that the product we produced is
+bug free.
+
+Application Tier
+![Application Code Coverage](ApplicationTier.png)
+Our application tier code coverage is pretty high. We were able to do extensive testing on
+the classes based in this tier very early into development. The classes in the application
+tier hold player information and the game information in respect to the players logged into
+the webapp and the games being played on the webapp.
