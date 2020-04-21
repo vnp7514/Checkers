@@ -3,11 +3,6 @@ geometry: margin=1in
 ---
 # PROJECT Design Documentation
 
-> _The following template provides the headings for your Design
-> Documentation.  As you edit each section make sure you remove these
-> commentary 'blockquotes'; the lines that start with a > character
-> and appear in the generated PDF in italics._
-
 ## Team Information
 * Team name: Wizards
 * Team members
@@ -18,10 +13,9 @@ geometry: margin=1in
 
 ## Executive Summary
 
-The WebCheckers application must let two users who are signed in to play a game of checkers. This application has two features that set it apart from a basic checkers game:
+The WebCheckers application must let two users who are signed in to play a game of checkers. This application has one feature that sets it apart from a basic checkers game:
 
-* Spectate games that are currently in session
-* Watch a replay of a game 
+* Spectate games that are currently in session 
 
 ### Purpose
 
@@ -51,11 +45,20 @@ player.
 
 
 ### MVP Features
-> _Provide a list of top-level Epics and/or Stories of the MVP._
+
+* As a Player I want to sign-in so that I can play a game of checkers
+* As a Player I want to start a game so that I can play checkers with an opponent
+* As a Player I want to make a move so that I know whether my move is valid
+* As a Player, I want to be able to undo a move so I can perform the best moves possible
+* As a Player, I want to show my opponent the moves I have made so my opponent can respond to my moves 
+* As a Player I want to be able to resign from a game so I can end a game early
+* As a Player I would like my piece to be able to turn my piece into a King in order to follow the rules of American checkers
+* As a Player, I want to be able to end the game according to the rules so I can either win or lose the game 
 
 ### Roadmap of Enhancements
-> _Provide a list of top-level features in the order you plan to consider them._
 
+* Spectator Mode (Implemented)
+* Replay Mode (Currently not implemented)
 
 ## Application Domain
 
@@ -153,12 +156,10 @@ The Model Tier contains classes that represent the data being used to dictate wh
 
 ### Design Improvements
 
-One thing we could implement to help make our design better is by creating
-   a class that checks the validity of a move and a jump as we discussed during
-   the Presentation my group gave on 4/2/2020 at around 2pm EST. This would
-   help reduce coupling within our program because as of right now a lot of the
-   functionality is stored in the BoardView class which can be problematic
-   down the road.
+We could make an abstract class called User which Player and Spectator would extend so the Player class is not
+responsible for spectating and playing
+
+Get rid of duplicate code by making the duplicate code into its own function which would be called instead
 
 ## Testing
 > _This section will provide information about the testing performed
