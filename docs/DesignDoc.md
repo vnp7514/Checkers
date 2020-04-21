@@ -175,6 +175,9 @@ is sent through Gson so this route deciphers that info and validates the info.
 
 Below is the Sequence Diagram of how a User can sign in and get into a game:
 
+![Sequence Diagram](SequenceDiagram.png)
+
+
 
 ### Application Tier
 
